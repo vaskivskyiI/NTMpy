@@ -1,12 +1,17 @@
+// Define padding constants
+const PADDING_LX = 25; // Left padding
+const PADDING_RX = 10; // Right padding
+const PADDING_DW = 25; // Bottom padding
+
 function drawAxis() {
     let canvas = document.getElementById("plot") 
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
 
     let y0 =  0;
-    let y1 = canvas.height - 25;
-    let x0 = 25;
-    let x1 = canvas.width - 10;
+    let y1 = canvas.height - PADDING_DW;
+    let x0 = PADDING_LX;
+    let x1 = canvas.width - PADDING_RX;
 
     ctx.lineWidth = 2;
     ctx.setLineDash([2,0]); 
@@ -19,13 +24,6 @@ function drawAxis() {
     ctx.lineTo( x0, y0);
 
     ctx.stroke()
-
-    /*ctx.fillStyle = "white";
-    ctx.lineWidth = 1;
-    ctx.font = "20px Times New Roman";
-    for (k = 0; k <= 4; k++) {
-        ctx.fillText("0", (k*x0 + (4-k)*x1)/4 - 5, y1 + 20);
-    }*/
 
     ctx.lineWidth = 1;
     ctx.setLineDash([2,4]);  
@@ -43,15 +41,29 @@ function drawAxis() {
 
 }
 
+function drawLabel(text) {
+    let canvas = document.getElementById("plot"); 
+    let ctx = canvas.getContext("2d");
+    let y0 =  0;
+    let y1 = canvas.height - PADDING_DW;
+    let x0 = PADDING_LX;
+    let x1 = canvas.width - PADDING_RX;
+
+    ctx.fillStyle = "white";
+    ctx.lineWidth = 1;
+    ctx.font = "20px Times New Roman";
+    for (k = 0; k <= 4; k++) { ctx.fillText(text[k], (k*x0 + (4-k)*x1)/4 - 5, y1 + 20);}
+}
+
 function drawCurve(data) {
     let canvas = document.getElementById("plot"); 
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
 
     let y0 =  0;
-    let y1 = canvas.height - 25;
-    let x0 = 25;
-    let x1 = canvas.width - 10;
+    let y1 = canvas.height - PADDING_DW;
+    let x0 = PADDING_LX;
+    let x1 = canvas.width - PADDING_RX;
     
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -62,15 +74,18 @@ function drawCurve(data) {
     
     // Plot data
     ctx.setLineDash([2,0]);
-    ctx.strokeStyle = '#ccccff';
+    ctx.strokeStyle = '#bbbbff';
     ctx.lineWidth = 2;
     ctx.beginPath();
 
-    data.forEach((ydata, xdata) => {
-        const x = x0 + (xdata/Xmax) * (x1-x0);
-        const y = y1 - (ydata/Ymax) * (y1-y0);
-        xdata === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    let x = x0, y = y1;
+    ctx.moveTo(x, y);
+    data.slice(1).forEach((ydata, xdata) => {
+        x = x0 + (xdata/Xmax) * (x1-x0);
+        y = y1 - (ydata/Ymax) * (y1-y0);
+        ctx.lineTo(x, y);
     });
 
     ctx.stroke();
+    
 }

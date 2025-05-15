@@ -137,4 +137,5 @@ async function plotTime() {
 
 async function plotSpace() {
     data = await eel.plot_src_x()();
+    drawCurve(await eel.plot_src_x()());
 }

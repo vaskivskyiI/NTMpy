@@ -110,11 +110,21 @@ function setSource() {
 
     complete = energy != "" && fwhm != "" && delay != ""; 
 
+    if (complete) {
     eel.setSource(energy, fwhm, delay);
-    eel.setFlags("source_set", true);
+        eel.setFlags("source_set", true);
+        
+        source.energy = parseFloat(energy);
+        source.fwhm   = parseFloat(fwhm);
+        source.delay  = parseFloat(delay);
 
-    $("#helpbar").css("color","#ffffff");
-    $("#helpbar").text("Source added correctly");
+        $("#helpbar").css("color","#ffffff");
+        $("#helpbar").text("Source added correctly");
+    } else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot add the source: Some source properties are missing");
+    }
+
 }
 
 function modifyIndexN() {
@@ -132,10 +142,14 @@ function modifyIndexN() {
 }
 
 async function plotTime() {
-    drawCurve(await eel.plot_src_t()());   
+    drawCurve(await eel.plot_src_t()());
+    timeStep = (source.delay + 2*source.fwhm) / 4;
+    timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
+    drawLabels(timeArray)
 }
 
 async function plotSpace() {
     data = await eel.plot_src_x()();
     drawCurve(await eel.plot_src_x()());
+    drawLabels()
 }

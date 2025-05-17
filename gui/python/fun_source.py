@@ -17,9 +17,9 @@ def getFlags(prop):
 @eel.expose
 def setSource(energy, fwhm, delay):
     flags["source_set"] = True
-    laser["energy"] = int(energy)
-    laser["fwhm"]   = int(fwhm)
-    laser["delay"]  = int(delay)
+    laser["energy"] = float(energy)
+    laser["fwhm"]   = float(fwhm)
+    laser["delay"]  = float(delay)
 
 @eel.expose
 def getSource():

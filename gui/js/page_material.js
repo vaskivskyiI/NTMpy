@@ -19,7 +19,7 @@ $(document).ready( function(){
     $("#insert_panel #submit").on("click", addLayer);
     $("#moveL").on("click", function() {moveLayer(-1);})
     $("#moveR").on("click", function() {moveLayer(+1);})
-    $("#update").on("click", function() {updateLayer();})
+    $("#update") .on("click", function() {updateLayer();})
     $("#destroy").on("click", function() {eel.remove_layer(layer_num-1); drawMaterial();})
     $(".canvas > div").on("click", selectLayer);
 
@@ -39,31 +39,32 @@ async function drawMaterial() {
 };
 
 function addLayer() {
-    console.log("Adding a new layer: " +  $("#insert_panel #name_input").val());
 
-    let layer = {
-        name:   $("#insert_panel .name_input").val(),
-        length: $("#insert_panel .leng_input").val(),
-        rho:    $("#insert_panel .dens_input").val(),
-        K: [],
-        C: [],
-        G: []
-    };
-
-    layer.K[0] = $("#insert_panel .K_input:eq(0)").val();
-    layer.K[1] = $("#insert_panel .K_input:eq(1)").val();
-    layer.C[0] = $("#insert_panel .C_input:eq(0)").val();
-    layer.C[1] = $("#insert_panel .C_input:eq(1)").val();
-    layer.G[0] = $("#insert_panel .G_input:eq(0)").val();
-    
     let complete = true;
-    for (let key in layer) { complete &= layer[key] != ''; }
+    $("#insert_panel input").each(function() {complete &= ($(this).val() != '')})
     
     if (complete) {
+        console.log("Adding a new layer: " +  $("#insert_panel .name_input").val());
+        
+        let layer = {
+            name:   $("#insert_panel .name_input").val(),
+            length: parseFloat($("#insert_panel .leng_input").val()),
+            rho:    parseFloat($("#insert_panel .dens_input").val()),
+            K: [], C: [], G: []
+        };
+
+        layer.K[0] = parseFloat($("#insert_panel .K_input:eq(0)").val());
+        layer.K[1] = parseFloat($("#insert_panel .K_input:eq(1)").val());
+        layer.C[0] = parseFloat($("#insert_panel .C_input:eq(0)").val());
+        layer.C[1] = parseFloat($("#insert_panel .C_input:eq(1)").val());
+        layer.G[0] = parseFloat($("#insert_panel .G_input:eq(0)").val());
+    
         eel.setLayers(layer);
+
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Layer added correctly");
         $("#insert_panel input").val("");
+
     } else {
         $("#helpbar").css("color","#ff5555");
         $("#helpbar").text("Cannot add the layer: Some material properties are missing");

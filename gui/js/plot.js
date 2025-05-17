@@ -1,7 +1,7 @@
 // Define padding constants
-const PADDING_LX = 25; // Left padding
-const PADDING_RX = 10; // Right padding
-const PADDING_DW = 25; // Bottom padding
+const PADDING_LX = 30; // Left padding
+const PADDING_RX = 30; // Right padding
+const PADDING_DW = 20; // Bottom padding
 
 function drawAxis() {
     let canvas = document.getElementById("plot") 
@@ -41,7 +41,7 @@ function drawAxis() {
 
 }
 
-function drawLabel(text) {
+function drawLabels(text) {
     let canvas = document.getElementById("plot"); 
     let ctx = canvas.getContext("2d");
     let y0 =  0;
@@ -51,8 +51,8 @@ function drawLabel(text) {
 
     ctx.fillStyle = "white";
     ctx.lineWidth = 1;
-    ctx.font = "20px Times New Roman";
-    for (k = 0; k <= 4; k++) { ctx.fillText(text[k], (k*x0 + (4-k)*x1)/4 - 5, y1 + 20);}
+    ctx.font = "18px Times New Roman";
+    for (k = 0; k <= 4; k++) { ctx.fillText(text[k], (k*x1 + (4-k)*x0)/4 - 25, y1 + 20);}
 }
 
 function drawCurve(data) {

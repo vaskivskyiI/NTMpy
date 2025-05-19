@@ -6,7 +6,11 @@ let source;
 
 let data;
 
-$(document).ready(function() {
+$(document).ready(async function() {
+
+    reflection = await eel.getFlags("reflection")();
+    nindex = await eel.getIndexN()();
+    source_set = await eel.getFlags("source_set")();
 
     $("#time_header").on("click", function() {
         $("#time_panel").slideToggle(300);
@@ -39,9 +43,6 @@ $(document).ready(function() {
 });
 
 async function drawPage() {
-    reflection = await eel.getFlags("reflection")();
-    nindex = await eel.getIndexN()();
-    source_set = await eel.getFlags("source_set")();
 
     let labels = [];
     
@@ -104,25 +105,26 @@ function selectLayer() {
 }
 
 function setSource() {
-    energy = $("#table_time input:eq(0)").val();
-    fwhm   = $("#table_time input:eq(1)").val();
-    delay  = $("#table_time input:eq(2)").val();
+    energy = parseFloat($("#table_time input:eq(0)").val());
+    fwhm   = parseFloat($("#table_time input:eq(1)").val());
+    delay  = parseFloat($("#table_time input:eq(2)").val());
 
-    complete = energy != "" && fwhm != "" && delay != ""; 
+    valid = (energy > 0) && (fwhm > 0) && !isNaN(delay); 
 
-    if (complete) {
-    eel.setSource(energy, fwhm, delay);
+
+    if (valid) {
+        eel.setSource(energy, fwhm, delay);
         eel.setFlags("source_set", true);
         
-        source.energy = parseFloat(energy);
-        source.fwhm   = parseFloat(fwhm);
-        source.delay  = parseFloat(delay);
+        source.energy = energy;
+        source.fwhm   = fwhm;
+        source.delay  = delay;
 
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Source added correctly");
     } else {
         $("#helpbar").css("color","#ff5555");
-        $("#helpbar").text("Cannot add the source: Some source properties are missing");
+        $("#helpbar").text("Cannot add the source: Some source properties are invalid");
     }
 
 }
@@ -142,6 +144,7 @@ function modifyIndexN() {
 }
 
 async function plotTime() {
+
     drawCurve(await eel.plot_src_t()());
     timeStep = (source.delay + 2*source.fwhm) / 4;
     timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
@@ -149,6 +152,7 @@ async function plotTime() {
 }
 
 async function plotSpace() {
+
     data = await eel.plot_src_x()();
     drawCurve(await eel.plot_src_x()());
     drawLabels()

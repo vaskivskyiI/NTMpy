@@ -53,11 +53,11 @@ function addLayer() {
             K: [], C: [], G: []
         };
 
-        layer.K[0] = parseFloat($("#insert_panel .K_input:eq(0)").val());
-        layer.K[1] = parseFloat($("#insert_panel .K_input:eq(1)").val());
-        layer.C[0] = parseFloat($("#insert_panel .C_input:eq(0)").val());
-        layer.C[1] = parseFloat($("#insert_panel .C_input:eq(1)").val());
-        layer.G[0] = parseFloat($("#insert_panel .G_input:eq(0)").val());
+        layer.K[0] = $("#insert_panel .K_input:eq(0)").val();
+        layer.K[1] = $("#insert_panel .K_input:eq(1)").val();
+        layer.C[0] = $("#insert_panel .C_input:eq(0)").val();
+        layer.C[1] = $("#insert_panel .C_input:eq(1)").val();
+        layer.G[0] = $("#insert_panel .G_input:eq(0)").val();
     
         eel.setLayers(layer);
 
@@ -110,8 +110,8 @@ function updateLayer() {
 
     let layer = {
         name:   $("#modify_panel .name_input").val(),
-        length: $("#modify_panel .leng_input").val(),
-        rho:    $("#modify_panel .dens_input").val(),
+        length: parseFloat($("#modify_panel .leng_input").val()),
+        rho:    parseFloat($("#modify_panel .dens_input").val()),
         K: [],
         C: [],
         G: []

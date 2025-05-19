@@ -8,7 +8,7 @@ def setLayers(layer, id = -1):
 
     if id < 0:
         layers.append(layer)
-        nindex.append({"l": "", "nr": "", "ni": ""})
+        nindex.append({"l": None, "nr": None, "ni": None})
     else:
         layers[id] = layer
     return

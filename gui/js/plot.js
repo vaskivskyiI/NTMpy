@@ -67,7 +67,6 @@ function drawCurve(data) {
     
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawAxis();
         
     const Ymax = 1.2 * Math.max(...data);
     const Xmax = data.length - 1;
@@ -88,4 +87,5 @@ function drawCurve(data) {
 
     ctx.stroke();
     
+    drawAxis();
 }

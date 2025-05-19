@@ -47,9 +47,15 @@ async function drawPage() {
     let labels = [];
     
     if (reflection) {
-        nindex.reduce(function(dummy, layer) {labels.push(layer.nr + " + " + layer.ni + "i");}, 0);
+        nindex.reduce(function(dummy, layer) {
+            if (layer.nr !== null && layer.ni !== null){ labels.push(layer.nr + " + " + layer.ni + "i"); }
+            else { labels.push(""); }
+        }, 0);
     } else {
-        nindex.reduce(function(dummy, layer) {labels.push(layer.l);}, 0);
+        nindex.reduce(function(dummy, layer) {
+            if (layer.l !== null) {   labels.push(layer.l); }
+            else { labels.push(""); }
+        }, 0);
     }
 
     if (source_set||true) {
@@ -120,6 +126,8 @@ function setSource() {
         source.fwhm   = fwhm;
         source.delay  = delay;
 
+        source_set = true;
+
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Source added correctly");
     } else {
@@ -144,11 +152,15 @@ function modifyIndexN() {
 }
 
 async function plotTime() {
-
-    drawCurve(await eel.plot_src_t()());
-    timeStep = (source.delay + 2*source.fwhm) / 4;
-    timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
-    drawLabels(timeArray)
+    if (source_set) {
+        drawCurve(await eel.plot_src_t()());
+        timeStep = (source.delay + 2*source.fwhm) / 4;
+        timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
+        drawLabels(timeArray);
+    } else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot plot the source: Source is not set");
+    }
 }
 
 async function plotSpace() {

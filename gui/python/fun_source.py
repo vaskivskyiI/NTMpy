@@ -34,7 +34,7 @@ def source():
 def plot_src_x():
     src_init()
     total_leng = np.sum([ layer["length"] for layer in layers])
-    array = src.lambert_beer(np.linspace(0,total_leng,128))
+    array = src.lambert_beer(np.linspace(0,total_leng, 512))
     return [float(x) for x in array]
     
 
@@ -42,7 +42,7 @@ def plot_src_x():
 def plot_src_t():
     src_init()
     total_time = 2*laser["fwhm"] + laser["delay"]
-    array = src.gaussian(np.linspace(0, total_time, 128))
+    array = src.gaussian(np.linspace(0, total_time, 512))
     return [float(x) for x in array]
 
 # Absorption / Refraction interface ##############

@@ -139,9 +139,20 @@ function setSource() {
 
 function modifyIndexN() {
 
+    let complete = true;
+    $("#space_panel input").each(function() {complete &= ($(this).val() != '')})
 
+    if (layer_num <= 0) {
 
-    if (layer_num > 0) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot modify the index: No layer selected");
+    
+    } else if (!complete) {
+    
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot modify the index: Some input is empty");
+    
+    } else {
 
         if (reflection) {
             nindex[layer_num - 1].nr = parseFloat($("#table_space input:eq(0)").val());
@@ -156,9 +167,6 @@ function modifyIndexN() {
         $("#helpbar").text("Index modified correctly");
 
         drawPage();
-    } else {
-        $("#helpbar").css("color","#ff5555");
-        $("#helpbar").text("Cannot modify the index: Layer number is invalid");
     }
 
 }

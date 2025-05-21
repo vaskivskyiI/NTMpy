@@ -47,15 +47,15 @@ async function drawPage() {
     let labels = [];
     
     if (reflection) {
-        nindex.reduce(function(dummy, layer) {
+        nindex.forEach(function(layer) {
             if (layer.nr !== null && layer.ni !== null){ labels.push(layer.nr + " + " + layer.ni + "i"); }
             else { labels.push(""); }
-        }, 0);
+        });
     } else {
-        nindex.reduce(function(dummy, layer) {
-            if (layer.l !== null) {   labels.push(layer.l); }
+        nindex.forEach(function(layer) {
+            if (layer.l !== null) { labels.push(layer.l); }
             else { labels.push(""); }
-        }, 0);
+        });
     }
 
     if (source_set||true) {
@@ -138,17 +138,29 @@ function setSource() {
 }
 
 function modifyIndexN() {
-    console.log(layer_num)
-    if (reflection) {
-        nr = $("#table_space input:eq(0)").val();
-        ni = $("#table_space input:eq(0)").val();
-        eel.setIndexN( nr, ni, layer_num)
+
+
+
+    if (layer_num > 0) {
+
+        if (reflection) {
+            nindex[layer_num - 1].nr = parseFloat($("#table_space input:eq(0)").val());
+            nindex[layer_num - 1].ni = parseFloat($("#table_space input:eq(1)").val());
+            eel.setIndexN( nindex[layer_num - 1].nr, nindex[layer_num - 1].ni, layer_num)
+        } else {
+            nindex[layer_num - 1].l = parseFloat($("#table_space input:eq(0)").val());
+            eel.setIndexN( nindex[layer_num - 1].l, 0, layer_num )
+        }
+
+        $("#helpbar").css("color","#ffffff");
+        $("#helpbar").text("Index modified correctly");
+
+        drawPage();
     } else {
-        lambda = $("#table_space input:eq(0)").val();
-        eel.setIndexN( lambda, 0, layer_num)
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot modify the index: Layer number is invalid");
     }
 
-    drawPage()
 }
 
 async function plotTime() {

@@ -1,0 +1,29 @@
+.headerpanel {
+    background-image: linear-gradient(180deg, #c9be2d,#968919)
+}
+.headerpanel:hover {
+    background-image: linear-gradient(180deg, #e9dc29,#a09218)
+}
+
+
+#new_file {
+    background-image: linear-gradient(180deg, #498d2a,#366616)
+}
+#new_file:hover {
+    background-image: linear-gradient(180deg, #5ce034,#40a521)
+}
+
+#load_file {
+    background-image: linear-gradient(180deg, #ad1e42,#641327)
+}
+#load_file:hover {
+    background-image: linear-gradient(180deg, #e71a4d,#881a36)
+}
+
+#save_file {
+    background-image: linear-gradient(180deg, #2a398d,#162266)
+}
+#save_file:hover {
+    background-image: linear-gradient(180deg, #475fe7,#2135a5)
+}
+

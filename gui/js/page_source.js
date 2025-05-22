@@ -83,11 +83,11 @@ function drawMenu() {
                         "<td>Refractive Index (real)</td>" + 
                         "<td>Refractive Index (imag)</td>" +
                     "</tr>" +
-                    "<tr><td><input></td><td><input></td></tr>";
+                    "<tr><td><input class='n_input'></td><td><input class='n_input'></td></tr>";
         $("#check_TMM").prop("checked", true);
     } else {
         content =   "<tr><td>Absorption Length</td></tr>" + 
-                    "<tr><td><input></td></tr>";
+                    "<tr><td><input class='n_input'></td></tr>";
         $("#check_LBL").prop("checked", true);
     }
 
@@ -140,19 +140,9 @@ function setSource() {
 function modifyIndexN() {
 
     let complete = true;
-    $("#space_panel input").each(function() {complete &= ($(this).val() != '')})
+    $(".n_input").each(function() {complete &= !isNaN(parseFloat($(this).val()));})
 
-    if (layer_num <= 0) {
-
-        $("#helpbar").css("color","#ff5555");
-        $("#helpbar").text("Cannot modify the index: No layer selected");
-    
-    } else if (!complete) {
-    
-        $("#helpbar").css("color","#ff5555");
-        $("#helpbar").text("Cannot modify the index: Some input is empty");
-    
-    } else {
+    if (layer_num > 0 && complete) {
 
         if (reflection) {
             nindex[layer_num - 1].nr = parseFloat($("#table_space input:eq(0)").val());
@@ -163,10 +153,18 @@ function modifyIndexN() {
             eel.setIndexN( nindex[layer_num - 1].l, 0, layer_num )
         }
 
+        drawPage();
+
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Index modified correctly");
-
-        drawPage();
+    }
+    else if (layer_num <= 0) {   
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot modify the index: no layer selected");
+    }
+    else if (!complete) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot modify the index: some input is not a number");
     }
 
 }
@@ -177,15 +175,34 @@ async function plotTime() {
         timeStep = (source.delay + 2*source.fwhm) / 4;
         timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
         drawLabels(timeArray);
-    } else {
+        $("#helpbar").css("color","#ffffff");
+        $("#helpbar").text("Time plot generated");
+    }
+    else {
         $("#helpbar").css("color","#ff5555");
-        $("#helpbar").text("Cannot plot the source: Source is not set");
+        $("#helpbar").text("Cannot plot the source: source is not set");
     }
 }
 
 async function plotSpace() {
+    let complete = true;
+    
+    if (reflection) {
+        nindex.forEach(function(layer) { complete &= (layer.nr !== null) && (layer.ni !== null); });
+    } else {
+        nindex.forEach(function(layer) { complete &= (layer.l !== null);});
+    }
 
-    data = await eel.plot_src_x()();
-    drawCurve(await eel.plot_src_x()());
-    drawLabels()
+    if (complete) {
+        drawCurve(await eel.plot_src_x()());
+        spaceStep = layers.reduce((length, layer) => length + layer.length, 0) / 4;
+        spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
+        drawLabels(spaceArray);
+        $("#helpbar").css("color","#ffffff");
+        $("#helpbar").text("Space plot generated");
+    }
+    else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot plot: Some layers' properties are missing");
+    }
 }

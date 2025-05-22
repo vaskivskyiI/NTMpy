@@ -42,14 +42,19 @@ function addLayer() {
 
     let complete = true;
     $("#insert_panel input").each(function() {complete &= ($(this).val() != '')})
+
+    const length = parseFloat($("#insert_panel .leng_input").val());
+    const density = parseFloat($("#insert_panel .dens_input").val());
+    let valid = (length > 0) && (density > 0);
     
-    if (complete) {
+    if (complete && valid) {
+        
         console.log("Adding a new layer: " +  $("#insert_panel .name_input").val());
         
         let layer = {
             name:   $("#insert_panel .name_input").val(),
-            length: parseFloat($("#insert_panel .leng_input").val()),
-            rho:    parseFloat($("#insert_panel .dens_input").val()),
+            length: length,
+            rho:    density,
             K: [], C: [], G: []
         };
 
@@ -65,7 +70,12 @@ function addLayer() {
         $("#helpbar").text("Layer added correctly");
         $("#insert_panel input").val("");
 
-    } else {
+    }
+    else if (!valid) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot add the layer: length and density must be positive numbers");
+    }
+    else if (!complete) {
         $("#helpbar").css("color","#ff5555");
         $("#helpbar").text("Cannot add the layer: Some material properties are missing");
     }

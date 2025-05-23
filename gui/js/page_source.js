@@ -101,11 +101,12 @@ function selectLayer() {
 
     $("#space_panel div label:eq(0)").text("Properties of Layer " + layer_num);
 
-    if (reflection) {
-        $("#table_space input:eq(0)").val(nindex.nr);
-        $("#table_space input:eq(1)").val(nindex.ni);
-    } else {
-        $("#table_space input:eq(0)").val(nindex.l);
+
+    if (reflection && nindex[layer_num - 1].nr !== null && nindex[layer_num - 1].ni !== null) {
+        $("#table_space input:eq(0)").val(nindex[layer_num - 1].nr);
+        $("#table_space input:eq(1)").val(nindex[layer_num - 1].ni);
+    } else if (!reflection && nindex[layer_num - 1].l !== null) {
+        $("#table_space input:eq(0)").val(nindex[layer_num - 1].l);
     }
 
 }

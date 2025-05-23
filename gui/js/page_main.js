@@ -9,12 +9,13 @@ $(document).ready( function(){
 
 async function saveFile() {
     let message = await eel.save_file()(); // Call the Python function
-    alert(message); // Show a success or error message
+    $("#helpbar").css("color","#ffffff");
+    $("#helpbar").text(message);
 }
 
 async function loadFile() {
     let message = await eel.load_file()(); // Call the Python load_file function
-    alert(message); // Show a success or error message
+    $("#help_message").text(message);
     if (message.startsWith("Successfully loaded")) {
         drawMaterial(); // Redraw material if loading was successful
     }

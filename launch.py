@@ -7,11 +7,7 @@ import eel
 import variables # type: ignore
 import fun_material # type: ignore
 import fun_source # type: ignore
-
-# Save all #######################################
-@eel.expose
-def save():
-     pass
+import fun_files # type: ignore
 
 
 eel.init('.', allowed_extensions=['.js', '.html', '.css'])

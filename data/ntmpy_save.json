@@ -1,0 +1,36 @@
+{
+    "flags": {
+        "reflection": false,
+        "source_set": true
+    },
+    "laser": {
+        "energy": 1,
+        "fwhm": 1,
+        "delay": 1
+    },
+    "layers": [
+        {
+            "name": "Au",
+            "length": 1,
+            "rho": 10,
+            "K": [
+                "1",
+                "1"
+            ],
+            "C": [
+                "1",
+                "1"
+            ],
+            "G": [
+                "1"
+            ]
+        }
+    ],
+    "nindex": [
+        {
+            "l": 1,
+            "nr": null,
+            "ni": null
+        }
+    ]
+}

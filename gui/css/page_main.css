@@ -1,10 +1,16 @@
-.headerpanel {
+#files_menu {
     background-image: linear-gradient(180deg, #c9be2d,#968919)
 }
-.headerpanel:hover {
+#files_menu:hover {
     background-image: linear-gradient(180deg, #e9dc29,#a09218)
 }
 
+#sim_menu {
+    background-image: linear-gradient(180deg, #1b1b1b,#000000)
+}
+#sim_menu:hover {
+    background-image: linear-gradient(180deg, #363636,#1b1b1b)
+}
 
 #new_file {
     background-image: linear-gradient(180deg, #498d2a,#366616)

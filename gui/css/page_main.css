@@ -1,4 +1,4 @@
-#filename {
+#filename, #pathname {
     flex: 2;
 }
 
@@ -12,14 +12,33 @@
     height: 30px;
 }
 
+#filetable td {
+    height: 30px;
+    padding: 0 12 0 12;
+    align-content: center;
+    width: 25%;
+    flex: 1;
+}
+
 #filetable td:hover {
     background-color: #666666;
 }
 
-#files_menu, #sim_menu {
+#files_header, #sim2T_header {
     background-image: linear-gradient(180deg, #1b1b1b,#000000)
 }
-#files_menu:hover, #sim_menu:hover {
+#files_header:hover, #sim2T_header:hover {
+    background-image: linear-gradient(180deg, #363636,#1b1b1b)
+}
+
+#goto {
+    width: 80px;
+    height: 30px;
+    padding: 0px;
+    background-image: linear-gradient(180deg, #1b1b1b,#000000)
+}
+
+#goto:hover {
     background-image: linear-gradient(180deg, #363636,#1b1b1b)
 }
 

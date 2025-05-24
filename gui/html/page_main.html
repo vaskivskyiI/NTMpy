@@ -6,12 +6,17 @@
 
 <div style="flex: 1;">    
 
-    <div class="headerpanel" id="files_menu">Files Menu</div>
-    <div class="content" style="display:flex; flex-direction: column;">
+    <div class="headerpanel" id="files_header">Files Menu</div>
+    <div class="content" id="files_panel" style="display:flex; flex-direction: column;">
         <div style="margin: 4px; display: flex; flex-direction: row;">
             <span style="flex:1; display: flex;">
                 <label style="align-content: end; margin-right: 10px;">Filename: </label>
                 <input type="text" id="filename">    
+            </span>
+            <span style="flex:2; display: flex;">
+                <label style="align-content: end; margin-right: 10px;margin-left: 20px;">Path: </label>
+                <input type="text" id="pathname">
+                <button id="goto"> Go to folder</button>
             </span>
         </div>
         <div style="margin: 8 0 8 0; display: flex; flex-direction: row;">
@@ -26,8 +31,8 @@
         
     </div>
 
-    <div class="headerpanel" id="sim_menu">Simulation Menu</div>
-    <div class="content" style="display:flex">
+    <div class="headerpanel" id="sim2T_header">Simulation Menu</div>
+    <div class="content" id="sim2T_panel" style="display:flex">
         <button id="run_2Tsim"  class="button">Run Simulation </button>
     </div>
     

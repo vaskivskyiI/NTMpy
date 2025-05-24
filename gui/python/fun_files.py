@@ -1,11 +1,11 @@
 import eel
-import json
+import json, os
 from gui.python.variables import flags, laser, layers, nindex
 
 
 # Save File #####################################
 @eel.expose
-def save_file(filename="data//ntmpy_save.json"):
+def save_file(filename="ntmpy_save.json"):
     data_to_save = {
         "flags": flags,
         "laser": laser,
@@ -13,7 +13,7 @@ def save_file(filename="data//ntmpy_save.json"):
         "nindex": nindex,
     }
     try:
-        json.dump(data_to_save, open(filename, 'w'), indent=4)
+        json.dump(data_to_save, open("./data//" + filename + ".json", 'w'), indent=4)
         return("Successfully saved to " + filename)
     except Exception as e:
         return("Error saving file: "+ str(e))
@@ -45,3 +45,11 @@ def load_file(filename="data//ntmpy_save.json"):
         return("Error: File " + filename + " not found.")
     except Exception as e:
         return("Error loading file: " + str(e))
+    
+# Explore Files #################################
+@eel.expose
+def explore_files():
+    try:
+        return([f for f in os.listdir("data") if f.endswith('.json')])
+    except Exception as e:
+        print("Error exploring files: " + str(e))

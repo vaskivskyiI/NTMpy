@@ -55,14 +55,11 @@ function addLayer() {
             name:   $("#insert_panel .name_input").val(),
             length: length,
             rho:    density,
-            K: [], C: [], G: []
+            K: [$("#insert_panel .K_input:eq(0)").val(), $("#insert_panel .K_input:eq(1)").val()],
+            C: [$("#insert_panel .C_input:eq(0)").val(), $("#insert_panel .C_input:eq(1)").val()],
+            G: $("#insert_panel .G_input:eq(0)").val()
         };
 
-        layer.K[0] = $("#insert_panel .K_input:eq(0)").val();
-        layer.K[1] = $("#insert_panel .K_input:eq(1)").val();
-        layer.C[0] = $("#insert_panel .C_input:eq(0)").val();
-        layer.C[1] = $("#insert_panel .C_input:eq(1)").val();
-        layer.G[0] = $("#insert_panel .G_input:eq(0)").val();
     
         eel.setLayers(layer);
 

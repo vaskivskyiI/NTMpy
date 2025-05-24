@@ -7,10 +7,23 @@
 <div style="flex: 1;">    
 
     <div class="headerpanel" id="files_menu">Files Menu</div>
-    <div class="content" style="display:flex">
-        <button id="new_file"  class="button">New File </button>
-        <button id="load_file" class="button">Load File</button>
-        <button id="save_file" class="button">Save File</button>
+    <div class="content" style="display:flex; flex-direction: column;">
+        <div style="margin: 4px; display: flex; flex-direction: row;">
+            <span style="flex:1; display: flex;">
+                <label style="align-content: end; margin-right: 10px;">Filename: </label>
+                <input type="text" id="filename">    
+            </span>
+        </div>
+        <div style="margin: 8 0 8 0; display: flex; flex-direction: row;">
+            <table id="filetable">
+            </table>
+        </div>
+        <div style="display: flex; flex: 1">
+            <button id="new_file"  class="button">New File </button>
+            <button id="load_file" class="button">Load File</button>
+            <button id="save_file" class="button">Save File</button>
+        </div>
+        
     </div>
 
     <div class="headerpanel" id="sim_menu">Simulation Menu</div>

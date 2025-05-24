@@ -32,6 +32,6 @@ async function drawMaterial() {
     let labels = [];
     layers.reduce(function(dummy, layer) {labels.push(layer.name);}, 0);
     await drawMaterial_core(labels);
-    $(".canvas > div").on("click", selectLayer);
+    //$(".canvas > div").on("click", selectLayer);
 };
 

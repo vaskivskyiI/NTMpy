@@ -5,7 +5,7 @@ from gui.python.variables import flags, laser, layers, nindex
 
 # Save File #####################################
 @eel.expose
-def save_file(filename="ntmpy_save.json"):
+def save_file(filename="ntmpy_save.json", path="./data/"):
     data_to_save = {
         "flags": flags,
         "laser": laser,
@@ -13,18 +13,18 @@ def save_file(filename="ntmpy_save.json"):
         "nindex": nindex,
     }
     try:
-        json.dump(data_to_save, open("./data//" + filename + ".json", 'w'), indent=4)
-        return("Successfully saved to " + filename)
+        json.dump(data_to_save, open(path + filename + ".json", 'w'), indent=4)
+        return("Successfully saved to " + path + filename)
     except Exception as e:
         return("Error saving file: "+ str(e))
 
 
 # Load File #####################################
 @eel.expose
-def load_file(filename="data//ntmpy_save.json"):
+def load_file(filename="ntmpy_save.json", path="./data/"):
 
     try:
-        with open(filename, 'r') as f:
+        with open(path + filename, 'r') as f:
             data_loaded = json.load(f)
 
         flags.clear()

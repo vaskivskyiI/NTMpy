@@ -8,25 +8,27 @@ $(document).ready( function(){
 
     $("#files_header").on("click", function() {
         $("#files_panel").slideToggle(300);
-        //$("#sim2T_panel").slideUp(300);
     });
     $("#sim2T_header").on("click", function() {
         $("#sim2T_panel").slideToggle(300);
-        //$("#files_panel").slideUp(300);
     });
 
     explore_files();
 
+    $("#goto").on("click", async function() {
+        
+    });
+
 });
 
 
-explore_files = async function() {
-    let files = await eel.explore_files()(); // Call the Python function
+async function explore_files() {
+    let files = await eel.explore_files()();
     console.log("Files: ", files);
     $("#filetable").empty();
 
     for (let i = 0; i < files.length; i++) {
-        if (i % 3 == 0) { $("#filetable").append("<tr></tr>"); }
+        if (i % 4 === 0) { $("#filetable").append("<tr></tr>"); }
         let file = files[i];
         $("#filetable tr:last-child").append("<td>" + file + "</td>");
     }
@@ -37,16 +39,15 @@ async function saveFile() {
     let message = await eel.save_file(filename)();
     $("#helpbar").css("color", "#ffffff");
     $("#helpbar").text(message);
+    explore_files();
 }
 
 async function loadFile() {
     let message = await eel.load_file()(); // Call the Python load_file function
-    $("#help_message").text(message);
-    if (message.startsWith("Successfully loaded")) {
-        drawMaterial(); // Redraw material if loading was successful
-    }
+    $("#helpbar").css("color", "#ffffff");
+    $("#helpbar").text(message);
+    drawMaterial(); // Redraw material if loading was successful
 }
-
 
 
 async function runSimulation() {

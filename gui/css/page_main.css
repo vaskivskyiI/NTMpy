@@ -1,3 +1,8 @@
+label {
+    align-content: center;
+    padding: 0 20 0 20;
+}
+
 #filename, #pathname {
     flex: 2;
 }
@@ -5,10 +10,12 @@
 #filetable {
     width: 100%;
     border: 1px solid #ffffff;
-    height: 92px;
+    align-content: start;
+    display: table;
 }
 
 #filetable tr {
+    display: table-row;
     height: 30px;
 }
 
@@ -17,7 +24,6 @@
     padding: 0 12 0 12;
     align-content: center;
     width: 25%;
-    flex: 1;
 }
 
 #filetable td:hover {

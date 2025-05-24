@@ -16,14 +16,14 @@ $(document).ready( function(){
     explore_files();
 
     $("#goto").on("click", async function() {
-        
+        await explore_files($("#pathname").val());
     });
 
 });
 
 
-async function explore_files() {
-    let files = await eel.explore_files()();
+async function explore_files(path = null) {
+    let files = await eel.explore_files(path)();
     console.log("Files: ", files);
     $("#filetable").empty();
 

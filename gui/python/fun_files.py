@@ -48,8 +48,10 @@ def load_file(filename="ntmpy_save.json", path="./data/"):
     
 # Explore Files #################################
 @eel.expose
-def explore_files():
+def explore_files(path="data"):
+    if not path:
+        path = "data"
     try:
-        return([f for f in os.listdir("data") if f.endswith('.json')])
+        return [f for f in os.listdir(path) if f.endswith('.json')]
     except Exception as e:
         print("Error exploring files: " + str(e))

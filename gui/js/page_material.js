@@ -33,7 +33,7 @@ async function drawMaterial() {
     layers = await eel.getLayers()();
 
     let labels = [];
-    layers.reduce(function(dummy, layer) {labels.push(layer.name);}, 0);
+    layers.forEach(function(layer) {labels.push(layer.name);});
     await drawMaterial_core(labels);
     $(".canvas > div").on("click", selectLayer);
 };

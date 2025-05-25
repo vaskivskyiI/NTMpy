@@ -7,6 +7,7 @@ global src; src = source()
 global data; data = {"src": None}
 global sim; sim = Sim2T()
 
+global current_file; current_file = [""]
 
 global layers; layers = []
 global nindex; nindex = []

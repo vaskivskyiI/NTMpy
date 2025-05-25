@@ -1,6 +1,6 @@
 import eel
 import json, os
-from gui.python.variables import flags, laser, layers, nindex
+from gui.python.variables import flags, laser, layers, nindex, current_file
 
 
 # Save File #####################################
@@ -39,19 +39,63 @@ def load_file(filename="ntmpy_save.json", path="./data/"):
         nindex.clear()
         nindex.extend(data_loaded.get("nindex", []))
 
+        current_file[0] = filename
 
         return("Successfully loaded from " + filename)
     except FileNotFoundError:
         return("Error: File " + filename + " not found.")
     except Exception as e:
         return("Error loading file: " + str(e))
-    
+
+# Load File #####################################
+@eel.expose
+def new_file():
+        flags.clear()
+        laser.clear()
+        layers.clear()
+        nindex.clear()
+        current_file[0] = "Untitled"
+
+
 # Explore Files #################################
 @eel.expose
-def explore_files(path="data"):
+def explore_files(path):
     if not path:
-        path = "data"
+        path = load_path()
     try:
-        return [f for f in os.listdir(path) if f.endswith('.json')]
+        files = [f for f in os.listdir(path) if f.endswith('.json')]
+        folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+        return folders + files
     except Exception as e:
         print("Error exploring files: " + str(e))
+
+
+# Save and Load Preferences #####################
+@eel.expose
+def save_path(path):
+    with open("./gui/pref/last_path.txt", "w") as f:
+        f.write(path)
+
+@eel.expose
+def load_path():
+    with open("./gui/pref/last_path.txt", "r") as f:
+        try:
+            return f.read()
+        except FileNotFoundError:
+            return "./data/"
+
+@eel.expose
+def get_filename():
+    return(current_file)
+
+# Delete File ###################################
+@eel.expose
+def delete_file(filename, path = "./data/"):
+    return(0)
+    try:
+        if target_path.exists():
+            os.remove(path + filename)
+            return f"Successfully deleted {filename}"
+        return f"File {filename} not found"
+    except Exception as e:
+        return f"Error deleting file: {str(e)}"

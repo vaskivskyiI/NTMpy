@@ -10,20 +10,6 @@
     },
     "layers": [
         {
-            "name": "Pt",
-            "length": 0.1,
-            "rho": 1,
-            "K": [
-                "1",
-                "1"
-            ],
-            "C": [
-                "1",
-                "1"
-            ],
-            "G": "1"
-        },
-        {
             "name": "Au",
             "length": 1,
             "rho": 1,
@@ -39,11 +25,6 @@
         }
     ],
     "nindex": [
-        {
-            "l": null,
-            "nr": null,
-            "ni": null
-        },
         {
             "l": 1,
             "nr": null,

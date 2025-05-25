@@ -1,3 +1,5 @@
+let selectedFile = null;
+
 $(document).ready(async function(){
 
     drawMaterial();
@@ -15,8 +17,9 @@ $(document).ready(async function(){
         $("#sim2T_panel").slideToggle(300);
     });
 
-    curr_file = await eel.get_filename()();
-    $("#filename").val(curr_file);
+    currentFile = await eel.get_filename()();
+    currentFile = currentFile[0].slice(0, currentFile[0].lastIndexOf(".json"));
+    $("#filename").val(currentFile);
 
     dirname = await eel.load_path()();
     $("#pathname").val(dirname);
@@ -75,23 +78,31 @@ async function saveFile() {
     let message = await eel.save_file(filename)();
     $("#helpbar").css("color", "#ffffff");
     $("#helpbar").text(message);
-    explore_files();
+    exploreFiles();
 }
 
 async function loadFile() {
-    let message = await eel.load_file(selectedFile)();
-    $("#filename").val(selectedFile);
-    $("#helpbar").css("color", "#ffffff");
-    $("#helpbar").text(message);
-    drawMaterial(); 
+    if (selectedFile) {
+        let message = await eel.load_file(selectedFile)();
+        selectedFile = selectedFile.slice(0, selectedFile.lastIndexOf(".json"));
+        $("#filename").val(selectedFile);
+        $("#helpbar").css("color", "#ffffff");
+        $("#helpbar").text(message);
+        drawMaterial();
+    } else {
+        $("#helpbar").css("color", "#ff0000");
+        $("#helpbar").text("No file selected");
+    }
 }
 
 async function delFile() {
-    if (!selectedFile) return;
-    
-    if (confirm(`Delete ${selectedFile}?`)) {
-        await eel.delete_file(selectedFile)();
-        explore_files();
+    if (selectedFile) {
+        if (confirm("Delete "+ selectedFile + "?")) {
+            message = await eel.delete_file(selectedFile)();
+            $("#helpbar").css("color", "#ffffff");
+            $("#helpbar").text(message);
+            exploreFiles();
+        }
     }
 }
 

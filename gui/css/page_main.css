@@ -38,7 +38,9 @@ label {
 }
 
 #goto {
-    width: 80px;
+    flex-basis: 120px;
+    flex-grow: 0;
+    flex-shrink: 0;
     height: 30px;
     padding: 0px;
     background-image: linear-gradient(180deg, #1b1b1b,#000000)
@@ -91,4 +93,31 @@ label {
     background-color: #616161;
     border: 1px solid #ffffff;
 }
+
+.sim_info {
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+}
+
+.sim_info label {
+    width: 150px;
+    padding: 4px;
+}
+
+.sim_info span {
+    flex: 1;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#simStatus div {
+    margin: 4px 0;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+
+🟢 { color: #4CAF50; }
+🔴 { color: #ff4444; }
 

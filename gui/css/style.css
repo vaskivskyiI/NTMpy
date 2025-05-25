@@ -25,6 +25,7 @@ h1 {
   border-width: 0 0 4 0;
   border-style: solid;
   border-radius: 2px;
+  overflow: hidden;
 }
 
 table {

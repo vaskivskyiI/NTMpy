@@ -91,11 +91,8 @@ def get_filename():
 # Delete File ###################################
 @eel.expose
 def delete_file(filename, path = "./data/"):
-    return(0)
     try:
-        if target_path.exists():
-            os.remove(path + filename)
-            return f"Successfully deleted {filename}"
-        return f"File {filename} not found"
+        os.remove(path + filename)
+        return("Successfully deleted " + filename)
     except Exception as e:
-        return f"Error deleting file: {str(e)}"
+        return("Error deleting file: " + str(e))

@@ -94,29 +94,32 @@ label {
     border: 1px solid #ffffff;
 }
 
-.sim_info {
+#sim_info {
     margin: 8px 0;
     display: flex;
     align-items: center;
 }
 
-.sim_info label {
+#sim_info label {
     width: 150px;
     padding: 4px;
 }
 
-.sim_info span {
+#sim_info span {
     flex: 1;
     text-align: center;
     margin-bottom: 10px;
 }
 
-#simStatus div {
-    margin: 4px 0;
-    padding: 4px;
-    border-radius: 4px;
+.light {
+    background-color: #ff4444;
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin: 0 4 0 4;
 }
-
 
 🟢 { color: #4CAF50; }
 🔴 { color: #ff4444; }

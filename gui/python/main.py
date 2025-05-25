@@ -4,7 +4,7 @@ from gui.python.variables import flags, laser, layers, nindex, sim, src
 
 # Run Simulation #################################
 @eel.expose
-def run():
+def run_simulation():
     src_init()
     build_material()
 

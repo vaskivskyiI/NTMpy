@@ -17,11 +17,11 @@ $(document).ready(async function(){
         $("#sim2T_panel").slideToggle(300);
     });
 
-    currentFile = await eel.get_filename()();
+    let currentFile = await eel.get_filename()();
     currentFile = currentFile[0].slice(0, currentFile[0].lastIndexOf(".json"));
     $("#filename").val(currentFile);
 
-    dirname = await eel.load_path()();
+    const dirname = await eel.load_path()();
     $("#pathname").val(dirname);
     exploreFiles();
 
@@ -74,19 +74,21 @@ async function newFile() {
 }
 
 async function saveFile() {
-    let filename = $("#filename").val();
-    let message = await eel.save_file(filename)();
-    $("#helpbar").css("color", "#ffffff");
+    const filename = $("#filename").val();
+    const message = await eel.save_file(filename)();
+    const color = message.toLowerCase().includes("error")? "#ff0000" : "#ffffff";
+    $("#helpbar").css("color", color);
     $("#helpbar").text(message);
     exploreFiles();
 }
 
 async function loadFile() {
     if (selectedFile) {
-        let message = await eel.load_file(selectedFile)();
+        const message = await eel.load_file(selectedFile)();
         selectedFile = selectedFile.slice(0, selectedFile.lastIndexOf(".json"));
         $("#filename").val(selectedFile);
-        $("#helpbar").css("color", "#ffffff");
+        const color = message.toLowerCase().includes("error")? "#ff0000" : "#ffffff";
+        $("#helpbar").css("color", color);
         $("#helpbar").text(message);
         drawMaterial();
     } else {
@@ -98,8 +100,9 @@ async function loadFile() {
 async function delFile() {
     if (selectedFile) {
         if (confirm("Delete "+ selectedFile + "?")) {
-            message = await eel.delete_file(selectedFile)();
-            $("#helpbar").css("color", "#ffffff");
+            const message = await eel.delete_file(selectedFile)();
+            const color = message.toLowerCase().includes("error")? "#ff0000" : "#ffffff";
+            $("#helpbar").css("color", color);
             $("#helpbar").text(message);
             exploreFiles();
         }
@@ -107,8 +110,8 @@ async function delFile() {
 }
 
 async function runSimulation() {
-    let message = await eel.run_simulation()(); // Call the Python function
-    alert(message); // Show a success or error message
+    let message = await eel.run_simulation()();
+    alert(message);
 }
 
 async function drawMaterial() {

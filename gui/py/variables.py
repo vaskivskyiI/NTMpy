@@ -11,8 +11,13 @@ global current_file; current_file = [""]
 global layers; layers = []
 global nindex; nindex = []
 
-global flags; flags = {"reflection": False, "source_set": False, "result_available": False}
 global laser; laser = {"energy": 0, "fwhm": 0, "delay": 0}
+
+global flags; flags = { "reflection": False,
+                        "source_set": False,
+                        "layers_set": False,
+                        "result_set": False}
+
 
 global out; out = array([])
 

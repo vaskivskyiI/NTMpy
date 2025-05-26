@@ -1,3 +1,6 @@
+## Update
+The graphical inteface will soon be available on this repository.
+
 # What does NTMpy solves
 NTMpy is a python package to solve 1D diffusion equation with 2 or 3 temperature coupled
 
@@ -119,7 +122,7 @@ Please, cite the reference [paper](https://www.sciencedirect.com/science/article
 ## Dependencies
 NTMpy has four dependencies: [Numpy](http://www.numpy.org/), [Matplotlib](https://matplotlib.org/), [B-splines](https://github.com/johntfoster), and [Progressbar](https://pypi.org/project/tqdm/2.2.3/)
 
-Note that by downloading the package via `pip install NTMpy` a routine, which automatically checks if all the required packages are existent on the local machine is implemented. If one of the dependent pip packages, listed here, is missing an automatic download is initiated.
+You can download the package via `pip install NTMpy` a automatically install the missing packages. Note that the NTMpy available on PyPi is an old version!
 
   
 

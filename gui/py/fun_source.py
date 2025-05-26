@@ -13,6 +13,13 @@ def setFlags(id, prop):
 def getFlags(id):
     return flags[id]
 
+@eel.expose
+def setReflection(reflection):
+    flags["reflection"] = reflection
+    check_layers()
+    return flags["layers_set"]
+
+
 # Laser source interface #########################
 @eel.expose
 def setSource(energy, fwhm, delay):
@@ -26,15 +33,19 @@ def getSource():
     return laser
 
 @eel.expose
-def source():
-    pass
+def setWavelength(wavelength, angle):
+    laser["wavelength"] = wavelength
+    laser["angle"] = angle
 
 # Plotting source ################################
 @eel.expose
 def plot_src_x():
     src_init()
     total_leng = np.sum([ layer["length"] for layer in layers])
-    array = src.lambert_beer(np.linspace(0,total_leng, 512))
+    if flags["reflection"]:
+        array = src.transfer_matrix(np.linspace(0,total_leng, 512))
+    else:
+        array = src.lambert_beer(np.linspace(0,total_leng, 512))
     return [float(x) for x in array]
     
 
@@ -53,7 +64,18 @@ def setIndexN( nr, ni, id):
         nindex[id-1]["ni"] = ni
     else:
         nindex[id-1]["l"] = nr
+    check_layers()
+    return flags["layers_set"]
 
 @eel.expose
 def getIndexN():
     return nindex
+
+
+def check_layers():
+    if flags["reflection"]:
+        flags["layers_set"]  = not any(element["nr"] is None for element in nindex)
+        flags["layers_set"] &= not any(element["ni"] is None for element in nindex)
+    else:
+        flags["layers_set"] = not any(element["l"] is None for element in nindex)
+    flags["layers_set"] &= len(layers) > 0

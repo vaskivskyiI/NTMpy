@@ -11,7 +11,7 @@ def setLayers(layer, id = -1):
         nindex.append({"l": None, "nr": None, "ni": None})
     else:
         layers[id] = layer
-    return
+    flags["layers_set"] = False
     
 
 @eel.expose

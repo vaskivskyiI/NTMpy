@@ -56,8 +56,11 @@ def new_file():
     layers.clear()
     nindex.clear()
 
-    flags.update({"reflection": False, "source_set": False, "result_available": False})
     laser.update({"energy": 0, "fwhm": 0, "delay": 0})
+    flags.update({  "reflection": False,
+                    "source_set": False,
+                    "layers_set": False,
+                    "result_set": False})
 
     current_file[0] = "Untitled.json"
 

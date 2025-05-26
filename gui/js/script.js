@@ -1,7 +1,6 @@
 const colors = ['#a88924','#2469a8','#a84e24','#44911a','#6319af'];
 let layers;
 
-
 async function drawMaterial_core(labels) {
     
     $(".canvas div").remove();
@@ -20,6 +19,8 @@ async function drawMaterial_core(labels) {
                                 '<div' + style2 + colors[i%5] + '"></div>' + 
                             '<div>');
     }
+
+    if (await eel.getFlags("source_set")()) {$("img").css("opacity", "1");}
 
     return layers.length;
 } 

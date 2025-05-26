@@ -116,26 +116,32 @@ async function delFile() {
 }
 
 async function runSimulation() {
-    const finalTime = parseFloat($("#final_time").val());
-    const sourceSet = await eel.getFlags("soruce_set")();
+    const finalTime = parseFloat($("#sim_time").val());
+    const sourceSet = await eel.getFlags("source_set")();
+    const layersSet = await eel.getFlags("layers_set")();
+    console.log(finalTime);
     
     // Validate final time
-    if (finalTime <= 0) {
-        $("#helpbar").css("color", "#ff0000");
-        $("#helpbar").val("Final simulation time is not set or not valid");
-    } else if (souceSet) {
-        $("#helpbar").css("color", "#ff0000");
-        $("#helpbar").text("The source is not set");
-    } else if (finalTime > 0 && sourceSet) {
+    if (finalTime > 0 && sourceSet && layersSet) {
         $("#helpbar").css("color", "#ffffff");
         $("#helpbar").text("Running simulation...");
         let message = await eel.run_simulation(finalTime)();
         alert(message);
+        $("#helpbar").css("color", "#00ff00");
         $("#helpbar").text("Simulation finished");
+    }
+    else if (!finalTime > 0) {
+        $("#helpbar").css("color", "#ff0000");
+        $("#helpbar").text("Final simulation time is not set or not valid");
+    } else if (!souceSet) {
+        $("#helpbar").css("color", "#ff0000");
+        $("#helpbar").text("The source is not set");
+    } else if (!layersSet) {
+        $("#helpbar").css("color", "#ff0000");
+        $("#helpbar").text("Some material's properties are not set");
     }
     
     checkFlags();
-
 }
 
 async function drawMaterial() {
@@ -153,6 +159,13 @@ async function checkFlags() {
     } else {
         $("#sourceStatus .light").css("background-color","#ff0000")
         $("#sourceStatus .text" ).text("Source not configured");
+    }
+    if (await eel.getFlags("layers_set")()) {
+        $("#layersStatus .light").css("background-color","#00ff00")
+        $("#layersStatus .text" ).text("Material configured");
+    } else {
+        $("#layersStatus .light").css("background-color","#ff0000")
+        $("#layersStatus .text" ).text("Material not configured");
     }
     
 }

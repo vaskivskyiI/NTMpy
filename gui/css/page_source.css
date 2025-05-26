@@ -8,33 +8,41 @@
     margin-top: 10px;
 }
 
+#source_style {
+    display: flex;
+    margin-top: 8px;
+    padding-bottom: 2px;
+    padding: 4 10 4 10;
+    border: 2px solid  #000000;
+    border-radius: 4px;
+    background-color: rgb(175, 175, 175);
+    color: black;
+}
+
 #table_time td:nth-child(2) {
     padding-right: 10px;
     padding-left: 10px;
 }
-  
+
+#table_wave {
+    margin-top: 10px;
+}
+
 table input {
     width: 100%;
 }
-  
-#table_space {
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 2 0 0 0;
-    padding-top: 4px;
-}
 
-#space_header, #update_space, #plot_space {
+#layer_header, #update_layer, #plot_space {
     background-image: linear-gradient(180deg, #ad1e42,#641327)
 }
-#space_header:hover, #update_space:hover, #plot_space:hover {
+#layer_header:hover, #update_layer:hover, #plot_space:hover {
     background-image: linear-gradient(180deg, #e71a4d,#881a36)
 }
 
-#time_header, #update_time, #plot_time {
+#wave_header, #update_time, #update_wave, #plot_time {
     background-image: linear-gradient(180deg, #2a398d,#162266)
 }
-#time_header:hover, #update_time:hover, #plot_time:hover {
+#wave_header:hover, #update_time:hover, #update_wave:hover, #plot_time:hover {
     background-image: linear-gradient(180deg, #475fe7,#2135a5)
 }
 

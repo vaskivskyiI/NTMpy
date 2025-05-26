@@ -34,9 +34,14 @@ def build_material():
 
 # Initialize Source #################################
 def src_init():
-    if not flags["source_set"] or True:
-        src.angle = 0
+    if flags["source_set"]:
         src.setLaser(float(laser["energy"]), float(laser["fwhm"]))
-        src.absorption = [float(n["l"]) for n in nindex]
         src.delay = float(laser["delay"])
+    if flags["layers_set"]:
+        if flags["reflection"]:
+            src.type_x = "reflection"
+            src.refraction = [array([float(n["nr"]), float(n["ni"])]) for n in nindex]
+        else:
+            src.type_x = "lambertbeer"
+            src.absorption = [float(n["l"]) for n in nindex]
         src.thickness = [float(layer["length"]) for layer in layers]

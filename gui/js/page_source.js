@@ -1,8 +1,9 @@
 let layer_num = 0;
 let source_set;
+let layers_set;
 let reflection;
 let nindex;
-let source;
+let source = {energy: null, fwhm: null, delay: null};
 
 let data;
 
@@ -11,28 +12,32 @@ $(document).ready(async function() {
     reflection = await eel.getFlags("reflection")();
     nindex = await eel.getIndexN()();
     source_set = await eel.getFlags("source_set")();
+    layers_set = await eel.getFlags("layers_set")();
 
-    $("#time_header").on("click", function() {
-        $("#time_panel").slideToggle(300);
+    $("#wave_header").on("click", function() {
+        $("#wave_panel").slideToggle(300);
         $("#plot_panel").slideUp(300);
     })
 
-    $("#space_header").on("click", function() {
-        $("#space_panel").slideToggle(300);
+    $("#layer_header").on("click", function() {
+        $("#layer_panel").slideToggle(300);
         $("#plot_panel").slideUp(300);
     })
 
     $("#plot_header").on("click", function() {
         $("#plot_panel").slideToggle(300);
-        $( "#time_panel").slideUp(300);
-        $("#space_panel").slideUp(300);
+        $( "#wave_panel").slideUp(300);
+        $("#layer_panel").slideUp(300);
     })
 
-    $("#check_LBL").on("click", function() {reflection = false; eel.setFlags("reflection", false); drawPage();})
-    $("#check_TMM").on("click", function() {reflection =  true; eel.setFlags("reflection",  true); drawPage();})
+    $("#check_LBL").on("click", async function()
+    {   reflection = false; layers_set = await eel.setReflection(false)(); drawPage();})
+    $("#check_TMM").on("click", async function()
+    {   reflection =  true; layers_set = await eel.setReflection( true)(); drawPage();})
 
-    $("#update_space").on("click", modifyIndexN);
+    $("#update_layer").on("click", modifyIndexN);
     $("#update_time" ).on("click", setSource);
+    $("#update_wave" ).on("click", setWave);
 
     $("#plot_space").on("click", plotSpace);
     $("#plot_time" ).on("click", plotTime );
@@ -58,7 +63,7 @@ async function drawPage() {
         });
     }
 
-    if (source_set||true) {
+    if (source_set) {
         source = await eel.getSource()();
         $("#table_time input:eq(0)").val(source.energy);
         $("#table_time input:eq(1)").val(source.fwhm);
@@ -78,45 +83,60 @@ function drawMenu() {
 
     let content;
 
+    $("#table_layer tr").remove();
+    $("#table_wave, #update_wave").remove();
+
+    $("#layer_panel div label:eq(0)").text("Properties of Layer 0")
+
     if (reflection) {
-        content =   "<tr>" +
-                        "<td>Refractive Index (real)</td>" + 
-                        "<td>Refractive Index (imag)</td>" +
-                    "</tr>" +
-                    "<tr><td><input class='n_input'></td><td><input class='n_input'></td></tr>";
+
+        content =   "<tr><td>Refractive Index (real)</td><td>Refractive Index (imag)</td></tr>" +
+                    "<tr><td style='margin-right: 5px'><input class='n_input'></td>" +
+                    "<td style='margin-left: 5px'><input class='n_input'></td></tr>";
+
+        $("#table_layer").append(content);
         $("#check_TMM").prop("checked", true);
+
+        content =   "<table id='table_wave'>" +
+                    "<tr><td>Wavelength</td><td>Incidence Angle</td></tr>" +
+                    "<tr><td style='margin-right:5px'><input class='k_input'></td>" +
+                    "<td style='margin-left:5px'><input class='k_input'></td></tr>";
+                    "</table>";
+
+        $("#wave_panel").append(content);
+        $("#wave_panel").append("<button class='button' id='update_wave'>Update Source Reflection</button>")
+
     } else {
         content =   "<tr><td>Absorption Length</td></tr>" + 
                     "<tr><td><input class='n_input'></td></tr>";
+        
+        $("#table_layer").append(content);
         $("#check_LBL").prop("checked", true);
     }
-
-    $("#table_space tr").remove();
-    $("#table_space").prepend(content);
 
 } 
 
 function selectLayer() {
     layer_num = $(this).index();
 
-    $("#space_panel div label:eq(0)").text("Properties of Layer " + layer_num);
+    $("#layer_header").text("Properties of Layer " + layer_num);
 
 
     if (reflection && nindex[layer_num - 1].nr !== null && nindex[layer_num - 1].ni !== null) {
-        $("#table_space input:eq(0)").val(nindex[layer_num - 1].nr);
-        $("#table_space input:eq(1)").val(nindex[layer_num - 1].ni);
+        $("#table_layer input:eq(0)").val(nindex[layer_num - 1].nr);
+        $("#table_layer input:eq(1)").val(nindex[layer_num - 1].ni);
     } else if (!reflection && nindex[layer_num - 1].l !== null) {
-        $("#table_space input:eq(0)").val(nindex[layer_num - 1].l);
+        $("#table_layer input:eq(0)").val(nindex[layer_num - 1].l);
     }
 
 }
 
 function setSource() {
-    energy = parseFloat($("#table_time input:eq(0)").val());
-    fwhm   = parseFloat($("#table_time input:eq(1)").val());
-    delay  = parseFloat($("#table_time input:eq(2)").val());
+    const energy = parseFloat($("#table_time input:eq(0)").val());
+    const fwhm   = parseFloat($("#table_time input:eq(1)").val());
+    const delay  = parseFloat($("#table_time input:eq(2)").val());
 
-    valid = (energy > 0) && (fwhm > 0) && !isNaN(delay); 
+    const valid = (energy > 0) && (fwhm > 0) && !isNaN(delay); 
 
 
     if (valid) {
@@ -128,6 +148,7 @@ function setSource() {
         source.delay  = delay;
 
         source_set = true;
+        drawPage();
 
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Source added correctly");
@@ -138,7 +159,32 @@ function setSource() {
 
 }
 
-function modifyIndexN() {
+async function setWave() {
+    const wavelength = parseFloat($("#table_wave input:eq(0)").val());
+    const angle      = parseFloat($("#table_wave input:eq(1)").val());
+
+    const valid = (wavelength > 0) && (angle >= 0) && (angle < 90); 
+    
+    if (valid) {
+        eel.setWave(wavelength, angle);
+        eel.setFlags("source_set", true);
+        
+        source.angle = angle;
+        source.wavelength  = wavelength;
+
+        //source_set = true;
+        drawPage();
+
+        $("#helpbar").css("color","#ffffff");
+        $("#helpbar").text("Source added correctly");
+    } else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot add the source: Some source properties are invalid");
+    }
+}
+
+
+async function modifyIndexN() {
 
     let complete = true;
     $(".n_input").each(function() {complete &= !isNaN(parseFloat($(this).val()));})
@@ -146,12 +192,12 @@ function modifyIndexN() {
     if (layer_num > 0 && complete) {
 
         if (reflection) {
-            nindex[layer_num - 1].nr = parseFloat($("#table_space input:eq(0)").val());
-            nindex[layer_num - 1].ni = parseFloat($("#table_space input:eq(1)").val());
-            eel.setIndexN( nindex[layer_num - 1].nr, nindex[layer_num - 1].ni, layer_num)
+            nindex[layer_num - 1].nr = parseFloat($("#table_layer input:eq(0)").val());
+            nindex[layer_num - 1].ni = parseFloat($("#table_layer input:eq(1)").val());
+            layers_set = await eel.setIndexN( nindex[layer_num - 1].nr, nindex[layer_num - 1].ni, layer_num)();
         } else {
-            nindex[layer_num - 1].l = parseFloat($("#table_space input:eq(0)").val());
-            eel.setIndexN( nindex[layer_num - 1].l, 0, layer_num )
+            nindex[layer_num - 1].l = parseFloat($("#table_layer input:eq(0)").val());
+            layers_set = await eel.setIndexN( nindex[layer_num - 1].l, 0, layer_num )();
         }
 
         drawPage();
@@ -186,15 +232,8 @@ async function plotTime() {
 }
 
 async function plotSpace() {
-    let complete = true;
-    
-    if (reflection) {
-        nindex.forEach(function(layer) { complete &= (layer.nr !== null) && (layer.ni !== null); });
-    } else {
-        nindex.forEach(function(layer) { complete &= (layer.l !== null);});
-    }
 
-    if (complete) {
+    if (layers_set) {
         drawCurve(await eel.plot_src_x()());
         spaceStep = layers.reduce((length, layer) => length + layer.length, 0) / 4;
         spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));

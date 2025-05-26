@@ -1,7 +1,8 @@
 {
     "flags": {
         "reflection": false,
-        "source_set": true
+        "source_set": true,
+        "layers_set": true
     },
     "laser": {
         "energy": 1,

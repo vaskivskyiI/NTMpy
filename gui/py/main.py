@@ -1,22 +1,28 @@
+import sys
 import eel
-from gui.python.variables import flags, laser, layers, nindex, sim, src, out
+
+sys.path.insert(0, './code')
+from Sim2T import Sim2T # type: ignore
+from Source import source # type: ignore
+from numpy import array # type: ignore
+
+from gui.py.variables import flags, laser, layers, nindex, src, out
 
 
 # Run Simulation #################################
 @eel.expose
 def run_simulation(final_time):
     src_init()
-    build_material()
+    sim = build_material()
     sim.setSource(src)
     sim.final_time = float(final_time)
     out = sim.run()
     print(out)
     return out
 
-
-
 # Build Material ####################################
 def build_material():
+    sim = Sim2T()
     for layer in layers:
         length = layer["length"]
         cond = [eval(layer["K"][0]), eval(layer["K"][1])]
@@ -24,6 +30,7 @@ def build_material():
         coup =  eval(layer["G"])
         dens = layer["rho"]
         sim.addLayer( length, cond, capc, dens, coup)
+        return sim
 
 # Initialize Source #################################
 def src_init():

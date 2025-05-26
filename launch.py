@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, './gui/python')
+sys.path.insert(0, './gui/py')
 
 import eel
 

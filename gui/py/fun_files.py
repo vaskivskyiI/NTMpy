@@ -1,6 +1,6 @@
 import eel
 import json, os
-from gui.python.variables import flags, laser, layers, nindex, current_file
+from gui.py.variables import flags, laser, layers, nindex, current_file
 
 
 # Save File #####################################
@@ -50,11 +50,16 @@ def load_file(filename="ntmpy_save.json", path="./data/"):
 # Load File #####################################
 @eel.expose
 def new_file():
-        flags.clear()
-        laser.clear()
-        layers.clear()
-        nindex.clear()
-        current_file[0] = "Untitled"
+
+    flags.clear()
+    laser.clear()
+    layers.clear()
+    nindex.clear()
+
+    flags.update({"reflection": False, "source_set": False, "result_available": False})
+    laser.update({"energy": 0, "fwhm": 0, "delay": 0})
+
+    current_file[0] = "Untitled.json"
 
 
 # Explore Files #################################

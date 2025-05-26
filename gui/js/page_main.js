@@ -29,6 +29,8 @@ $(document).ready(async function(){
         await exploreFiles($("#pathname").val());
     });
 
+    checkFlags();
+
 });
 
 async function exploreFiles(path = null) {
@@ -71,6 +73,7 @@ async function newFile() {
     $("#helpbar").css("color", "#ffffff");
     $("#helpbar").text("New simulation file created");
     drawMaterial();
+    checkFlags();
 }
 
 async function saveFile() {
@@ -90,11 +93,14 @@ async function loadFile() {
         const color = message.toLowerCase().includes("error")? "#ff0000" : "#ffffff";
         $("#helpbar").css("color", color);
         $("#helpbar").text(message);
+        $("td").removeClass("selected");
         drawMaterial();
     } else {
         $("#helpbar").css("color", "#ff0000");
         $("#helpbar").text("No file selected");
     }
+
+    checkFlags();
 }
 
 async function delFile() {
@@ -110,8 +116,26 @@ async function delFile() {
 }
 
 async function runSimulation() {
-    let message = await eel.run_simulation($("#sim_time").val())();
-    alert(message);
+    const finalTime = parseFloat($("#final_time").val());
+    const sourceSet = await eel.getFlags("soruce_set")();
+    
+    // Validate final time
+    if (finalTime <= 0) {
+        $("#helpbar").css("color", "#ff0000");
+        $("#helpbar").val("Final simulation time is not set or not valid");
+    } else if (souceSet) {
+        $("#helpbar").css("color", "#ff0000");
+        $("#helpbar").text("The source is not set");
+    } else if (finalTime > 0 && sourceSet) {
+        $("#helpbar").css("color", "#ffffff");
+        $("#helpbar").text("Running simulation...");
+        let message = await eel.run_simulation(finalTime)();
+        alert(message);
+        $("#helpbar").text("Simulation finished");
+    }
+    
+    checkFlags();
+
 }
 
 async function drawMaterial() {
@@ -122,5 +146,14 @@ async function drawMaterial() {
     await drawMaterial_core(labels);
 };
 
-
+async function checkFlags() {
+    if (await eel.getFlags("source_set")()) {
+        $("#sourceStatus .light").css("background-color","#00ff00")
+        $("#sourceStatus .text" ).text("Source configured");
+    } else {
+        $("#sourceStatus .light").css("background-color","#ff0000")
+        $("#sourceStatus .text" ).text("Source not configured");
+    }
+    
+}
 

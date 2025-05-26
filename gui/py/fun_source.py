@@ -1,7 +1,7 @@
 import eel
 import numpy as np
 
-from gui.python.variables import flags, laser, layers, nindex, src
+from gui.py.variables import flags, laser, layers, nindex, src
 from main import src_init
 
 # Flags interfaces ###############################
@@ -10,8 +10,8 @@ def setFlags(id, prop):
     flags[id] = prop
 
 @eel.expose
-def getFlags(prop):
-    return flags[prop]
+def getFlags(id):
+    return flags[id]
 
 # Laser source interface #########################
 @eel.expose

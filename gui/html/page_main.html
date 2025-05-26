@@ -34,18 +34,22 @@
 
     <div class="headerpanel" id="sim2T_header">Simulation Menu</div>
     <div class="content" id="sim2T_panel" style="display:flex; flex-direction: column;">
+        <span style="display: flex; flex-direction: row; flex: 1;">
+            <label>Total simulation Time: </label>
+            <input type="number" id="sim_time">
+        </span>
         <div id="sim_info">
-            <span style="display: flex; flex-direction: row; flex: 0.5;">
-                <label>Simulation Time: </label>
-                <input type="number" id="sim_time">
-            </span>
-            <span id="sourceStatus">
+            <span id="layersStatus" style="flex: 1;">
                 <div class="light"></div>
-                <div>Source not configured</div>
+                <div class="text">Material not configured</div>
             </span>
-            <span id="resultStatus">
+            <span id="sourceStatus" style="flex: 1;">
                 <div class="light"></div>
-                <div>Results not available</div>
+                <div class="text">Source not configured</div>
+            </span>
+            <span id="resultStatus" style="flex: 1;">
+                <div class="light"></div>
+                <div class="text">Results not available</div>
             </span>
         </div>
         <button id="run_2Tsim" class="button">Run Simulation</button>

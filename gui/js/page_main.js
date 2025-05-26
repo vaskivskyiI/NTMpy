@@ -110,7 +110,7 @@ async function delFile() {
 }
 
 async function runSimulation() {
-    let message = await eel.run_simulation()();
+    let message = await eel.run_simulation($("#sim_time").val())();
     alert(message);
 }
 

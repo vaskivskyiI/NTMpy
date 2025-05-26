@@ -1,12 +1,17 @@
 import eel
-from gui.python.variables import flags, laser, layers, nindex, sim, src
+from gui.python.variables import flags, laser, layers, nindex, sim, src, out
 
 
 # Run Simulation #################################
 @eel.expose
-def run_simulation():
+def run_simulation(final_time):
     src_init()
     build_material()
+    sim.setSource(src)
+    sim.final_time = float(final_time)
+    out = sim.run()
+    print(out)
+    return out
 
 
 
@@ -14,12 +19,11 @@ def run_simulation():
 def build_material():
     for layer in layers:
         length = layer["length"]
-        cond = [eval("lambda Te, Tl: " + layer["K"][0]), eval("lambda Te, Tl: " + layer["K"][1])]
-        capc = [eval("lambda Te, Tl: " + layer["C"][0]), eval("lambda Te, Tl: " + layer["C"][1])]
-        coup =  eval("lambda Te, Tl: " + layer["G"])
+        cond = [eval(layer["K"][0]), eval(layer["K"][1])]
+        capc = [eval(layer["C"][0]), eval(layer["C"][1])]
+        coup =  eval(layer["G"])
         dens = layer["rho"]
         sim.addLayer( length, cond, capc, dens, coup)
-
 
 # Initialize Source #################################
 def src_init():

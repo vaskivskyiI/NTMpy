@@ -108,19 +108,22 @@ label {
 #sim_info span {
     flex: 1;
     text-align: center;
-    margin-bottom: 10px;
+}
+
+#resultStatus, #sourceStatus {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex: 1;
 }
 
 .light {
     background-color: #ff4444;
     border: 1px solid #ffffff;
     border-radius: 10px;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     display: inline-block;
-    margin: 0 4 0 4;
+    margin: 0 8 0 8;
 }
-
-🟢 { color: #4CAF50; }
-🔴 { color: #ff4444; }
 

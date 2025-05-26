@@ -11,8 +11,11 @@ async function drawMaterial_core(labels) {
 
     layers = await eel.getLayers()()
 
+    const total_length = layers.reduce((length, layer) => length + layer.length, 0);
+    const layers_percent = layers.map(layer => layer.length / total_length);
+
     for (let i = 0; i < layers.length; i++) {
-        $(".canvas").append('<div style="flex:' + layers[i].length + '">' + 
+        $(".canvas").append('<div style="flex:' + layers_percent[i] + '">' + 
                                 '<div' + style1 + labels[i] + '</div>' +
                                 '<div' + style2 + colors[i%5] + '"></div>' + 
                             '<div>');

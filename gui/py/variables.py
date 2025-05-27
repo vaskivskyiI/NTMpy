@@ -11,7 +11,12 @@ global current_file; current_file = [""]
 global layers; layers = []
 global nindex; nindex = []
 
-global laser; laser = {"energy": 0, "fwhm": 0, "delay": 0}
+global laser; laser = { "energy":        0,
+                        "fwhm":          0,
+                        "delay":         0,
+                        "wavelength": None,
+                        "angle":         0,
+                        "polarization": "s"}
 
 global flags; flags = { "reflection": False,
                         "source_set": False,

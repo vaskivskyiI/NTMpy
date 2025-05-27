@@ -56,7 +56,12 @@ def new_file():
     layers.clear()
     nindex.clear()
 
-    laser.update({"energy": 0, "fwhm": 0, "delay": 0})
+    laser.update({  "energy":        0,
+                    "fwhm":          0,
+                    "delay":         0,
+                    "wavelength": None,
+                    "angle":         0,
+                    "polarization": "s"})
     flags.update({  "reflection": False,
                     "source_set": False,
                     "layers_set": False,

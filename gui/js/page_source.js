@@ -3,7 +3,7 @@ let source_set;
 let layers_set;
 let reflection;
 let nindex;
-let source = {energy: null, fwhm: null, delay: null};
+let source = {energy: null, fwhm: null, delay: null, wavelength: null, angle: null};
 
 let data;
 
@@ -98,10 +98,13 @@ function drawMenu() {
         $("#check_TMM").prop("checked", true);
 
         content =   "<table id='table_wave'>" +
-                    "<tr><td>Wavelength</td><td>Incidence Angle</td></tr>" +
-                    "<tr><td style='margin-right:5px'><input class='k_input'></td>" +
-                    "<td style='margin-left:5px'><input class='k_input'></td></tr>";
-                    "</table>";
+                    "<tr><td>Wavelength</td><td>Incidence Angle</td><td>Polarization</td></tr>" +
+                    "<tr><td><input class='k_input'></td>" +
+                    "<td style=><input class='k_input'></td>" + 
+                    "<td style='display:flex;flex-direction: row; align-items: center;'>" +
+                    "<div style='flex:1'><input type='radio' name='pol' style='width: 12px' id='checkS'><label>S</label></div>" +
+                    "<div style='flex:1'><input type='radio' name='pol' style='width: 12px' id='checkP'><label>P</label>" +
+                    "</div></td></tr></table>";
 
         $("#wave_panel").append(content);
         $("#wave_panel").append("<button class='button' id='update_wave'>Update Source Reflection</button>")

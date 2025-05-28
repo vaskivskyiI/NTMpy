@@ -12,6 +12,7 @@ def save_file(filename="ntmpy_save.json", path="./data/"):
         "layers": layers,
         "nindex": nindex,
     }
+    current_file[0] = filename
     try:
         json.dump(data_to_save, open(path + filename + ".json", 'w'), indent=4)
         return("Successfully saved to " + path + filename)
@@ -55,13 +56,14 @@ def new_file():
     laser.clear()
     layers.clear()
     nindex.clear()
-
-    laser.update({  "energy":        0,
-                    "fwhm":          0,
-                    "delay":         0,
-                    "wavelength": None,
-                    "angle":         0,
-                    "polarization": "s"})
+  
+    laser.update({  "energy":       None,
+                    "fwhm":         None,
+                    "delay":        None,
+                    "wavelength":   None,
+                    "angle":        None,
+                    "polarization": None})
+                    
     flags.update({  "reflection": False,
                     "source_set": False,
                     "layers_set": False,

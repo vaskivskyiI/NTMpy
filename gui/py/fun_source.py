@@ -17,7 +17,8 @@ def getFlags(id):
 def setReflection(reflection):
     flags["reflection"] = reflection
     check_layers()
-    return flags["layers_set"]
+    check_source()
+    return [flags["source_set"], flags["layers_set"]]
 
 
 # Laser source interface #########################
@@ -33,9 +34,10 @@ def getSource():
     return laser
 
 @eel.expose
-def setWavelength(wavelength, angle):
+def setWave(wavelength, angle, polarization):
     laser["wavelength"] = wavelength
     laser["angle"] = angle
+    laser["polarization"] = polarization
 
 # Plotting source ################################
 @eel.expose
@@ -79,3 +81,13 @@ def check_layers():
     else:
         flags["layers_set"] = not any(element["l"] is None for element in nindex)
     flags["layers_set"] &= len(layers) > 0
+
+def check_source():
+    flags["source_set"] = True
+    flags["source_set"] &= laser["energy"] is not None
+    flags["source_set"] &= laser["fwhm"]   is not None
+    flags["source_set"] &= laser["delay"]  is not None
+    if flags["reflection"]:
+        flags["source_set"] &= laser["wavelength"] is not None
+        flags["source_set"] &= laser["angle"] is not None
+        flags["source_set"] &= laser["polarization"] is not None

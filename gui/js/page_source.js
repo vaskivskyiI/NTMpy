@@ -14,8 +14,8 @@ $(document).ready(async function() {
     source_set = await eel.getFlags("source_set")();
     layers_set = await eel.getFlags("layers_set")();
 
-    $("#wave_header").on("click", function() {
-        $("#wave_panel").slideToggle(300);
+    $("#source_header").on("click", function() {
+        $("#source_panel").slideToggle(300);
         $("#plot_panel").slideUp(300);
     })
 
@@ -26,18 +26,23 @@ $(document).ready(async function() {
 
     $("#plot_header").on("click", function() {
         $("#plot_panel").slideToggle(300);
-        $( "#wave_panel").slideUp(300);
+        $("#source_panel").slideUp(300);
         $("#layer_panel").slideUp(300);
     })
 
-    $("#check_LBL").on("click", async function()
-    {   reflection = false; layers_set = await eel.setReflection(false)(); drawPage();})
-    $("#check_TMM").on("click", async function()
-    {   reflection =  true; layers_set = await eel.setReflection( true)(); drawPage();})
+    $("#check_LBL").on("click", async function() {
+        reflection = false;
+        [source_set, layers_set] = await eel.setReflection(false)();
+        drawPage();
+    })
+    $("#check_TMM").on("click", async function() {
+        reflection =  true;
+        [source_set, layers_set] = await eel.setReflection( true)();
+        drawPage();
+    })
 
     $("#update_layer").on("click", modifyIndexN);
-    $("#update_time" ).on("click", setSource);
-    $("#update_wave" ).on("click", setWave);
+    $("#update_source" ).on("click", setSource);
 
     $("#plot_space").on("click", plotSpace);
     $("#plot_time" ).on("click", plotTime );
@@ -63,19 +68,27 @@ async function drawPage() {
         });
     }
 
+    drawMenu();
+    drawAxis();
+
     if (source_set) {
         source = await eel.getSource()();
-        $("#table_time input:eq(0)").val(source.energy);
-        $("#table_time input:eq(1)").val(source.fwhm);
-        $("#table_time input:eq(2)").val(source.delay);
+        $("#input_energy").val(source.energy);
+        $("#input_fwhm"  ).val(source.fwhm);
+        $("#input_delay" ).val(source.delay);
+        if (reflection) {
+            $(".k_input:eq(0)").val(source.wavelength);
+            $(".k_input:eq(1)").val(source.angle);
+            if (source.polarization === "S") { $("#checkS").prop("checked", true); }
+            else { $("#checkP").prop("checked", true); }
+        }
     }
 
     
     await drawMaterial_core(labels);
     $(".canvas > div").on("click", selectLayer);
 
-    drawMenu();
-    drawAxis();
+
 
 };
 
@@ -84,9 +97,12 @@ function drawMenu() {
     let content;
 
     $("#table_layer tr").remove();
-    $("#table_wave, #update_wave").remove();
+    $("#table_source tr").remove();
 
-    $("#layer_panel div label:eq(0)").text("Properties of Layer 0")
+    content =   "<tr><td>Incident Energy:</td><td>Full Width Half Max (Gaussian):</td><td>Delay:</td></tr>" +
+    "<tr><td><input id='input_energy'></td><td><input id='input_fwhm'></td><td><input id='input_delay'></td></tr>"
+    
+    $("#table_source").append(content);
 
     if (reflection) {
 
@@ -97,17 +113,15 @@ function drawMenu() {
         $("#table_layer").append(content);
         $("#check_TMM").prop("checked", true);
 
-        content =   "<table id='table_wave'>" +
-                    "<tr><td>Wavelength</td><td>Incidence Angle</td><td>Polarization</td></tr>" +
+        content =   "<tr style='margin-top:4px'><td>Wavelength</td><td>Incidence Angle</td><td>Polarization</td></tr>" +
                     "<tr><td><input class='k_input'></td>" +
                     "<td style=><input class='k_input'></td>" + 
                     "<td style='display:flex;flex-direction: row; align-items: center;'>" +
                     "<div style='flex:1'><input type='radio' name='pol' style='width: 12px' id='checkS'><label>S</label></div>" +
                     "<div style='flex:1'><input type='radio' name='pol' style='width: 12px' id='checkP'><label>P</label>" +
-                    "</div></td></tr></table>";
+                    "</div></td></tr>";
 
-        $("#wave_panel").append(content);
-        $("#wave_panel").append("<button class='button' id='update_wave'>Update Source Reflection</button>")
+        $("#table_source").append(content);
 
     } else {
         content =   "<tr><td>Absorption Length</td></tr>" + 
@@ -135,21 +149,38 @@ function selectLayer() {
 }
 
 function setSource() {
-    const energy = parseFloat($("#table_time input:eq(0)").val());
-    const fwhm   = parseFloat($("#table_time input:eq(1)").val());
-    const delay  = parseFloat($("#table_time input:eq(2)").val());
+    const energy = parseFloat($("#input_energy").val());
+    const fwhm   = parseFloat($("#input_fwhm"  ).val());
+    const delay  = parseFloat($("#input_delay" ).val());
 
-    const valid = (energy > 0) && (fwhm > 0) && !isNaN(delay); 
+    let wavelength, angle, polarization;
 
+    let valid = (energy > 0) && (fwhm > 0) && !isNaN(delay); 
+
+    if (reflection) {
+        wavelength = parseFloat($(".k_input:eq(0)").val());
+        angle      = parseFloat($(".k_input:eq(1)").val());
+        valid &= (wavelength > 0) && (angle >= 0) && (angle < 90);
+        valid &= ($("#checkS").prop("checked") || $("#checkP").prop("checked"));
+    }
 
     if (valid) {
         eel.setSource(energy, fwhm, delay);
-        eel.setFlags("source_set", true);
         
         source.energy = energy;
         source.fwhm   = fwhm;
         source.delay  = delay;
 
+        if (reflection) {
+            polarization = $("#checkS").prop("checked") ? "S" : "P";
+            eel.setWave(wavelength, angle, polarization);
+            
+            source.angle = angle;
+            source.wavelength  = wavelength;
+            source_set.polarization = polarization;
+        }
+
+        eel.setFlags("source_set", true);
         source_set = true;
         drawPage();
 
@@ -157,33 +188,9 @@ function setSource() {
         $("#helpbar").text("Source added correctly");
     } else {
         $("#helpbar").css("color","#ff5555");
-        $("#helpbar").text("Cannot add the source: Some source properties are invalid");
+        $("#helpbar").text("Cannot add the source: Some source properties are missing or invalid");
     }
 
-}
-
-async function setWave() {
-    const wavelength = parseFloat($("#table_wave input:eq(0)").val());
-    const angle      = parseFloat($("#table_wave input:eq(1)").val());
-
-    const valid = (wavelength > 0) && (angle >= 0) && (angle < 90); 
-    
-    if (valid) {
-        eel.setWave(wavelength, angle);
-        eel.setFlags("source_set", true);
-        
-        source.angle = angle;
-        source.wavelength  = wavelength;
-
-        //source_set = true;
-        drawPage();
-
-        $("#helpbar").css("color","#ffffff");
-        $("#helpbar").text("Source added correctly");
-    } else {
-        $("#helpbar").css("color","#ff5555");
-        $("#helpbar").text("Cannot add the source: Some source properties are invalid");
-    }
 }
 
 

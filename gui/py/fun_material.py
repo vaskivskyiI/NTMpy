@@ -1,5 +1,5 @@
 import eel
-from gui.py.variables import layers, nindex
+from gui.py.variables import layers, nindex, flags
 
 
 # Material properties interfaces #################

@@ -126,7 +126,7 @@ async function runSimulation() {
         $("#helpbar").css("color", "#ffffff");
         $("#helpbar").text("Running simulation...");
         let message = await eel.run_simulation(finalTime)();
-        alert(message);
+        //alert(message);
         $("#helpbar").css("color", "#00ff00");
         $("#helpbar").text("Simulation finished");
     }

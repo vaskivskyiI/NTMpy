@@ -1,0 +1,55 @@
+/* Add button color schemes matching other pages */
+#plot_python {
+    background-image: linear-gradient(180deg, #2a398d,#162266);
+}
+#plot_python:hover {
+    background-image: linear-gradient(180deg, #475fe7,#2135a5);
+}
+
+#plot_time {
+    background-image: linear-gradient(180deg, #8e18a5,#640f75)
+}
+#plot_time:hover {
+    background-image: linear-gradient(180deg, #b222cf,#8a15a1)
+}
+
+#anim_play{
+    background-image: linear-gradient(180deg, #498d2a,#366616)
+}
+#anim_play:hover {
+    background-image: linear-gradient(180deg, #5ce034,#40a521)
+}
+
+#anim_stop {
+    background-image: linear-gradient(180deg, #ad1e42,#641327)
+}
+#anim_stop:hover {
+    background-image: linear-gradient(180deg, #e71a4d,#881a36)
+}
+
+#plot_save {
+    background-image: linear-gradient(180deg, #c58103,#856600);
+}
+#plot_save:hover {
+    background-image: linear-gradient(180deg, #f3b303,#b68500);
+}
+
+#plot_anim {
+    background-image: linear-gradient(180deg, #252525,#000000);
+}
+
+#plot_anim:hover {
+    background-image: linear-gradient(180deg, #424242,#242424);
+}
+
+#extend_sim {
+    font-variant: small-caps;
+    font-weight: bold;
+    font-size: 22px;
+    color: #000000;
+    background-image: linear-gradient(180deg, #dadada,#b1b1b1);
+    margin-top: 8px;
+}
+#extend_sim:hover {
+    background-image: linear-gradient(180deg, #ffffff,#dfdfdf)
+}

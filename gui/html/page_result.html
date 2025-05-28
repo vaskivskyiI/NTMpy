@@ -1,0 +1,51 @@
+{% extends 'template.html' %}
+
+{% block content %}
+<script type='text/javascript' src="../js/page_result.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/page_result.css">
+<div style="flex: 1;">
+    <div class="headerpanel">Simulation Results</div>
+    <div class="content" style="display:flex; flex-direction: column;">
+        <div style="margin-left: 35px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+            <span>
+                <label>Filename for saving: </label>
+                <input type="text" id="save_name">    
+            </span>
+            <span style="display: flex; align-items: center;">
+                <div style="height:4px; width: 20px; background-color: #ee5555;"></div>
+                <label style="margin: 0 10 0 10;">Electron temperature</label>
+                <div style="height:4px; width: 20px; background-color: #5555ee;"></div>
+                <label  style="margin: 0 10 0 10;">Lattice temperature</label>
+            </span>
+        </div>
+        <canvas id="plot" height="300" width="950"></canvas>
+
+        <div style="display:flex;  width: 100%; justify-content: space-evenly">
+            <label>Time plot settings:</label>
+            <div>
+                <input type="radio" id="plot_zero" name="plot_type" checked>
+                <label for="plot_2D">Surface temperature</label>
+            </div>
+            <div>
+            <input type="radio" id="plot_exp" name="plot_type">
+            <label for="plot_3D">Exponential decay with penetration depth:</label>
+            <input id="penetration">
+            </div>
+        </div>
+        <div style="display:flex; margin-top:10px">
+            <button class="button" id="plot_time"  >Time plot</button>
+            <button class="button" id="plot_save"  >Save Data</button>
+            <button class="button" id="plot_python">Python   </button>
+        </div>
+        <div style="display:flex; margin-top:10px">
+            <button class="button" id="plot_anim">Animation</button>
+            <button class="button" id="anim_play">Play</button>
+            <button class="button" id="anim_stop">Stop</button>
+        </div>
+        <div style="display:flex; margin-top:10px">
+            <button class="button" id="extend_sim">Extend Simulation Time</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+ 

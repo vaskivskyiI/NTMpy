@@ -40,7 +40,10 @@ def src_init():
     if flags["layers_set"]:
         if flags["reflection"]:
             src.type_x = "reflection"
-            src.refraction = [array([float(n["nr"]), float(n["ni"])]) for n in nindex]
+            src.refraction = [float(n["nr"]) + 1j * float(n["ni"]) for n in nindex]
+            src.angle = laser["angle"]
+            src.polarization = laser["polarization"]
+            src.wavelength = laser["wavelength"]
         else:
             src.type_x = "lambertbeer"
             src.absorption = [float(n["l"]) for n in nindex]

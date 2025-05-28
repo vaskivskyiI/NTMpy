@@ -18,11 +18,12 @@ def run_simulation(final_time):
     sim.setSource(src)
     sim.final_time = float(final_time)
     out = sim.run()
+    filename = "./data/" + current_file[0].split(".")[:-1][0]
+    savez(filename, x = out[0], t=out[1], Te=out[2][0], Tl=out[2][1])
     
-    filename = current_file[0].split(".")[0] + ".npz"
-    print(filename)
-    #savez(current_file[0], t=sim.t, x=sim.x, out=out)
-    
+    #with load('foo.npz') as data:
+    #a = data['a']
+
     time["computation"] = sim.computation_time
     flags["result_set"] = True
     

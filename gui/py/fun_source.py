@@ -16,6 +16,7 @@ def getFlags(id):
 @eel.expose
 def setReflection(reflection):
     flags["reflection"] = reflection
+    flags["result_set"] = False
     check_layers()
     check_source()
     return [flags["source_set"], flags["layers_set"]]
@@ -25,6 +26,7 @@ def setReflection(reflection):
 @eel.expose
 def setSource(energy, fwhm, delay):
     flags["source_set"] = True
+    flags["result_set"] = False
     laser["energy"] = energy
     laser["fwhm"]   = fwhm
     laser["delay"]  = delay
@@ -38,6 +40,7 @@ def setWave(wavelength, angle, polarization):
     laser["wavelength"] = wavelength
     laser["angle"] = angle
     laser["polarization"] = polarization
+    flags["result_set"] = False
 
 # Plotting source ################################
 @eel.expose
@@ -67,6 +70,7 @@ def setIndexN( nr, ni, id):
     else:
         nindex[id-1]["l"] = nr
     check_layers()
+    flags["result_set"] = False
     return flags["layers_set"]
 
 @eel.expose

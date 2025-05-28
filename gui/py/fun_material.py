@@ -12,6 +12,7 @@ def setLayers(layer, id = -1):
     else:
         layers[id] = layer
     flags["layers_set"] = False
+    flags["result_set"] = False
     
 
 @eel.expose

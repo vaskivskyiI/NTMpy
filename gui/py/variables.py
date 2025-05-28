@@ -5,6 +5,7 @@ from numpy import array # type: ignore
 
 global src; src = source()
 
+global current_path; current_path = ["./data/"]
 global current_file; current_file = [""]
 
 global layers; layers = []

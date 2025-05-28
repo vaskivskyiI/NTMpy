@@ -29,6 +29,11 @@ $(document).ready(async function(){
         await exploreFiles($("#pathname").val());
     });
 
+    if (await eel.getTime("simulation")() > 0)
+    {   $("#sim_time").val(await eel.getTime("simulation")()); }
+    if (await eel.getFlags("result_set")())
+    {   $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds"); }
+        
     checkFlags();
 
 });
@@ -119,14 +124,13 @@ async function runSimulation() {
     const finalTime = parseFloat($("#sim_time").val());
     const sourceSet = await eel.getFlags("source_set")();
     const layersSet = await eel.getFlags("layers_set")();
-    console.log(finalTime);
     
     // Validate final time
     if (finalTime > 0 && sourceSet && layersSet) {
         $("#helpbar").css("color", "#ffffff");
         $("#helpbar").text("Running simulation...");
-        let message = await eel.run_simulation(finalTime)();
-        //alert(message);
+        await eel.run_simulation(finalTime)();
+        $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds");
         $("#helpbar").css("color", "#00ff00");
         $("#helpbar").text("Simulation finished");
     }
@@ -166,6 +170,15 @@ async function checkFlags() {
     } else {
         $("#layersStatus .light").css("background-color","#ff0000")
         $("#layersStatus .text" ).text("Material not configured");
+    }
+    if (await eel.getFlags("result_set")()) {
+        $("#resultStatus .light").css("background-color","#00ff00")
+        $("#resultStatus .text" ).text("Results available");
+        $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds");
+    } else {
+        $("#resultStatus .light").css("background-color","#ff0000")
+        $("#resultStatus .text" ).text("Results not available");
+        $("#comp_time").text("Never run");
     }
     
 }

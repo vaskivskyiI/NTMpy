@@ -90,6 +90,7 @@ class Sim2T(object):
         self.zeroE = []  # boolean: layer with zero conductivity (elec)
         self.zeroL = []  # boolean: layer with zero conductivity (latt)
         
+        self.computation_time = 0
 
 # ========================================================================================
 #
@@ -461,6 +462,7 @@ class Sim2T(object):
             phi_E[i] = self.P0 @ c_E; phi_L[i] = self.P0 @ c_L
         # END OF THE MAIN LOOP
         end_EL = time.time()
+        self.computation_time = end_EL - start_EL
         self.warning(0, str(end_EL - start_EL))
         return self.y, self.t, np.transpose(np.dstack([phi_E, phi_L]))
 

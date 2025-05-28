@@ -23,6 +23,7 @@ global flags; flags = { "reflection": False,
                         "result_set": False}
 
 
+global time; time = {"simulation": 0, "computation": 0}
 global out; out = array([])
 
 

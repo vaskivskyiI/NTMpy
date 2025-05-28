@@ -4,21 +4,28 @@ import eel
 sys.path.insert(0, './code')
 from Sim2T import Sim2T # type: ignore
 from Source import source # type: ignore
-from numpy import array # type: ignore
+from numpy import array, savez # type: ignore
 
-from gui.py.variables import flags, laser, layers, nindex, src, out
+from gui.py.variables import flags, laser, layers, nindex, src, out, time, current_file
 
 
 # Run Simulation #################################
 @eel.expose
 def run_simulation(final_time):
+    time["simulation"] = final_time
     src_init()
     sim = build_material()
     sim.setSource(src)
     sim.final_time = float(final_time)
     out = sim.run()
-    print(out)
-    return out
+    
+    filename = current_file[0].split(".")[0] + ".npz"
+    print(filename)
+    #savez(current_file[0], t=sim.t, x=sim.x, out=out)
+    
+    time["computation"] = sim.computation_time
+    flags["result_set"] = True
+    
 
 # Build Material ####################################
 def build_material():
@@ -30,7 +37,7 @@ def build_material():
         coup =  eval(layer["G"])
         dens = layer["rho"]
         sim.addLayer( length, cond, capc, dens, coup)
-        return sim
+    return sim
 
 # Initialize Source #################################
 def src_init():
@@ -48,3 +55,8 @@ def src_init():
             src.type_x = "lambertbeer"
             src.absorption = [float(n["l"]) for n in nindex]
         src.thickness = [float(layer["length"]) for layer in layers]
+
+# Get Computation Time ##########################
+@eel.expose
+def getTime(what):
+    return time[what]

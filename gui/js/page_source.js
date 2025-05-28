@@ -228,7 +228,7 @@ async function modifyIndexN() {
 
 async function plotTime() {
     if (source_set) {
-        drawCurve(await eel.plot_src_t()());
+        drawCurve(await eel.plot_src_t()(), true, "#bbbbff");
         timeStep = (source.delay + 2*source.fwhm) / 4;
         timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
         drawLabels(timeArray);
@@ -244,7 +244,7 @@ async function plotTime() {
 async function plotSpace() {
 
     if (layers_set) {
-        drawCurve(await eel.plot_src_x()());
+        drawCurve(await eel.plot_src_x()(), true, "#bbbbff");
         spaceStep = layers.reduce((length, layer) => length + layer.length, 0) / 4;
         spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
         drawLabels(spaceArray);

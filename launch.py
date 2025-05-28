@@ -7,6 +7,7 @@ import variables # type: ignore
 import fun_material # type: ignore
 import fun_source # type: ignore
 import fun_files # type: ignore
+import fun_result # type: ignore
 
 
 eel.init('.', allowed_extensions=['.js', '.html', '.css'])

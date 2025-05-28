@@ -1,0 +1,58 @@
+{
+    "flags": {
+        "reflection": false,
+        "source_set": true,
+        "layers_set": true,
+        "result_set": false
+    },
+    "laser": {
+        "energy": 5,
+        "fwhm": 2e-12,
+        "delay": 2e-12,
+        "wavelength": null,
+        "angle": null,
+        "polarization": null
+    },
+    "layers": [
+        {
+            "name": "Pt",
+            "length": 3e-08,
+            "rho": 6500,
+            "K": [
+                "8",
+                "0"
+            ],
+            "C": [
+                "lambda T: .112*T",
+                "450"
+            ],
+            "G": "6e17"
+        },
+        {
+            "name": "Au",
+            "length": 8e-08,
+            "rho": 5100,
+            "K": [
+                "24",
+                "12"
+            ],
+            "C": [
+                "lambda T: 0.025*T",
+                "730"
+            ],
+            "G": "6"
+        }
+    ],
+    "nindex": [
+        {
+            "l": 1.9e-07,
+            "nr": null,
+            "ni": null
+        },
+        {
+            "l": 1.9e-07,
+            "nr": null,
+            "ni": null
+        }
+    ]
+}

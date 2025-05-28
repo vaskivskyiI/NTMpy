@@ -9,10 +9,11 @@ def setLayers(layer, id = -1):
     if id < 0:
         layers.append(layer)
         nindex.append({"l": None, "nr": None, "ni": None})
+        flags["layers_set"] = False
     else:
         layers[id] = layer
-    flags["layers_set"] = False
     flags["result_set"] = False
+
     
 
 @eel.expose

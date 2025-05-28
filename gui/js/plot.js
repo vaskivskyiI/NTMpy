@@ -55,7 +55,7 @@ function drawLabels(text) {
     for (k = 0; k <= 4; k++) { ctx.fillText(text[k], (k*x1 + (4-k)*x0)/4 - 25, y1 + 20);}
 }
 
-function drawCurve(data) {
+function drawCurve(data, clear = true, color = "white") {
     let canvas = document.getElementById("plot"); 
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
@@ -66,14 +66,14 @@ function drawCurve(data) {
     let x1 = canvas.width - PADDING_RX;
     
     // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (clear) {ctx.clearRect(0, 0, canvas.width, canvas.height); }
         
     const Ymax = 1.2 * Math.max(...data);
     const Xmax = data.length - 1;
     
     // Plot data
     ctx.setLineDash([2,0]);
-    ctx.strokeStyle = '#bbbbff';
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     ctx.beginPath();
 

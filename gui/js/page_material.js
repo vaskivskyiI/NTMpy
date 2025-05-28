@@ -115,25 +115,39 @@ function moveLayer(move) {
 
 function updateLayer() {
 
-    let layer = {
-        name:   $("#modify_panel .name_input").val(),
-        length: parseFloat($("#modify_panel .leng_input").val()),
-        rho:    parseFloat($("#modify_panel .dens_input").val()),
-        K: [],
-        C: [],
-        G: []
-    };
+    let complete = true;
+    $("#modify_panel input").each(function() {complete &= ($(this).val() != '')})
 
-    layer.K[0] = $("#modify_panel .K_input:eq(0)").val();
-    layer.K[1] = $("#modify_panel .K_input:eq(1)").val();
-    layer.C[0] = $("#modify_panel .C_input:eq(0)").val();
-    layer.C[1] = $("#modify_panel .C_input:eq(1)").val();
-    layer.G[0] = $("#modify_panel .G_input:eq(0)").val();
+    const length = parseFloat($("#modify_panel .leng_input").val());
+    const density = parseFloat($("#modify_panel .dens_input").val());
+    let valid = (length > 0) && (density > 0);
+    
+    if (complete && valid) {
+        
+        console.log("Adding a new layer: " +  $("#modify_panel .name_input").val());
+        
+        let layer = {
+            name:   $("#modify_panel .name_input").val(),
+            length: length,
+            rho:    density,
+            K: [$("#modify_panel .K_input:eq(0)").val(), $("#modify_panel .K_input:eq(1)").val()],
+            C: [$("#modify_panel .C_input:eq(0)").val(), $("#modify_panel .C_input:eq(1)").val()],
+            G: $("#modify_panel .G_input:eq(0)").val()
+        };
 
     eel.setLayers(layer, layer_num - 1);
     $("#helpbar").css("color","#ffffff");
     $("#helpbar").text("Layer modified correctly");
-    $("#insert_panel input").val("");
+    $("#modify_panel input").val("");
+    }
+    else if (!valid) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot modify the layer: length and density must be positive numbers");
+    }
+    else if (!complete) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot modify the layer: Some material properties are missing");
+    }
 
 
     drawMaterial();

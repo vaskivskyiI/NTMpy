@@ -66,7 +66,7 @@ sim = Sim2T() # Default initial temperature: 300 Kelvin
 sim.setSource(s)
 
 # add material layers:
-# addLayer(length, [CE, CL], [kE, kL], density, G_EL, spline_number)
+# addLayer(length, [kE, kL], [CE, CL], density, G_EL, spline_number)
 sim.addLayer( 30e-9, [ 8,  0], [lambda T: .112*T, 450], 6500, 6e17, 9)
 sim.addLayer( 80e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
 
@@ -82,8 +82,8 @@ vs.compare(x,t,phi[0],phi[1])
 
 The ouput `phi` is a 3D array with the following structure:
 * the first index selects the temperature: `phi[0]` is the electron temperature, `phi[1]` is the lattice temperature.
-* the second index is the time instant: `phi[0][0]` is the initial temperature, `phi[0][100]` is the temperature after 100 time steps.
-* the third index is the space position: `phi[0][100][10]` is the temperature of the temperature in the 10th point of the grid.
+* the second index is the space position: `phi[0][0]` is the temperature on the surface, `phi[0][10]` is the temperature in the 10th point of the grid.
+* the third index is the time instant: `phi[0][0][100]` is the temperature of the temperature of the surface after 100 time steps.
 
 ------------------------------------------------------------------------------------------------------------------
 

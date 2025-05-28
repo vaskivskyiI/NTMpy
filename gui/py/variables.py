@@ -25,6 +25,6 @@ global flags; flags = { "reflection": False,
 
 
 global time; time = {"simulation": 0, "computation": 0}
-global out; out = array([])
+global out; out = {"x": None, "t": None, "T": None}
 
 

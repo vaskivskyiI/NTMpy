@@ -128,7 +128,12 @@ async function runSimulation() {
     if (finalTime > 0 && sourceSet && layersSet) {
         $("#helpbar").css("color", "#ffffff");
         $("#helpbar").text("Running simulation...");
-        await eel.run_simulation(finalTime)();
+        error = await eel.run_simulation(finalTime)();
+        if (error) {
+            $("#helpbar").css("color", "#ff0000");
+            $("#helpbar").text(error);
+            return;
+        }
         $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds");
         $("#helpbar").css("color", "#00ff00");
         $("#helpbar").text("Simulation finished");

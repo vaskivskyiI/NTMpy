@@ -38,7 +38,7 @@ async function drawMaterial() {
     $(".canvas > div").on("click", selectLayer);
 };
 
-function addLayer() {
+async function addLayer() {
 
     let complete = true;
     $("#insert_panel input").each(function() {complete &= ($(this).val() != '')})
@@ -61,7 +61,8 @@ function addLayer() {
         };
 
     
-        eel.setLayers(layer);
+        await eel.setLayers(layer);
+        await drawMaterial();
 
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Layer added correctly");
@@ -77,7 +78,7 @@ function addLayer() {
         $("#helpbar").text("Cannot add the layer: Some material properties are missing");
     }
 
-    drawMaterial();
+
 }
 
 
@@ -101,19 +102,21 @@ function selectLayer() {
 
 }
 
-function moveLayer(move) {
+async function moveLayer(move) {
     
     if (layer_num + move > 0 && layer_num + move < layers.length + 1) {  
-        eel.move_layer( layer_num - 1, layer_num - 1 + move);
+        await eel.move_layer( layer_num - 1, layer_num - 1 + move);
         layer_num += move;
     }
 
+    await drawMaterial();    
     $("#modify_header").text("Modify Layer " + layer_num + " Menu: " + layers[layer_num - 1].name)
-    drawMaterial();
+
+
 }
 
 
-function updateLayer() {
+async function updateLayer() {
 
     let complete = true;
     $("#modify_panel input").each(function() {complete &= ($(this).val() != '')})
@@ -135,10 +138,13 @@ function updateLayer() {
             G: $("#modify_panel .G_input:eq(0)").val()
         };
 
-    eel.setLayers(layer, layer_num - 1);
+    await eel.setLayers(layer, layer_num - 1);
+    await drawMaterial();
+    $("#modify_header").text("Modify Layer " + layer_num + " Menu: " + layers[layer_num - 1].name)
+
     $("#helpbar").css("color","#ffffff");
     $("#helpbar").text("Layer modified correctly");
-    $("#modify_panel input").val("");
+    //$("#modify_panel input").val("");
     }
     else if (!valid) {
         $("#helpbar").css("color","#ff5555");
@@ -149,6 +155,4 @@ function updateLayer() {
         $("#helpbar").text("Cannot modify the layer: Some material properties are missing");
     }
 
-
-    drawMaterial();
 }

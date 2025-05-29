@@ -15,9 +15,12 @@ const ANIMATION_DURATION = 10;
 const TOTAL_FRAMES = ANIMATION_DURATION * FRAME_PER_SECOND;
 const FRAME_DURATION = 1000 / FRAME_PER_SECOND;
 
+const MIN_TEMP = 295;
+const INIT_TEMP = 300;
+
 $(document).ready(async function() {
 
-    plot_offset = 10;
+    plot_offset = 15;
     $(".canvas").remove();
 
     result_set = await eel.getFlags("result_set")();
@@ -26,10 +29,9 @@ $(document).ready(async function() {
     $("#plot_time").on("click", plotTemperature);
     $("#plot_anim").on("click", setupAnimation);
     $("#anim_play").on("click", playAnimation);
-    $("#anim_stop").on("click", () => { clearInterval(timer); animation_running = false; });
-    $("#plot_python").on("click", () => {eel.pythonPlotT()();});
-
-    $("#plot_exp").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
+    $("#anim_stop").on("click", stopAnimation);
+    $("#plot_python").on("click", plotPython);
+    $("#plot_exp").on("click", plotExperimental);
     $("#extend_sim").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
     
 
@@ -47,27 +49,44 @@ async function plotTemperature() {
     if (result_set) {
         data = await eel.getResultsTime()();
 
-        Telectron = data[1].map(T => T- 295);
-        Tlattice  = data[2].map(T => T- 295);
+        Telectron = data[1].map(T => T- INIT_TEMP);
+        Tlattice  = data[2].map(T => T- INIT_TEMP);
 
         const TmaxElectron = Math.max(...Telectron);
         const TmaxLattice  = Math.max(...Tlattice );
-        const scaleE = 0.9 * TmaxElectron / Math.max(TmaxElectron, TmaxLattice);
-        const scaleL = 0.9 * TmaxLattice  / Math.max(TmaxElectron, TmaxLattice);
+        const absoluteMax = Math.max(TmaxElectron, TmaxLattice);
+        const scaleE = 0.9 * TmaxElectron / absoluteMax;
+        const scaleL = 0.9 * TmaxLattice  / absoluteMax;
 
         drawCurve(Telectron,  true, "#ee5555", scaleE);
         drawCurve( Tlattice, false, "#5555ee", scaleL);
-        timeStep = data[0][1] / 5;
+        timeStep = data[0][1] / 4;
         timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
         timeArray[0] = "";
         drawLabelsX(timeArray);
 
+        const labels = Array.from({length: 3}, (_, i) => (INIT_TEMP + 0.45*i*absoluteMax).toFixed(0))
+        drawLabelsY(labels);
+
         $("#helpbar").css("color","#ffffff");
-        $("#helpbar").text("Temperature plotted") 
+        $("#helpbar").text("Temperature plotted");
     } else {
         $("#helpbar").css("color","#ff5555");
-        $("#helpbar").text("No results available")
+        $("#helpbar").text("No results available");
     }
+}
+
+async function plotExperimental() {
+    plotTemperature();
+    data = await eel.getExperimental()();
+    times = data[0].map(t => t/finalTime);
+    reflectivity = data[1].map(R => R - data[1][0]);
+    drawDots(times, reflectivity, 0.001, 0.0005, "#00ff00");
+}
+
+
+function plotPython() {
+    eel.plotPython()();
 }
 
 async function setupAnimation() {
@@ -76,11 +95,11 @@ async function setupAnimation() {
     animation_running = false;
 
     if (result_set) {
-        maxTemperature = await eel.getMaxTemperature()() - 295;
+        maxTemperature = await eel.getMaxTemperature()() - MIN_TEMP;
         data = await eel.getResultsSpace(0)();
         
-        const Telectron = data[1].map(T => T- 295);
-        const Tlattice  = data[2].map(T => T- 295);
+        const Telectron = data[1].map(T => T- MIN_TEMP);
+        const Tlattice  = data[2].map(T => T- MIN_TEMP);
 
         const scaleE = 0.9 * Math.max(...Telectron) / maxTemperature;
         const scaleL = 0.9 * Math.max(...Tlattice ) / maxTemperature;
@@ -88,10 +107,13 @@ async function setupAnimation() {
         drawCurve(Telectron,  true, "#ee5555", scaleE);
         drawCurve( Tlattice, false, "#5555ee", scaleL);
         
-        spaceStep = data[0][1] / 5;
+        spaceStep = data[0][1] / 4;
         spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
         spaceArray[0] = "";
         drawLabelsX(spaceArray);
+
+        const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + 0.45*i*maxTemperature).toFixed(0))
+        drawLabelsY(labels);
 
         animation_set = true;
 
@@ -121,12 +143,19 @@ async function playAnimation() {
     }
 }
 
+async function stopAnimation() {
+    clearInterval(timer);
+    animation_running = false; 
+    $("#helpbar").css("color","#ffdddd");
+    $("#helpbar").text("Animation stopped")
+}
+
 async function animateStep() {
     
     data = await eel.getResultsSpace(animationTime)();
     
-    const Telectron = data[1].map(T => T- 295);
-    const Tlattice  = data[2].map(T => T- 295);
+    const Telectron = data[1].map(T => T- MIN_TEMP);
+    const Tlattice  = data[2].map(T => T- MIN_TEMP);
 
     const scaleE = 0.9 * Math.max(...Telectron) / maxTemperature;
     const scaleL = 0.9 * Math.max(...Tlattice ) / maxTemperature;
@@ -136,10 +165,13 @@ async function animateStep() {
     drawCurve(Telectron,  true, "#ee5555", scaleE);
     drawCurve( Tlattice, false, "#5555ee", scaleL);
 
-    spaceStep = data[0][1] / 5;
+    spaceStep = data[0][1] / 4;
     spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
     spaceArray[0] = "";
     drawLabelsX(spaceArray);
+
+    const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + 0.45*i*maxTemperature).toFixed(0))
+    drawLabelsY(labels);
 
     const timeStep = finalTime / TOTAL_FRAMES;
     animationTime += timeStep * multiplier;
@@ -151,3 +183,4 @@ async function animateStep() {
         $("#helpbar").text("Animation ended")
     }
 }
+

@@ -2,6 +2,7 @@
 const PADDING_LX = 30; // Left padding
 const PADDING_RX = 30; // Right padding
 const PADDING_DW = 20; // Bottom padding
+const PADDING_UP =  10; // Top padding
 let plot_offset = 0;
 
 function drawAxis() {
@@ -9,7 +10,7 @@ function drawAxis() {
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
 
-    let y0 =  0;
+    let y0 = PADDING_UP;
     let y1 = canvas.height - PADDING_DW;
     let x0 = PADDING_LX + plot_offset;
     let x1 = canvas.width - PADDING_RX;
@@ -45,17 +46,33 @@ function drawAxis() {
 function drawLabelsX(text) {
     let canvas = document.getElementById("plot"); 
     let ctx = canvas.getContext("2d");
-    let y0 =  0;
+    let y0 = PADDING_UP;
     let y1 = canvas.height - PADDING_DW;
     let x0 = PADDING_LX + plot_offset;
     let x1 = canvas.width - PADDING_RX;
 
-    ctx.strokeStyle = "white";;
+    ctx.strokeStyle = "white";
 
     ctx.fillStyle = "white";
     ctx.lineWidth = 1;
     ctx.font = "18px Times New Roman";
     for (k = 0; k <= 4; k++) { ctx.fillText(text[k], (k*x1 + (4-k)*x0)/4 - 25, y1 + 20);}
+}
+
+function drawLabelsY(text) {
+    let canvas = document.getElementById("plot"); 
+    let ctx = canvas.getContext("2d");
+    let y0 = PADDING_UP;
+    let y1 = canvas.height - PADDING_DW;
+    let x0 = PADDING_LX + plot_offset;
+    let x1 = canvas.width - PADDING_RX;
+
+    ctx.strokeStyle = "white";
+
+    ctx.fillStyle = "white";
+    ctx.lineWidth = 1;
+    ctx.font = "18px Times New Roman";
+    for (k = 0; k <= 2; k++) { ctx.fillText(text[k], x0 - 40, (k*y0 + (2-k)*y1)/2 + 5);}
 }
 
 function drawCurve(data, clear = true, color = "white", scale = 0.9) {
@@ -86,6 +103,46 @@ function drawCurve(data, clear = true, color = "white", scale = 0.9) {
         x = x0 + (xdata/Xmax) * (x1-x0);
         y = y1 - (ydata/Ymax) * (y1-y0);
         ctx.lineTo(x, y);
+    });
+
+    ctx.stroke();
+    
+    drawAxis();
+}
+
+function drawDots(data, clear = true, color = "white", scale = 0.9) {
+    let canvas = document.getElementById("plot"); 
+    let ctx = canvas.getContext("2d");
+    ctx.strokeStyle = "white";
+
+    let y0 =  0;
+    let y1 = canvas.height - PADDING_DW;
+    let x0 = PADDING_LX + plot_offset;
+    let x1 = canvas.width - PADDING_RX;
+    
+    // Clear canvas
+    if (clear) {ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        
+    const Ymax = Math.max(...data) / scale;
+    const Xmax = data.length - 1;
+    
+    // Plot data
+    ctx.setLineDash([2,0]);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+
+    let x = x0, y = y1;
+    // code to draw the dots
+    data.forEach((ydata, xdata) => {
+        x = x0 + (xdata/Xmax) * (x1-x0);
+        y = y1 - (ydata/Ymax) * (y1-y0);
+        
+        // Draw a dot at each data point
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, 2 * Math.PI); // 3px radius circle
+        ctx.fillStyle = color;
+        ctx.fill();
     });
 
     ctx.stroke();

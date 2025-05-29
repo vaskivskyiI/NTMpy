@@ -174,7 +174,7 @@ async function checkFlags() {
         $("#resultStatus .light").css("background-color","#00ff00")
         $("#resultStatus .text" ).text("Results available");
         $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds");
-        $( "#sim_time").text((await eel.getTime("simulation" )()).toExponential(3) + " seconds");
+        $( "#sim_time").val(await eel.getTime("simulation" )());
     } else {
         $("#resultStatus .light").css("background-color","#ff0000")
         $("#resultStatus .text" ).text("Results not available");

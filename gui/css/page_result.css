@@ -53,3 +53,13 @@
 #extend_sim:hover {
     background-image: linear-gradient(180deg, #ffffff,#dfdfdf)
 }
+
+.headerpanel {
+    background-image: linear-gradient(180deg, #dadada,#b1b1b1);
+    color: black;
+    font-weight: bold;
+}
+
+.headerpanel:hover {
+    background-image: linear-gradient(180deg, #ffffff,#dfdfdf)
+}

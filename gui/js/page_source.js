@@ -47,6 +47,8 @@ $(document).ready(async function() {
     $("#plot_space").on("click", plotSpace);
     $("#plot_time" ).on("click", plotTime );
 
+    $("#plot_save" ).on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
+    $("#plot_pyplt").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
 
     drawPage();
 

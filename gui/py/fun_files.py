@@ -99,6 +99,16 @@ def explore_files(path):
     except Exception as e:
         print("Error exploring files: " + str(e))
 
+# Delete File ###################################
+@eel.expose
+def delete_file(filename, path = "./data/"):
+    try:
+        os.remove(path + filename)
+        if flags["result_set"]:
+            os.remove(path + filename.split(".")[0] + ".npz")
+        return("Successfully deleted " + filename + ".json and " + filename + ".npz")
+    except Exception as e:
+        return("Error deleting file: " + str(e))
 
 # Save and Load Preferences #####################
 @eel.expose
@@ -118,13 +128,4 @@ def load_path():
 def get_filename():
     return(current_file)
 
-# Delete File ###################################
-@eel.expose
-def delete_file(filename, path = "./data/"):
-    try:
-        os.remove(path + filename + ".json")
-        if flags["result_set"]:
-            os.remove(path + filename + ".npz")
-        return("Successfully deleted " + filename + ".json and " + filename + ".npz")
-    except Exception as e:
-        return("Error deleting file: " + str(e))
+

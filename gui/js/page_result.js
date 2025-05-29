@@ -17,6 +17,7 @@ const FRAME_DURATION = 1000 / FRAME_PER_SECOND;
 
 $(document).ready(async function() {
 
+    plot_offset = 10;
     $(".canvas").remove();
 
     result_set = await eel.getFlags("result_set")();
@@ -26,7 +27,12 @@ $(document).ready(async function() {
     $("#plot_anim").on("click", setupAnimation);
     $("#anim_play").on("click", playAnimation);
     $("#anim_stop").on("click", () => { clearInterval(timer); animation_running = false; });
+    $("#plot_python").on("click", () => {eel.pythonPlotT()();});
+
+    $("#plot_exp").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
+    $("#extend_sim").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
     
+
     drawAxis();
 
     if (!result_set) {
@@ -51,7 +57,10 @@ async function plotTemperature() {
 
         drawCurve(Telectron,  true, "#ee5555", scaleE);
         drawCurve( Tlattice, false, "#5555ee", scaleL);
-        //drawLabels();
+        timeStep = data[0][1] / 5;
+        timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
+        timeArray[0] = "";
+        drawLabelsX(timeArray);
 
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Temperature plotted") 
@@ -63,6 +72,7 @@ async function plotTemperature() {
 
 async function setupAnimation() {
     clearInterval(timer);
+    animationTime = 0;
     animation_running = false;
 
     if (result_set) {
@@ -74,11 +84,15 @@ async function setupAnimation() {
 
         const scaleE = 0.9 * Math.max(...Telectron) / maxTemperature;
         const scaleL = 0.9 * Math.max(...Tlattice ) / maxTemperature;
-
+        
         drawCurve(Telectron,  true, "#ee5555", scaleE);
         drawCurve( Tlattice, false, "#5555ee", scaleL);
         
-        animationStep = 0;
+        spaceStep = data[0][1] / 5;
+        spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
+        spaceArray[0] = "";
+        drawLabelsX(spaceArray);
+
         animation_set = true;
 
         $("#helpbar").css("color","#ffffff");
@@ -121,6 +135,11 @@ async function animateStep() {
 
     drawCurve(Telectron,  true, "#ee5555", scaleE);
     drawCurve( Tlattice, false, "#5555ee", scaleL);
+
+    spaceStep = data[0][1] / 5;
+    spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
+    spaceArray[0] = "";
+    drawLabelsX(spaceArray);
 
     const timeStep = finalTime / TOTAL_FRAMES;
     animationTime += timeStep * multiplier;

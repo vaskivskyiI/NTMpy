@@ -14,7 +14,7 @@
                 <label  style="margin: 0 10 0 10;">Lattice temperature</label>
             </span>
         </div>
-        <canvas id="plot" height="300" width="950"></canvas>
+        <canvas id="plot" height="300" width="950" style="margin-bottom: 10px;"></canvas>
 
         <div style="display:flex;  width: 100%; justify-content: space-between;">
             <label style="margin-left: 20px;">Time plot settings:</label>
@@ -30,8 +30,8 @@
         </div>
         <div style="display: flex; justify-content: space-between; margin-top: 8px;">
             <span>
-                <label style="margin-left: 20px;">Filename for saving: </label>
-                <input type="text" id="save_name">    
+                <label style="margin-left: 20px;">Experimental data location: </label>
+                <input type="text" id="save_name" style="width: 300px">    
             </span>
             <span>
                 <label>Animation speed:  </label>
@@ -39,9 +39,9 @@
             </span>
         </div>
         <div style="display:flex; margin-top:10px">
-            <button class="button" id="plot_time"  >Time plot</button>
-            <button class="button" id="plot_save"  >Save Data</button>
-            <button class="button" id="plot_python">Python   </button>
+            <button class="button" id="plot_time"  >Time plot            </button>
+            <button class="button" id="plot_exp"  >Add experimental data</button>
+            <button class="button" id="plot_python">Plot with Python     </button>
         </div>
         <div style="display:flex; margin-top:10px">
             <button class="button" id="plot_anim">Setup Animation</button>

@@ -110,7 +110,7 @@ function drawCurve(data, clear = true, color = "white", scale = 0.9) {
     drawAxis();
 }
 
-function drawDots(data, clear = true, color = "white", scale = 0.9) {
+function drawDots(dataX, dataY, color = "white", scale = 0.9) {
     let canvas = document.getElementById("plot"); 
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
@@ -120,30 +120,23 @@ function drawDots(data, clear = true, color = "white", scale = 0.9) {
     let x0 = PADDING_LX + plot_offset;
     let x1 = canvas.width - PADDING_RX;
     
-    // Clear canvas
-    if (clear) {ctx.clearRect(0, 0, canvas.width, canvas.height); }
-        
-    const Ymax = Math.max(...data) / scale;
-    const Xmax = data.length - 1;
     
     // Plot data
     ctx.setLineDash([2,0]);
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
-    ctx.beginPath();
 
-    let x = x0, y = y1;
     // code to draw the dots
-    data.forEach((ydata, xdata) => {
-        x = x0 + (xdata/Xmax) * (x1-x0);
-        y = y1 - (ydata/Ymax) * (y1-y0);
+    for (var i = 0; i < dataX.length; i++) {
+        x = x0 + dataX[i] * (x1-x0);
+        y = y1 - dataY[i] * (y1-y0);
         
         // Draw a dot at each data point
         ctx.beginPath();
-        ctx.arc(x, y, 3, 0, 2 * Math.PI); // 3px radius circle
+        ctx.arc(x, y, 3, 0, 2 * Math.PI); 
         ctx.fillStyle = color;
         ctx.fill();
-    });
+    };
 
     ctx.stroke();
     

@@ -25,22 +25,22 @@
             <div>
             <input type="radio" id="plot_exp" name="plot_type">
             <label for="plot_3D">Exponential decay with penetration depth:</label>
-            <input id="penetration" style="margin-right: 20px;">
+            <input id="penetration" style="margin-right: 20px; width: 100px;">
             </div>
         </div>
         <div style="display: flex; justify-content: space-between; margin-top: 8px;">
             <span>
                 <label style="margin-left: 20px;">Experimental data location: </label>
-                <input type="text" id="save_name" style="width: 300px">    
+                <input type="text" id="data_file" style="width: 300px">    
             </span>
             <span>
                 <label>Animation speed:  </label>
-                <input type="number" id="anim_speed" style="margin-right: 20px;">
+                <input type="number" id="anim_speed" style="margin-right: 20px; width: 100px;">
             </span>
         </div>
         <div style="display:flex; margin-top:10px">
             <button class="button" id="plot_time"  >Time plot            </button>
-            <button class="button" id="plot_exp"  >Add experimental data</button>
+            <button class="button" id="plot_expdat">Add experimental data</button>
             <button class="button" id="plot_python">Plot with Python     </button>
         </div>
         <div style="display:flex; margin-top:10px">

@@ -6,10 +6,10 @@
     background-image: linear-gradient(180deg, #475fe7,#2135a5);
 }
 
-#plot_exp {
+#plot_expdat {
     background-image: linear-gradient(180deg, #8e18a5,#640f75)
 }
-#plot_exp:hover {
+#plot_expdat:hover {
     background-image: linear-gradient(180deg, #b222cf,#8a15a1)
 }
 

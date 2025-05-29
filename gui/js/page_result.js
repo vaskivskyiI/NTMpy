@@ -30,8 +30,11 @@ $(document).ready(async function() {
     $("#plot_anim").on("click", setupAnimation);
     $("#anim_play").on("click", playAnimation);
     $("#anim_stop").on("click", stopAnimation);
+    $("#plot_expdat" ).on("click", plotExperiment);
     $("#plot_python").on("click", plotPython);
-    $("#plot_exp").on("click", plotExperimental);
+    $("#data_file").val((await eel.load_path()()) + "/");
+
+    $("#plot_exp").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
     $("#extend_sim").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
     
 
@@ -76,12 +79,24 @@ async function plotTemperature() {
     }
 }
 
-async function plotExperimental() {
-    plotTemperature();
-    data = await eel.getExperimental()();
-    times = data[0].map(t => t/finalTime);
-    reflectivity = data[1].map(R => R - data[1][0]);
-    drawDots(times, reflectivity, 0.001, 0.0005, "#00ff00");
+async function plotExperiment() {
+    if (result_set) {
+        plotTemperature();
+        data = await eel.getExperimental($("#data_file").val())();
+        if (data instanceof Array) {
+            data[1] = data[1].map(R => R*0.9);
+            drawDots(data[0], data[1], "#88ff00");
+            $("#helpbar").css("color","#ffffff");
+            $("#helpbar").text("Temperature and experimental values plotted");    
+        } else {
+            $("#helpbar").css("color","#ff5555");
+            $("#helpbar").text(data)
+        }
+    } else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("No results available")
+    }
+
 }
 
 

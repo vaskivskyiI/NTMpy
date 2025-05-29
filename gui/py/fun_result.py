@@ -44,6 +44,13 @@ def plotPython():
 
 # Read experimental data ########################
 @eel.expose
-def getExperimental():
-    data = np.loadtxt("data/expdata.csv", delimiter=",")
-    return [list(data[:,0]), list(data[:,1])]
+def getExperimental(filename = "./data/"):
+    try:
+        data = np.loadtxt(filename, delimiter=",")
+        data[:,0] /= out["t"][-1]
+        data[:,1] -= data[0,1]
+        ratio = (out["T"][0][0][-1]-300) / (np.max(out["T"][0][0])-300)
+        data[:,1] *= ratio / data[-1][-1]
+        return [list(data[:,0]), list(data[:,1])]
+    except:
+        return "Error: data not found or invalid format"

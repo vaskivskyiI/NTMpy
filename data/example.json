@@ -3,7 +3,7 @@
         "reflection": false,
         "source_set": true,
         "layers_set": true,
-        "result_set": false
+        "result_set": true
     },
     "laser": {
         "energy": 5,
@@ -40,19 +40,23 @@
                 "lambda T: 0.025*T",
                 "730"
             ],
-            "G": "6"
+            "G": "6e17"
         }
     ],
     "nindex": [
         {
             "l": 1.9e-07,
-            "nr": null,
-            "ni": null
+            "nr": 1,
+            "ni": 0
         },
         {
             "l": 1.9e-07,
-            "nr": null,
-            "ni": null
+            "nr": 1,
+            "ni": 0
         }
-    ]
+    ],
+    "time": {
+        "simulation": 2e-11,
+        "computation": 0.17045187950134277
+    }
 }

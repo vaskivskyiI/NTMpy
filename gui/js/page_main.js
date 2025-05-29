@@ -18,7 +18,6 @@ $(document).ready(async function(){
     });
 
     let currentFile = await eel.get_filename()();
-    currentFile = currentFile[0].slice(0, currentFile[0].lastIndexOf(".json"));
     $("#filename").val(currentFile);
 
     const dirname = await eel.load_path()();

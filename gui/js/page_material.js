@@ -97,7 +97,7 @@ function selectLayer() {
     $("#modify_panel .K_input:eq(1)").val(layers[layer_num - 1].K[1])
     $("#modify_panel .C_input:eq(0)").val(layers[layer_num - 1].C[0])
     $("#modify_panel .C_input:eq(1)").val(layers[layer_num - 1].C[1])
-    $("#modify_panel .G_input:eq(0)").val(layers[layer_num - 1].G[0])
+    $("#modify_panel .G_input:eq(0)").val(layers[layer_num - 1].G)
 
 }
 

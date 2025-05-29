@@ -1,28 +1,33 @@
 import eel
 import json, os
-from gui.py.variables import flags, laser, layers, nindex, current_file
+from numpy import savez, load
+from gui.py.variables import flags, laser, layers, nindex, current_file, time, out
 
 
 # Save File #####################################
 @eel.expose
-def save_file(filename="ntmpy_save.json", path="./data/"):
+def save_file(filename="ntmpy_save", path="./data/"):
     data_to_save = {
         "flags": flags,
         "laser": laser,
         "layers": layers,
         "nindex": nindex,
+        "time": time
     }
     current_file[0] = filename
     try:
         json.dump(data_to_save, open(path + filename + ".json", 'w'), indent=4)
-        return("Successfully saved to " + path + filename)
+        if flags["result_set"]:
+            savez(path + filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1])
+            return("Successfully saved to " + path + filename + ".json and " + path + filename + ".npz")
+        return("Successfully saved to " + path + filename + ".json")
     except Exception as e:
         return("Error saving file: "+ str(e))
 
 
 # Load File #####################################
 @eel.expose
-def load_file(filename="ntmpy_save.json", path="./data/"):
+def load_file(filename="ntmpy_save", path="./data/"):
 
     try:
         with open(path + filename, 'r') as f:
@@ -30,6 +35,9 @@ def load_file(filename="ntmpy_save.json", path="./data/"):
 
         flags.clear()
         flags.update(data_loaded.get("flags", {}))
+
+        time.clear()
+        time.update( data_loaded.get("time", {}))
 
         laser.clear()
         laser.update(data_loaded.get("laser", {}))
@@ -40,8 +48,14 @@ def load_file(filename="ntmpy_save.json", path="./data/"):
         nindex.clear()
         nindex.extend(data_loaded.get("nindex", []))
 
-        current_file[0] = filename
+        current_file[0] = filename.split(".")[0]
 
+        if flags["result_set"]:
+                with load(path + current_file[0] + ".npz") as data:
+                    out["t"] = data["t"]
+                    out["x"] = data["x"]
+                    out["T"] = [data["Te"], data["Tl"]]
+                    return("Successfully loaded from " + filename + ".json and " + current_file[0] + ".npz")
         return("Successfully loaded from " + filename)
     except FileNotFoundError:
         return("Error: File " + filename + " not found.")
@@ -56,6 +70,7 @@ def new_file():
     laser.clear()
     layers.clear()
     nindex.clear()
+    time.clear()
   
     laser.update({  "energy":       None,
                     "fwhm":         None,
@@ -69,7 +84,7 @@ def new_file():
                     "layers_set": False,
                     "result_set": False})
 
-    current_file[0] = "Untitled.json"
+    current_file[0] = "untitled"
 
 
 # Explore Files #################################
@@ -107,7 +122,9 @@ def get_filename():
 @eel.expose
 def delete_file(filename, path = "./data/"):
     try:
-        os.remove(path + filename)
-        return("Successfully deleted " + filename)
+        os.remove(path + filename + ".json")
+        if flags["result_set"]:
+            os.remove(path + filename + ".npz")
+        return("Successfully deleted " + filename + ".json and " + filename + ".npz")
     except Exception as e:
         return("Error deleting file: " + str(e))

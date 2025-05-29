@@ -4,7 +4,7 @@ import eel
 sys.path.insert(0, './code')
 from Sim2T import Sim2T # type: ignore
 from Source import source # type: ignore
-from numpy import array, savez # type: ignore
+from numpy import array, savez, load # type: ignore
 
 from gui.py.variables import flags, laser, layers, nindex, src, out, time, current_file
 
@@ -18,11 +18,6 @@ def run_simulation(final_time):
     sim.setSource(src)
     sim.final_time = float(final_time)
     [out["x"], out["t"], out["T"]] = sim.run()
-    filename = "./data/" + current_file[0].split(".")[:-1][0]
-    savez(filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1])
-    
-    #with load('foo.npz') as data:
-    #a = data['a']
 
     time["computation"] = sim.computation_time
     flags["result_set"] = True
@@ -35,10 +30,10 @@ def build_material():
         length = layer["length"]
         cond = [eval(layer["K"][0]), eval(layer["K"][1])]
         capc = [eval(layer["C"][0]), eval(layer["C"][1])]
-        print(layer["G"])
+        print("G: " + layer["G"])
         coup =  eval(layer["G"])
         dens = layer["rho"]
-        sim.addLayer( length, cond, capc, dens, coup)
+        sim.addLayer( length, cond, capc, dens, coup, 18)
     return sim
 
 # Initialize Source #################################

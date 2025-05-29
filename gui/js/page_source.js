@@ -243,7 +243,7 @@ async function plotTime() {
 
 async function plotSpace() {
 
-    if (layers_set) {
+    if (layers_set && (source_set || !reflection)) {
         drawCurve(await eel.plot_src_x()(), true, "#bbbbff");
         spaceStep = layers.reduce((length, layer) => length + layer.length, 0) / 4;
         spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
@@ -251,8 +251,12 @@ async function plotSpace() {
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Space plot generated");
     }
-    else {
+    else if (!layers_set){
         $("#helpbar").css("color","#ff5555");
         $("#helpbar").text("Cannot plot: Some layers' properties are missing");
+    }
+    else if (!source_set && reflection) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot plot: When reflection is enabled, the source must be set");
     }
 }

@@ -20,7 +20,8 @@ $(document).ready( function(){
     $("#moveL").on("click", function() {moveLayer(-1);})
     $("#moveR").on("click", function() {moveLayer(+1);})
     $("#update") .on("click", function() {updateLayer();})
-    $("#destroy").on("click", function() {eel.remove_layer(layer_num-1); drawMaterial();})
+    $("#destroy").on("click", function() {eel.removeLayer(layer_num-1); drawMaterial();})
+    $("#duplicate").on("click", function() {eel.duplicateLayer(layer_num-1); drawMaterial();})
     $(".canvas > div").on("click", selectLayer);
 
 

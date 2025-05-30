@@ -27,7 +27,12 @@ def move_layer(id1, id2):
     nindex[id1], nindex[id2] = nindex[id2], nindex[id1]
 
 @eel.expose
-def remove_layer(id):
+def duplicateLayer(id):
+    layers.insert(id, layers[id].copy())
+    nindex.insert(id, nindex[id].copy())
+
+@eel.expose
+def removeLayer(id):
     layers.pop(id)
     nindex.pop(id)
 

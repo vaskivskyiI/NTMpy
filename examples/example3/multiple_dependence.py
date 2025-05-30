@@ -10,13 +10,13 @@ import numpy as np
 
 sim = Sim2T()
 # Add Nichel
-sim.addLayer( 50e-9, [lambda Te, Tl: 91 * Te / Tl, lambda T: 1065*T, 1, 3.6e17)
+sim.addLayer( 50e-9, [lambda Te, Tl: 91 * Te / Tl, lambda T: 1065*T], 1, 3.6e17)
 # Add Gold
 sim.addLayer(100e-9, [lambda Te, Tl: 91 * Te / Tl], lambda T:   71*T, 1, 2.1e16)
 
 
 src = source()
-src.absorption = 
+
 
 sim.setSource(src)
 # =============================================================================

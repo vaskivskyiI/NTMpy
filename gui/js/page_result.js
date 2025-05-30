@@ -50,6 +50,7 @@ $(document).ready(async function() {
 async function plotTemperature() {
 
     if (result_set) {
+        $("#time_val").text("");
         data = await eel.getResultsTime()();
 
         Telectron = data[1].map(T => T- INIT_TEMP);
@@ -110,6 +111,7 @@ async function setupAnimation() {
     animation_running = false;
 
     if (result_set) {
+        $("#time_val").text("time = 0.00000 ns");
         maxTemperature = await eel.getMaxTemperature()() - MIN_TEMP;
         data = await eel.getResultsSpace(0)();
         
@@ -168,7 +170,7 @@ async function stopAnimation() {
 async function animateStep() {
     
     data = await eel.getResultsSpace(animationTime)();
-    
+
     const Telectron = data[1].map(T => T- MIN_TEMP);
     const Tlattice  = data[2].map(T => T- MIN_TEMP);
 
@@ -190,6 +192,7 @@ async function animateStep() {
 
     const timeStep = finalTime / TOTAL_FRAMES;
     animationTime += timeStep * multiplier;
+    $("#time_val").text("time = " + (1e9*animationTime).toFixed(5) + " ns");
     
     if (animationTime < 0 || animationTime > finalTime) {
         clearInterval(timer);

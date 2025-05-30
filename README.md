@@ -1,5 +1,5 @@
 ## Update
-The graphical inteface will soon be available on this repository.
+The graphical inteface will soon be available on this repository. The GUI will need eel and jinja2 as dependencies, which can be installed with the command `pip install eel[jinja2]`.
 
 # What does NTMpy solves
 NTMpy is a python package to solve 1D diffusion equation with 2 or 3 temperature coupled

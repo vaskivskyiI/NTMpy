@@ -34,7 +34,6 @@ $(document).ready(async function() {
     $("#plot_python").on("click", plotPython);
     $("#data_file").val((await eel.load_path()()) + "/");
 
-    $("#plot_exp").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
     $("#extend_sim").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
     
 
@@ -50,8 +49,17 @@ $(document).ready(async function() {
 async function plotTemperature() {
 
     if (result_set) {
+        let penetration = 0;
         $("#time_val").text("");
-        data = await eel.getResultsTime()();
+        if ($("#plot_exp").prop("checked")) {
+            penetration = parseFloat($("#penetration").val());
+            if (isNaN(penetration) || penetration <= 0) {
+                $("#helpbar").css("color","#ff5555");
+                $("#helpbar").text("Penetration depth must be a positive number");
+                return;
+            }
+        }
+        data = await eel.getResultsTime(penetration)();
 
         Telectron = data[1].map(T => T- INIT_TEMP);
         Tlattice  = data[2].map(T => T- INIT_TEMP);

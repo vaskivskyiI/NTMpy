@@ -6,10 +6,22 @@ from gui.py.variables import out
 
 # Plot Temperature in time ######################
 @eel.expose
-def getResultsTime():
+def getResultsTime(penetration_depth = 0.0):
+    if penetration_depth > 0.0:
+        penetration  = np.exp(-out["x"]/penetration_depth)
+        penetration *= np.append(np.diff(out["x"]), 0.0)
+        penetration /= np.sum(penetration)
+        print("Penetration depth:", penetration)
+        print("Penetration shape:", penetration.shape)
+        temp_electron = penetration @ out["T"][0]
+        temp_lattice  = penetration @ out["T"][1]
+        print(temp_electron.shape, temp_lattice.shape)
+    else:
+        temp_electron = out["T"][0][0]
+        temp_lattice  = out["T"][1][0]
     time = np.linspace(out["t"][0], out["t"][-1], 512)
-    temp_electron = np.interp(time, out["t"], out["T"][0][0])
-    temp_lattice  = np.interp(time, out["t"], out["T"][1][0])
+    temp_electron = np.interp(time, out["t"], temp_electron)
+    temp_lattice  = np.interp(time, out["t"], temp_lattice)
     return [[time[0], time[-1]], list(temp_electron), list(temp_lattice)]
 
 
@@ -37,7 +49,7 @@ def plotPython():
     plt.grid()
     plt.xlim(out["t"][0]*1e9, out["t"][-1]*1e9)
     plt.ylim(300, (max(np.max(out["T"][0][0]),np.max(out["T"][1][0])) - 300) * 1.1 + 300) 
-    plt.legend(["Electron Temperature", "Lattice temperature"])
+    plt.legend(["Electron temperature", "Lattice temperature"])
     plt.xlabel("Time [ns]")
     plt.ylabel("Temperature [K]")
     plt.show()

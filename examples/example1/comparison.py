@@ -32,10 +32,10 @@ vs.spaceVStime(x, t, phi[1])
 vs.average(x,t,phi)
 
     
-np.savetxt('space.txt', x)
-np.savetxt( 'time.txt', t)
-np.savetxt('temp_elec.txt', phi[0])
-np.savetxt('temp_latt.txt', phi[1])
+np.savetxt('./examples/example1/space.txt', x)
+np.savetxt('./examples/example1/time.txt', t)
+np.savetxt('./examples/example1/temp_elec.txt', phi[0])
+np.savetxt('./examples/example1/temp_latt.txt', phi[1])
 
 # -------------------------------------------------------------------------
 

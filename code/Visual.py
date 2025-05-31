@@ -41,8 +41,8 @@ def single_point(x, t, phi, x_pnt):
 # ========================================================================================
 def animated(x, t, phi, speed = 2):
     fig, ax = plt.subplots()
-    minAx = np.min(phi) - .1*np.min(phi)*np.sign(np.min(phi));
-    maxAx = np.max(phi) + .1*np.max(phi)*np.sign(np.max(phi));
+    minAx = np.min(phi) - .1*np.min(phi)*np.sign(np.min(phi))
+    maxAx = np.max(phi) + .1*np.max(phi)*np.sign(np.max(phi))
     ax.set_xlim(0, x[-1]); ax.set_ylim( minAx, maxAx)
     plt.xlabel('Depth of Material'); plt.ylabel('Temperature')
     line, = ax.plot([], [], 'r', animated=True)
@@ -63,10 +63,10 @@ def animated(x, t, phi, speed = 2):
 # ========================================================================================
 def compare(x, t, phi1, phi2, speed = 1):
     fig, ax = plt.subplots()
-    minAx1 = np.min(phi1); maxAx1 = np.max(phi1);
-    minAx2 = np.min(phi2); maxAx2 = np.max(phi2);
-    minAx = min([minAx1, minAx2]); maxAx = max([maxAx1, maxAx2]);
-    diff = maxAx - minAx;
+    minAx1 = np.min(phi1); maxAx1 = np.max(phi1)
+    minAx2 = np.min(phi2); maxAx2 = np.max(phi2)
+    minAx = min([minAx1, minAx2]); maxAx = max([maxAx1, maxAx2])
+    diff = maxAx - minAx
     ax.set_xlim(0, x[-1]); ax.set_ylim( minAx - .1*diff, maxAx + .1*diff)
     plt.xlabel('Depth of Material'); plt.ylabel('Temperature')
     line1, = ax.plot([], [], 'r', animated=True)
@@ -103,8 +103,8 @@ def average(x, t, phi):
     if len(phi[0].shape) > 1:
         for i in range(len(phi)):
             phi_ave = np.average(phi[i], axis = 0, weights = wx)
-            plt.plot(t, phi_ave);
+            plt.plot(t, phi_ave)
     else:
         phi_ave = np.average(phi, axis = 0, weights = wx)
-        plt.plot(t, phi_ave);
-    plt.grid(); plt.show();
+        plt.plot(t, phi_ave)
+    plt.grid(); plt.show()

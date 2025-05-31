@@ -21,14 +21,14 @@ close all
 
 surf( x, t, Te_m ,'Edgecolor', 'None', 'facecolor', 'r')
 hold on
-surf( x, t, Te_py, 'Edgecolor', 'None', 'facecolor', 'b')
+surf( x, t, Te_py', 'Edgecolor', 'None', 'facecolor', 'b')
 camlight headlight
 lighting phong
 
 figure()
 surf( x, t, Tl_m , 'Edgecolor', 'None', 'facecolor', 'r')
 hold on
-surf( x, t, Tl_py, 'Edgecolor', 'None', 'facecolor', 'b')
+surf( x, t, Tl_py', 'Edgecolor', 'None', 'facecolor', 'b')
 camlight headlight
 lighting phong
 

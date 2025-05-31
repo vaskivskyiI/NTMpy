@@ -1,6 +1,9 @@
-from Sim3T import Sim3T
-import Visual as vs
-from Source import source
+import sys
+sys.path.insert(0, './code/')
+
+from Sim3T import Sim3T # type: ignore
+import Visual as vs # type: ignore
+from Source import source # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt
 

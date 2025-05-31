@@ -1,8 +1,7 @@
 import sys
+sys.path.insert(0, './code')
 
-sys.path.insert(0, '../Classes')
-
-from Source import source
+from Source import source # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -28,14 +27,14 @@ end = np.sum(s.thickness)
 x = np.linspace(0, end, 4000)
 t = np.linspace(0, 4e-12, 2000)
 
-SL = s.matrix(x, t)
+SL = s.create(x, t)
 s.type_x = 'tmm'
 
 s.polarization = 's'
-STs = s.matrix(x, t)
+STs = s.create(x, t)
 
 s.polarization = 'p'
-STp = s.matrix(x, t)
+STp = s.create (x, t)
 
 plt.plot(x, SL[:, 0])
 # plt.plot(x,SL[10,:],x,ST[10,:])

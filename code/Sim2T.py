@@ -219,6 +219,7 @@ class Sim2T(object):
             y = np.linspace(self.length[i], self.length[i+1] , self.plt_points[i])
             if self.substrate and i == len(self.length) - 2:
                 x = np.logspace(np.log10(self.length[i]), np.log10(self.length[i+1]) , self.grd_points[i])
+                y = np.logspace(np.log10(self.length[i]), np.log10(self.length[i+1]) , self.plt_points[i])
             # Spline Generation
             knot_vector = aptknt( x, order)
             basis       = Bspline(knot_vector, order)

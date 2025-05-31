@@ -3,7 +3,7 @@
         "reflection": false,
         "source_set": true,
         "layers_set": true,
-        "result_set": false
+        "result_set": true
     },
     "laser": {
         "energy": 5,
@@ -56,7 +56,8 @@
         }
     ],
     "time": {
-        "simulation": 2e-11,
-        "computation": 0.35219645500183105
-    }
+        "simulation": 7.87979009573371e-12,
+        "computation": 0.14375567436218262
+    },
+    "expdata": "./data/expdata.csv"
 }

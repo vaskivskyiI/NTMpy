@@ -2,7 +2,7 @@ import eel
 import numpy as np
 import matplotlib.pyplot as plt
 
-from gui.py.variables import out
+from gui.py.variables import out, current_data
 
 # Plot Temperature in time ######################
 @eel.expose
@@ -63,6 +63,11 @@ def getExperimental(filename = "./data/"):
         data[:,1] -= data[0,1]
         ratio = (out["T"][0][0][-1]-300) / (np.max(out["T"][0][0])-300)
         data[:,1] *= ratio / data[-1][-1]
+        current_data[0] = filename
         return [list(data[:,0]), list(data[:,1])]
     except:
         return "Error: data not found or invalid format"
+    
+@eel.expose
+def getDataFilename():
+    return current_data[0]

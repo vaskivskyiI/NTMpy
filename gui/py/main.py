@@ -23,6 +23,9 @@ def run_simulation(final_time):
     sim.final_time = float(final_time)
     [out["x"], out["t"], out["T"]] = sim.run()
 
+    if final_time >= 1:
+        time["simulation"] = sim.time_step * final_time
+
     time["computation"] = sim.computation_time
     flags["result_set"] = True
     

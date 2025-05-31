@@ -7,6 +7,7 @@ global src; src = source()
 
 global current_path; current_path = ["./data/"]
 global current_file; current_file = [""]
+global current_data; current_data = [""]
 
 global layers; layers = []
 global nindex; nindex = []

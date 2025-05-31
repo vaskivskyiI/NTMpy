@@ -1,7 +1,7 @@
 import eel
 import json, os
 from numpy import savez, load
-from gui.py.variables import flags, laser, layers, nindex, current_file, time, out
+from gui.py.variables import flags, laser, layers, nindex, current_file, current_data, time, out
 
 
 # Save File #####################################
@@ -12,7 +12,8 @@ def save_file(filename="ntmpy_save", path="./data/"):
         "laser": laser,
         "layers": layers,
         "nindex": nindex,
-        "time": time
+        "time": time,
+        "expdata": current_data[0]
     }
     current_file[0] = filename
     try:
@@ -49,6 +50,7 @@ def load_file(filename="ntmpy_save", path="./data/"):
         nindex.extend(data_loaded.get("nindex", []))
 
         current_file[0] = filename.split(".")[0]
+        current_data[0] = data_loaded.get("expdata", "")
 
         if flags["result_set"]:
                 with load(path + current_file[0] + ".npz") as data:
@@ -85,6 +87,7 @@ def new_file():
                     "result_set": False})
 
     current_file[0] = "untitled"
+    current_data[0] = ""
 
 
 # Explore Files #################################

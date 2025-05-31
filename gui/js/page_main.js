@@ -29,7 +29,7 @@ $(document).ready(async function(){
     });
 
     if (await eel.getTime("simulation")() > 0)
-    {   $("#sim_time").val(await eel.getTime("simulation")()); }
+    {   $("#sim_time").val((await eel.getTime("simulation")()).toExponential(4)); }
     if (await eel.getFlags("result_set")())
     {   $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds"); }
         
@@ -125,7 +125,7 @@ async function runSimulation() {
     const layersSet = await eel.getFlags("layers_set")();
     
     // Validate final time
-    if (finalTime > 0 && sourceSet && layersSet) {
+    if (!isNaN(finalTime) && finalTime > 0 && sourceSet && layersSet) {
         $("#helpbar").css("color", "#ffffff");
         $("#helpbar").text("Running simulation...");
         error = await eel.run_simulation(finalTime)();
@@ -138,7 +138,7 @@ async function runSimulation() {
         $("#helpbar").css("color", "#00ff00");
         $("#helpbar").text("Simulation finished");
     }
-    else if (!finalTime > 0) {
+    else if (!finalTime > 0 || isNaN(finalTime)) {
         $("#helpbar").css("color", "#ff0000");
         $("#helpbar").text("Final simulation time is not set or not valid");
     } else if (!souceSet) {
@@ -179,7 +179,7 @@ async function checkFlags() {
         $("#resultStatus .light").css("background-color","#00ff00")
         $("#resultStatus .text" ).text("Results available");
         $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds");
-        $( "#sim_time").val(await eel.getTime("simulation" )());
+        $( "#sim_time").val((await eel.getTime("simulation" )()).toExponential(4));
     } else {
         $("#resultStatus .light").css("background-color","#ff0000")
         $("#resultStatus .text" ).text("Results not available");

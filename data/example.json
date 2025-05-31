@@ -3,7 +3,7 @@
         "reflection": false,
         "source_set": true,
         "layers_set": true,
-        "result_set": true
+        "result_set": false
     },
     "laser": {
         "energy": 5,
@@ -15,7 +15,7 @@
     },
     "layers": [
         {
-            "name": "Pt",
+            "name": "Ni",
             "length": 3e-08,
             "rho": 6500,
             "K": [
@@ -29,7 +29,7 @@
             "G": "6e17"
         },
         {
-            "name": "Au",
+            "name": "Si",
             "length": 8e-08,
             "rho": 5100,
             "K": [

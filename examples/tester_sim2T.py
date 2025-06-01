@@ -43,7 +43,7 @@ elif case == 2:
     s.setLaser(5, 2e-12)
     s.delay       = 2e-12       # time the maximum intensity hits
     s.refraction  = [1,1]
-    s.absorption  = [1.9e-7, 1.9e-7, 1.9e-7]
+    s.absorption  = [1.9e-7, 1.9e-7, 1.9e-7,1.9e-7]
 
 
     # initialize simulation: ntm.simulation(number of temperatures, source)
@@ -52,8 +52,10 @@ elif case == 2:
 
     # add material layers:
     sim.addLayer( 30e-9, [ 8,  0], [lambda T: .112*T, 450], 6500, 6e17, 9)
-    sim.addLayer( 80e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
-    sim.addSubstrate( 1000e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
+    #sim.addLayer( 80e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
+    #sim.addLayer( 80e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
+    #sim.addLayer( 80e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
+    sim.addSubstrate( 5000e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
     
 
     # set final simulation time (in seconds)
@@ -63,7 +65,9 @@ elif case == 2:
     [x, t, phi] = sim.run()
     
     # Plot temperature
-    vs.compare(x,t,phi[0],phi[1])
+    #vs.compare(x,t,phi[0],phi[1])
+    plt.plot(x,phi[0][:,-1])
+    plt.show()
 
     # -------------------------------------------------------------------------
 

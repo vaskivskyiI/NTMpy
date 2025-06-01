@@ -24,6 +24,8 @@ $(document).ready( function(){
     $("#duplicate").on("click", function() {eel.duplicateLayer(layer_num-1); drawMaterial();})
     $(".canvas > div").on("click", selectLayer);
 
+    $("#load_btn").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");})
+
 
     console.log("ready");
   

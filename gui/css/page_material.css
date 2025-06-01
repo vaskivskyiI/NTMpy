@@ -118,3 +118,31 @@
 #submit:hover, #insert_header:hover, #duplicate:hover {
   background-image: linear-gradient(180deg, #24e745,#138113)
 }
+
+#load_menu {
+  display: flex;
+  margin-top: 2px;
+  padding-top: 5px;
+  margin-bottom: 5px;
+  justify-content: space-between;
+  border-top: 2px solid #eeeeee;
+  align-items: center;
+}
+
+#load_drop {
+  flex: none;
+  width: 500px;
+  height: 25px;
+}
+
+#load_btn {
+  padding: 2px;
+  flex: none;
+  width: 200px;
+  height: 30px;
+  background-image: linear-gradient(180deg, #ccbb00,#997700)
+}
+
+#load_btn:hover {
+  background-image: linear-gradient(180deg, #eedd00,#bbaa00)
+}

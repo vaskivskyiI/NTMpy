@@ -52,7 +52,7 @@ td {
   float: right;
   display: flex;
   flex-direction: row;
-  margin: 6 12 6 12;
+  margin: 0 -10 6 -10;
 }
 
 #navbar a {
@@ -65,9 +65,9 @@ td {
   justify-content: flex-start;
   align-items: flex-start;
   display: flex;
-  padding: 6px;
+  padding: 6px 0px;
   font-size: 20;
-  margin: 2px;
+  margin: 0px;
   height: 30px;
   border-bottom: 2px solid #101010;
   border-left: 2px solid #606060;
@@ -75,6 +75,15 @@ td {
   border-top: 2px solid #606060;
   justify-content: center;
   align-items: center;
+  transform: skewX(-15deg);
+}
+
+#navbar a:first-child, #navbar a:last-child {
+  flex:1.1;
+}
+
+#navbar label {
+  transform: skewX(15deg);
 }
 
 #navbar a:active {
@@ -130,7 +139,7 @@ canvas {
   background-color: #303030;
 }
 
-input {
+input, select {
   font-size: 17;
   font-family: 'Courier New';
 }
@@ -191,4 +200,8 @@ button {
 
 #navbar a:nth-child(1):hover {
   background-image: linear-gradient(180deg, #5ce034,#40a521)
+}
+
+body {
+  overflow: hidden;
 }

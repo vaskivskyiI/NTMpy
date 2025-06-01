@@ -38,9 +38,11 @@ $(document).ready(async function(){
 });
 
 async function exploreFiles(path = null) {
+    console.log("exploreFiles called with path:", path);
     let files = await eel.explore_files(path)();
 
-    $("#filetable").empty();
+    $("#filetable td").remove();
+    $("#filetable tr").remove();
     $("#filetable").append("<tr><td>📁 ..</td></tr>");
 
     for (let i = 0; i < files.length; i++) {
@@ -51,7 +53,7 @@ async function exploreFiles(path = null) {
     }
     if (path) { eel.save_path(path); }
 
-    $("#filetable").on("click", "td", async function() {
+    $("#filetable td").on("click", async function() {
         const item = $(this).text();
         
         if (item.startsWith('📁')) {

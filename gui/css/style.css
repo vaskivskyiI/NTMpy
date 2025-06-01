@@ -202,6 +202,14 @@ button {
   background-image: linear-gradient(180deg, #5ce034,#40a521)
 }
 
+#navbar a:nth-child(6):hover {
+  background-image: linear-gradient(180deg, #4c4c4c,#191919)
+}
+
+#navbar a:nth-child(6):hover {
+  background-image: linear-gradient(180deg, #7c7c7c,#494949)
+}
+
 body {
   overflow: hidden;
 }

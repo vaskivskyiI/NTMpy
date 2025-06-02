@@ -55,7 +55,7 @@ elif case == 2:
     #sim.addLayer( 80e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
     #sim.addLayer( 80e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
     #sim.addLayer( 80e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
-    sim.addSubstrate( 500e-9, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
+    sim.addSubstrate( 0.0001, [24, 12], [lambda T: .025*T, 730], 5100, 6e17, 12)
     
 
     # set final simulation time (in seconds)
@@ -66,7 +66,7 @@ elif case == 2:
     
     # Plot temperature
     #vs.compare(x,t,phi[0],phi[1])
-    plt.plot(x,phi[0][:,100])
+    plt.plot(x,phi[0][:,15])
     plt.grid()
     plt.show()
 

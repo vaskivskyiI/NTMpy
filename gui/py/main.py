@@ -17,6 +17,8 @@ def run_simulation(final_time):
     time["simulation"] = final_time
     src_init()
     sim = build_material()
+    if layers[-1]["length"] >= 10 * sum([layer["length"] for layer in layers[:-1]]):
+        sim.substrate = True
     if isinstance(sim, int):
         return "Error: some material property is not valid (maybe layer " + str(sim+1) + ")"
     sim.setSource(src)
@@ -41,7 +43,7 @@ def build_material():
         cond = [eval(layer["K"][0]), eval(layer["K"][1])]
         capc = [eval(layer["C"][0]), eval(layer["C"][1])]
         coup =  eval(layer["G"])
-        sim.addLayer( length, cond, capc, dens, coup, 16)
+        sim.addLayer( length, cond, capc, dens, coup, 12)
     return sim
 
 # Initialize Source #################################

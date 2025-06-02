@@ -28,17 +28,18 @@ $(document).ready(async function(){
         await exploreFiles($("#pathname").val());
     });
 
+    console.log("page loaded");
     if (await eel.getTime("simulation")() > 0)
-    {   $("#sim_time").val((await eel.getTime("simulation")()).toExponential(4)); }
+    {    $("#sim_time").val((await eel.getTime("simulation")()).toExponential(4)); }
     if (await eel.getFlags("result_set")())
     {   $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds"); }
-        
+    console.log("times loaded");
+    
     checkFlags();
 
 });
 
 async function exploreFiles(path = null) {
-    console.log("exploreFiles called with path:", path);
     let files = await eel.explore_files(path)();
 
     $("#filetable td").remove();
@@ -143,7 +144,10 @@ async function runSimulation() {
     else if (!finalTime > 0 || isNaN(finalTime)) {
         $("#helpbar").css("color", "#ff0000");
         $("#helpbar").text("Final simulation time is not set or not valid");
-    } else if (!souceSet) {
+    } else if (!sourceSet && !layersSet) {
+        $("#helpbar").css("color", "#ff0000");
+        $("#helpbar").text("The material and source are not set");
+    } else if (!sourceSet) {
         $("#helpbar").css("color", "#ff0000");
         $("#helpbar").text("The source is not set");
     } else if (!layersSet) {

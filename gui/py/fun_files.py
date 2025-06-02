@@ -81,10 +81,14 @@ def new_file():
                     "angle":        None,
                     "polarization": None})
                     
-    flags.update({  "reflection": False,
+    flags.update({  "spinS_temp": False,
+                    "reflection": False,
                     "source_set": False,
                     "layers_set": False,
                     "result_set": False})
+
+    time.update({   "simulation" : 0,
+                    "computation": 0})
 
     current_file[0] = "untitled"
     current_data[0] = ""

@@ -111,7 +111,11 @@ async function plotExperiment() {
 
 
 function plotPython() {
-    eel.plotPython()();
+    if (result_set) { eel.plotPython()(); }
+    else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("No results available")
+    }
 }
 
 async function setupAnimation() {
@@ -170,10 +174,17 @@ async function playAnimation() {
 }
 
 async function stopAnimation() {
-    clearInterval(timer);
-    animation_running = false; 
-    $("#helpbar").css("color","#ffdddd");
-    $("#helpbar").text("Animation stopped")
+    if (animation_running) {
+        clearInterval(timer);
+        animation_running = false; 
+        $("#helpbar").css("color","#ffbbbb");
+        $("#helpbar").text("Animation stopped");
+    }
+    else {
+        $("#helpbar").css("color","#ffbbbb");
+        $("#helpbar").text("The animation is not running");
+    }
+    
 }
 
 async function animateStep() {

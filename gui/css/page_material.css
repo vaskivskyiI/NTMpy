@@ -67,12 +67,12 @@
   flex: none;
   width: fit-content;
   margin-right: 10;
+  align-content: center;
 }
 
 .table3 input {
   flex: 1;
 }
-
 
 .help_btn {
   padding: 0px;
@@ -145,4 +145,15 @@
 
 #load_btn:hover {
   background-image: linear-gradient(180deg, #eedd00,#bbaa00)
+}
+
+#num_temp {
+    display: flex;
+    margin-top: 8px;
+    padding-bottom: 2px;
+    padding: 4 10 4 10;
+    border: 2px solid  #000000;
+    border-radius: 4px;
+    background-color: rgb(175, 175, 175);
+    color: black;
 }

@@ -1,5 +1,6 @@
 {
     "flags": {
+        "spinS_temp": false,
         "reflection": false,
         "source_set": true,
         "layers_set": true,

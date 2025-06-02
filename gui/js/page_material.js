@@ -1,8 +1,10 @@
 let layer_num = 0;
+let spinTemp = false;
 
 $(document).ready( function(){
 
     drawMaterial();
+    drawMenu(false);
 
     $("#insert_header").on("click", function() {
         $("#modify_panel").slideUp(300);
@@ -24,6 +26,8 @@ $(document).ready( function(){
     $("#duplicate").on("click", function() {eel.duplicateLayer(layer_num-1); drawMaterial();})
     $(".canvas > div").on("click", selectLayer);
 
+    $("#check_2T").on("click", () => {drawMenu(false);});
+    $("#check_3T").on("click", () => {drawMenu(true); $("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");})
     $("#load_btn").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");})
 
 
@@ -84,7 +88,6 @@ async function addLayer() {
 
 }
 
-
 function selectLayer() {
 
     layer_num = $(this).index();
@@ -117,7 +120,6 @@ async function moveLayer(move) {
 
 
 }
-
 
 async function updateLayer() {
 
@@ -157,5 +159,36 @@ async function updateLayer() {
         $("#helpbar").css("color","#ff5555");
         $("#helpbar").text("Cannot modify the layer: Some material properties are missing");
     }
+
+}
+
+async function setTempNum() {
+
+}
+
+async function drawMenu(debug) {
+    
+    //const spinTemp = await eel.getFlags("spinS_temp")();
+    spinTemp = debug;
+
+    $(".table2 td:nth-child(4)").remove();
+    $(".table2 td:nth-child(4)").remove();
+    $(".table2 td:nth-child(4)").remove();
+    $(".table3").empty();
+
+    if (!spinTemp) {
+        $("#check_2T").prop("checked", true);
+        $(".table3").append("<label>Coupling:</label><input style='flex: 1;' class='G_input'></input>")
+
+    }
+    else if (spinTemp) {
+        $("check_3T").prop("checked", true);
+        $(".table2 tr:nth-child(1)").append("<td>Spin</td>");
+        $(".table2 tr:nth-child(2)").append("<td><div><input class='K_input'></div></td>");
+        $(".table2 tr:nth-child(3)").append("<td><div><input class='C_input'></div></td>");
+        $(".table3").append("<label>Coupling EL:</label><input style='flex: 1;' class='G_input'></input>");
+        $(".table3").append("<label style='margin-left:12px'>LS:</label><input style='flex: 1;' class='G_input'></input>");
+        $(".table3").append("<label style='margin-left:12px'>ES:</label><input style='flex: 1;' class='G_input'></input>");
+    } 
 
 }

@@ -4,6 +4,12 @@
 <script type='text/javascript' src="../js/page_material.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/page_material.css">
 
+<div id="num_temp">
+    <label style="flex: 1;">Number of temperatures:</label>
+    <span  style="flex: 1;"><input type="radio" name="num_temp" id="check_2T"> Two temperatures</span>
+    <span  style="flex: 1;"><input type="radio" name="num_temp" id="check_3T"> Three temperatures</span>
+</div>
+
 <div style="flex: 1;">
     <div id="modify_header" class="headerpanel"> Click on a Layer to Modify</div>
     <div id="modify_panel" class="content">
@@ -51,9 +57,6 @@
             
             </table>
             <span class="table3">
-                <label>Coupling:</label>
-                <input style="flex: 1;" class="G_input">
-                <!-- <button class="help_btn">Help</button> -->
             </span>
             <span style="display: flex; flex-direction: row;">
                 <button class="button" id="update">Update Layer</button>
@@ -116,9 +119,6 @@
             
             </table>
             <span class="table3">
-                <label>Coupling:</label>
-                <input style="flex: 1;" class="G_input">
-                <!-- <button class="help_btn">Help</button> -->
             </span>
             <span id="load_menu">
                 <label style="align-content: center;">Take from saved materials:</label>

@@ -11,11 +11,8 @@ def getResultsTime(penetration_depth = 0.0):
         penetration  = np.exp(-out["x"]/penetration_depth)
         penetration *= np.append(np.diff(out["x"]), 0.0)
         penetration /= np.sum(penetration)
-        print("Penetration depth:", penetration)
-        print("Penetration shape:", penetration.shape)
         temp_electron = penetration @ out["T"][0]
         temp_lattice  = penetration @ out["T"][1]
-        print(temp_electron.shape, temp_lattice.shape)
     else:
         temp_electron = out["T"][0][0]
         temp_lattice  = out["T"][1][0]

@@ -10,7 +10,7 @@ let multiplier;
 let finalTime;
 let animationTime = 0;
 
-const FRAME_PER_SECOND = 30;
+const FRAME_PER_SECOND = 20;
 const ANIMATION_DURATION = 10;
 const TOTAL_FRAMES = ANIMATION_DURATION * FRAME_PER_SECOND;
 const FRAME_DURATION = 1000 / FRAME_PER_SECOND;

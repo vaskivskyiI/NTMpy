@@ -195,6 +195,8 @@ class Sim2T(object):
 # ----------------------------------------------------------------------------------------
     def build_geometry(self):
         if self.substrate:
+            if len(self.length) < 2:
+                print("Error: The substrate cannot be the only layer! Consider using sim2T1L")
             self.substrate_pnt()
         # Store layer and interface number
         self.layers = len(self.length) - 1
@@ -258,9 +260,9 @@ class Sim2T(object):
         self.dt_ext = self.stability(LSM)
 
     def substrate_pnt(self):
-        delta = 1.2 * (self.length[-2]/self.grd_points[-2])
+        delta = 1.05 * ((self.length[-2]-self.length[-3])/self.grd_points[-2])
         x = np.logspace(np.log10(self.length[-2]), np.log10(self.length[-1]), self.grd_points[-1])
-        while x[1] - x[0] > delta:
+        while x[2] - x[1] > delta:
             self.grd_points[-1] += 1
             x = np.logspace(np.log10(self.length[-2]), np.log10(self.length[-1]), self.grd_points[-1])
         self.plt_points[-1] = self.grd_points[-1] * 10

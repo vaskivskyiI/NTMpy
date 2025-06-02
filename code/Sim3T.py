@@ -89,7 +89,7 @@ class Sim3T(object):
         self.default_Np = 60 # default number of plot points per layer
         # Maximum Temperature Expected (used in time step evaluation)
         self.burn = 2000 # I do not expect temperature to go above this
-        
+        self.substrate = False # if the last layer is a substrate
 
         # Incides of the interfaces/material and number of Layers
         self.layers = 0 # number of layers
@@ -176,6 +176,11 @@ class Sim3T(object):
         Np = self.default_Np if not Np else Np
         self.plt_points.append(Np)
 
+    def addSubstrate(self, L, K, C, D, G = 0, Ng = False, Np = False):
+        if not self.substrate:
+            self.addLayer(L, K, C, D, G, Ng, Np)
+            self.substrate = True
+
 
 # ========================================================================================
 #
@@ -240,6 +245,8 @@ class Sim3T(object):
 #
 # ----------------------------------------------------------------------------------------
     def build_geometry(self):
+        if self.substrate:
+            self.substrate_pnt()
         # Store layer and interface number
         self.layers = len(self.length) - 1
         # Indices of the Interface points
@@ -261,6 +268,9 @@ class Sim3T(object):
             # Define Space Points
             x = np.linspace(self.length[i], self.length[i+1] , self.grd_points[i])
             y = np.linspace(self.length[i], self.length[i+1] , self.plt_points[i])
+            if self.substrate and i == len(self.length) - 2:
+                x = np.logspace(np.log10(self.length[i]), np.log10(self.length[i+1]) , self.grd_points[i])
+                y = np.logspace(np.log10(self.length[i]), np.log10(self.length[i+1]) , self.plt_points[i])
             # Spline Generation
             knot_vector = aptknt( x, order)
             basis       = Bspline(knot_vector, order)
@@ -270,7 +280,7 @@ class Sim3T(object):
             D2L = basis.collmat(x, deriv_order = 2)
             P0L = basis.collmat(y, deriv_order = 0)
             # Correct BSpline Package Bug
-            D0L[-1,-1] = 1; P0L[-1,-1] = 1;
+            D0L[-1,-1] = 1; P0L[-1,-1] = 1
             D1L[-1] = -np.flip(D1L[0],0)
             D2L[-1] = +np.flip(D2L[0],0)
             # Matrices for the Stablity
@@ -300,6 +310,13 @@ class Sim3T(object):
         # Calculate approximated Time steps
         self.dt_ext = self.stability(LSM)
 
+    def substrate_pnt(self):
+        delta = 1.05 * ((self.length[-2] - self.length[-3])/self.grd_points[-2])
+        x = np.logspace(np.log10(self.length[-2]), np.log10(self.length[-1]), self.grd_points[-1])
+        while x[2] - x[1] > delta:
+            self.grd_points[-1] += 1
+            x = np.logspace(np.log10(self.length[-2]), np.log10(self.length[-1]), self.grd_points[-1])
+        self.plt_points[-1] = self.grd_points[-1] * 10
 
 # ========================================================================================
 #

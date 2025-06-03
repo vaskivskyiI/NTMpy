@@ -2,7 +2,7 @@ import eel
 import numpy as np
 
 from gui.py.variables import flags, laser, layers, nindex, src
-from main import src_init
+from gui.py.main import src_init
 
 # Flags interfaces ###############################
 @eel.expose

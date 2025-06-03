@@ -1,13 +1,11 @@
-import sys
-sys.path.insert(0, './gui/py')
-
 import eel
 
-import variables # type: ignore
-import fun_material # type: ignore
-import fun_source # type: ignore
-import fun_files # type: ignore
-import fun_result # type: ignore
+import gui.py.variables # type: ignore
+import gui.py.fun_material # type: ignore
+import gui.py.fun_source # type: ignore
+import gui.py.fun_files # type: ignore
+import gui.py.fun_result # type: ignore
+import gui.py.main # type: ignore
 
 
 eel.init('.', allowed_extensions=['.js', '.html', '.css'])

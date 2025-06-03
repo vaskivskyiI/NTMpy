@@ -1,9 +1,7 @@
-import sys
 import eel
 
-sys.path.insert(0, './code')
-from Sim2T import Sim2T # type: ignore
-from Source import source # type: ignore
+from core.Sim2T import Sim2T # type: ignore
+from core.Source import source # type: ignore
 from numpy import array, savez, load # type: ignore
 import numpy as np
 from copy import deepcopy as copy

@@ -1,7 +1,4 @@
-import sys
-sys.path.insert(0, './code')
-from Source import source # type: ignore
-from numpy import array # type: ignore
+from core.Source import source # type: ignore
 
 global src; src = source()
 

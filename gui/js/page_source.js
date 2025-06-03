@@ -60,12 +60,14 @@ async function drawPage() {
     
     if (reflection) {
         nindex.forEach(function(layer) {
-            if (layer.nr !== null && layer.ni !== null){ labels.push(layer.nr + " + " + layer.ni + "i"); }
+            if (layer.nr !== null && layer.ni !== null){
+                labels.push("n = " + layer.nr + " + " + layer.ni + "i");
+            }
             else { labels.push(""); }
         });
     } else {
         nindex.forEach(function(layer) {
-            if (layer.l !== null) { labels.push(layer.l); }
+            if (layer.l !== null) { labels.push("λ = " + (layer.l * 1e9).toFixed(0) + " nm"); }
             else { labels.push(""); }
         });
     }

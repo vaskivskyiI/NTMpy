@@ -26,8 +26,15 @@ def getResultsTime(penetration_depth = 0.0):
 @eel.expose
 def getResultsSpace(time):
     space = out["x"]
-    temp_electron = [np.interp(time, out["t"], out["T"][0][x]) for x in range(len(space))]
-    temp_lattice  = [np.interp(time, out["t"], out["T"][1][x]) for x in range(len(space))]
+    t_index = np.interp(time, out["t"], np.arange(out["t"].size))
+    weight1 = np.ceil(t_index) - t_index 
+    weight2 = 1 - weight1
+    temp_electron  = out["T"][0][:, int(np.floor(t_index))] * weight1
+    temp_electron += out["T"][0][:, int(np.ceil( t_index))] * weight2
+    temp_lattice   = out["T"][1][:, int(np.floor(t_index))] * weight1
+    temp_lattice  += out["T"][1][:, int(np.ceil( t_index))] * weight2
+    #temp_electron = [np.interp(time, out["t"], out["T"][0][x]) for x in range(len(space))]
+    #temp_lattice  = [np.interp(time, out["t"], out["T"][1][x]) for x in range(len(space))]
     equispaced = np.linspace(space[0], space[-1], 512)
     temp_electron = np.interp(equispaced, space, temp_electron)
     temp_lattice  = np.interp(equispaced, space, temp_lattice )

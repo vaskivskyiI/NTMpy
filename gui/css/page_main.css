@@ -1,3 +1,11 @@
+#navbar a:nth-child(1) {
+  background-image: linear-gradient(180deg, #ad1e42,#641327)
+}
+
+#navbar a:nth-child(1):hover {
+  background-image: linear-gradient(180deg, #e71a4d,#881a36)
+}
+
 label {
     align-content: center;
     padding: 0 20 0 20;
@@ -30,11 +38,21 @@ label {
     background-color: #666666;
 }
 
-#files_header, #sim2T_header {
-    background-image: linear-gradient(180deg, #1b1b1b,#000000)
+#files_header, #new_file, #del_file, #load_file, #save_file {
+  background-image: linear-gradient(180deg, #2a398d,#162266)
 }
-#files_header:hover, #sim2T_header:hover {
-    background-image: linear-gradient(180deg, #363636,#1b1b1b)
+
+#files_header:hover, #files_header:hover, #new_file:hover, #del_file:hover, #load_file:hover, #save_file:hover {
+  background-image: linear-gradient(180deg, #475fe7,#2135a5)
+}
+
+
+#sim2T_header {
+  background-image: linear-gradient(180deg, #ad1e42,#641327)
+}
+
+#sim2T_header:hover {
+  background-image: linear-gradient(180deg, #e71a4d,#881a36)
 }
 
 #goto {
@@ -50,44 +68,15 @@ label {
     background-image: linear-gradient(180deg, #363636,#1b1b1b)
 }
 
-#new_file {
-    background-image: linear-gradient(180deg, #498d2a,#366616)
-}
-#new_file:hover {
-    background-image: linear-gradient(180deg, #5ce034,#40a521)
-}
-
-#del_file {
-    background-image: linear-gradient(180deg, #ad1e42,#641327)
-}
-#del_file:hover {
-    background-image: linear-gradient(180deg, #e71a4d,#881a36)
-}
-
-#load_file {
-    background-image: linear-gradient(180deg, #947f16,#514f0b)
-}
-#load_file:hover {
-  background-image: linear-gradient(180deg, #e7bd24,#816f13)
-}
-
-#save_file {
-    background-image: linear-gradient(180deg, #2a398d,#162266)
-}
-#save_file:hover {
-    background-image: linear-gradient(180deg, #475fe7,#2135a5)
-}
-
 #run_2Tsim {
     font-variant: small-caps;
     font-weight: bold;
     font-size: 22px;
-    color: #000000;
-    background-image: linear-gradient(180deg, #dadada,#b1b1b1);
+    background-image: linear-gradient(180deg, #ad1e42,#641327);
     margin-top: 8px;
 }
 #run_2Tsim:hover {
-    background-image: linear-gradient(180deg, #ffffff,#dfdfdf)
+    background-image: linear-gradient(180deg, #e71a4d,#881a36)
 }
 
 .selected {

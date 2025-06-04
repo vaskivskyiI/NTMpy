@@ -1,3 +1,11 @@
+#navbar a:nth-child(2) {
+  background-image: linear-gradient(180deg, #ad1e42,#641327)
+}
+
+#navbar a:nth-child(2):hover {
+  background-image: linear-gradient(180deg, #e71a4d,#881a36)
+}
+
 .content {
   display: none;
 }

@@ -17,7 +17,7 @@ global laser; laser = { "energy":       None,
                         "polarization": None}
 
 global flags; flags = { "spin_temp" : False,
-                        "reflection": False,
+                        "reflection":  True,
                         "substrate" : False,
                         "source_set": False,
                         "almost_set": False,

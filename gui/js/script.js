@@ -1,4 +1,4 @@
-const colors = ['#a88924','#2469a8','#a84e24','#44911a','#6319af'];
+const colors = ['#b90000','#b97800','#9db900','#00b0b9','#004ab9','#5000b9'];
 let layers;
 
 async function drawMaterial_core(labels, labelStates) {
@@ -24,12 +24,12 @@ async function drawMaterial_core(labels, labelStates) {
         const isValid = labelStates ? labelStates[i] : true;
         $(".canvas").append('<div style="flex:' + layers_percent[i] + '">' + 
                                 '<div' + style1(isValid) + labels[i] + '</div>' +
-                                '<div' + style2 + colors[i%5] + '"></div>' + 
+                                '<div' + style2 + colors[i%6] + '"></div>' + 
                             '<div>');
     }
 
     if (substrate) {
-        const style = "linear-gradient(to right, " + colors[(layers.length-1)%5] + ", transparent)"
+        const style = "linear-gradient(to right, " + colors[(layers.length-1)%6] + ", transparent)"
         $(".canvas > div:last-child").css("flex", "none");
         $(".canvas > div:last-child").css("width", "150px");
         $(".canvas > div:last-child > div:nth-child(2)").css("border-right-style", "hidden");

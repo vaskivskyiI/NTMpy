@@ -92,7 +92,7 @@ def new_file():
                     "polarization": None})
                     
     flags.update({  "spin_temp" : False,
-                    "reflection": False,
+                    "reflection":  True,
                     "substrate" : False,
                     "source_set": False,
                     "almost_set": False,

@@ -47,15 +47,17 @@ async function drawMaterial() {
     if (reflection) {
         nindex.forEach(function(layer) {
             if (layer.nr !== null && layer.ni !== null){
-                labels.push("n = " + layer.nr + " + " + layer.ni + "i");
+                labels.push("<i>n</i> = " + layer.nr + " + " + layer.ni + "<i>i</i>");
             }
             else { labels.push(""); }
         });
+        font = 20
     } else {
         nindex.forEach(function(layer) {
             if (layer.l !== null) { labels.push("λ = " + (layer.l * 1e9).toFixed(0) + " nm"); }
             else { labels.push(""); }
         });
+        font = 24
     }
 
     await drawMaterial_core(labels, layersState);
@@ -86,7 +88,7 @@ async function drawMenu() {
         $("#table_layer").append(content);
         $("#check_TMM").prop("checked", true);
 
-        content =   "<tr style='margin-top:4px'><td>Wavelength</td><td>Incidence Angle</td><td>Polarization</td></tr>" +
+        content =   "<tr style='margin-top:4px'><td>Wavelength [nm]</td><td>Incidence Angle [deg]</td><td>Polarization</td></tr>" +
                     "<tr><td><input class='k_input'></td>" +
                     "<td style=><input class='k_input'></td>" + 
                     "<td style='display:flex;flex-direction: row; align-items: center;'>" +
@@ -97,7 +99,7 @@ async function drawMenu() {
         $("#table_source").append(content);
 
     } else {
-        content =   "<tr><td>Absorption Length</td></tr>" + 
+        content =   "<tr><td>Absorption Length [nm]</td></tr>" + 
                     "<tr><td><input class='n_input'></td></tr>";
         
         $("#table_layer").append(content);
@@ -110,8 +112,8 @@ async function drawMenu() {
         $("#input_fwhm"  ).val((source.fwhm  * 1e12).toFixed(5));
         $("#input_delay" ).val((source.delay * 1e12).toFixed(5));
         if (reflection) {
-            $(".k_input:eq(0)").val(source.wavelength);
-            $(".k_input:eq(1)").val(source.angle);
+            $(".k_input:eq(0)").val(source.wavelength * 1e9);
+            $(".k_input:eq(1)").val(source.angle * 180 / Math.PI);
             if (source.polarization === "S") { $("#checkS").prop("checked", true); }
             else { $("#checkP").prop("checked", true); }
         }
@@ -132,7 +134,7 @@ async function selectLayer() {
         $("#table_layer input:eq(0)").val(nindex[layerNum - 1].nr);
         $("#table_layer input:eq(1)").val(nindex[layerNum - 1].ni);
     } else if (!reflection && nindex[layerNum - 1].l !== null) {
-        $("#table_layer input:eq(0)").val(nindex[layerNum - 1].l);
+        $("#table_layer input:eq(0)").val(1e9 * nindex[layerNum - 1].l);
     }
 
 }
@@ -159,8 +161,8 @@ async function setSource() {
     let valid = (energy > 0) && (fwhm > 0) && !isNaN(delay); 
 
     if (reflection) {
-        wavelength = parseFloat($(".k_input:eq(0)").val());
-        angle      = parseFloat($(".k_input:eq(1)").val());
+        wavelength = parseFloat($(".k_input:eq(0)").val() * 1e-9);
+        angle      = parseFloat($(".k_input:eq(1)").val() * Math.PI / 180);
         valid &= (wavelength > 0) && (angle >= 0) && (angle < 90);
         valid &= ($("#checkS").prop("checked") || $("#checkP").prop("checked"));
     }
@@ -200,7 +202,7 @@ async function modifyIndexN() {
             const nimag = parseFloat($("#table_layer input:eq(1)").val());
             await eel.setIndexN( nreal, nimag, layerNum)();
         } else {
-            const lambda = parseFloat($("#table_layer input:eq(0)").val());
+            const lambda = parseFloat($("#table_layer input:eq(0)").val()) * 1e-9;
             await eel.setIndexN( lambda, 0, layerNum )();
         }
 

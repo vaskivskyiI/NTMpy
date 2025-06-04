@@ -12,6 +12,10 @@ def setLayers(layer, id = -1):
         flags["layers_set"] = False
     else:
         layers[id] = layer
+    if layers[-1]["length"] > 10 * sum([layer["length"] for layer in layers[:-1]]):
+        flags["substrate"] = True
+    else:
+        flags["substrate"] = False
     flags["result_set"] = False
 
     

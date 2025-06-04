@@ -1,8 +1,8 @@
 {
     "flags": {
-        "spin_temp": false,
+        "spin_temp" : false,
         "reflection": false,
-        "substrate": false,
+        "substrate" : false,
         "source_set": true,
         "almost_set": true,
         "layers_set": true,

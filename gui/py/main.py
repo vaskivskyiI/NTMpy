@@ -16,8 +16,7 @@ def run_simulation(final_time):
     time["simulation"] = final_time
     src_init()
     sim = build_material()
-    if layers[-1]["length"] >= 10 * sum([layer["length"] for layer in layers[:-1]]):
-        sim.substrate = True
+    if flags["substrate"]: sim.substrate = True
     if isinstance(sim, int):
         return "Error: some material property is not valid (maybe layer " + str(sim+1) + ")"
     sim.setSource(src)

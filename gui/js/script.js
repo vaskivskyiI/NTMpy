@@ -13,7 +13,7 @@ async function drawMaterial_core(labels, labelStates) {
     let total_length = layers.reduce((length, layer) => length + layer.length, 0);
     let layers_percent = layers.map(layer => 100 * layer.length / total_length);
 
-    const substrate =  layers_percent.slice(-1)[0] > 90 && layers.length > 1;
+    const substrate = await eel.getFlags("substrate")();
 
     if (substrate) {
         total_length = layers.slice(0,-1).reduce((length, layer) => length + layer.length, 0);

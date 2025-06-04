@@ -2,7 +2,7 @@ import eel
 import numpy as np
 import matplotlib.pyplot as plt
 
-from gui.py.variables import out, current_data
+from gui.py.variables import out, current_data, flags, layers
 
 # Plot Temperature in time ######################
 @eel.expose
@@ -35,7 +35,10 @@ def getResultsSpace(time):
     temp_lattice  += out["T"][1][:, int(np.ceil( t_index))] * weight2
     #temp_electron = [np.interp(time, out["t"], out["T"][0][x]) for x in range(len(space))]
     #temp_lattice  = [np.interp(time, out["t"], out["T"][1][x]) for x in range(len(space))]
-    equispaced = np.linspace(space[0], space[-1], 512)
+    if not flags["substrate"]:
+        equispaced = np.linspace(space[0], space[-1], 512)
+    else:
+        equispaced = np.linspace(0, 1.2 * np.sum([layer["length"] for layer in layers[:-1]]), 512)
     temp_electron = np.interp(equispaced, space, temp_electron)
     temp_lattice  = np.interp(equispaced, space, temp_lattice )
     return [[space[0], space[-1]], list(temp_electron), list(temp_lattice)] 

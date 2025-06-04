@@ -1,25 +1,28 @@
 import eel
 import json, os
 from numpy import savez, load
-from gui.py.variables import flags, laser, layers, nindex, current_file, current_data, time, out
+from gui.py.variables import flags, laser, layers, nindex, current_file, current_data, time, out, layer_state
 
 
 # Save File #####################################
 @eel.expose
 def save_file(filename="ntmpy_save", path="./data/"):
     data_to_save = {
-        "flags": flags,
-        "laser": laser,
-        "layers": layers,
-        "nindex": nindex,
-        "time": time,
+        "flags"  :  flags,
+        "laser"  :  laser,
+        "layers" : layers,
+        "nindex" : nindex,
+        "time"   :   time,
         "expdata": current_data[0]
     }
     current_file[0] = filename
     try:
         json.dump(data_to_save, open(path + filename + ".json", 'w'), indent=4)
-        if flags["result_set"]:
+        if flags["result_set"] and not flags["spin_temp"]:
             savez(path + filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1])
+            return("Successfully saved to " + path + filename + ".json and " + path + filename + ".npz")
+        elif flags["result_set"] and flags["spin_temp"]:
+            savez(path + filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1], Ts=out["T"][2])
             return("Successfully saved to " + path + filename + ".json and " + path + filename + ".npz")
         return("Successfully saved to " + path + filename + ".json")
     except Exception as e:
@@ -52,12 +55,18 @@ def load_file(filename="ntmpy_save", path="./data/"):
         current_file[0] = filename.split(".")[0]
         current_data[0] = data_loaded.get("expdata", "")
 
-        if flags["result_set"]:
-                with load(path + current_file[0] + ".npz") as data:
-                    out["t"] = data["t"]
-                    out["x"] = data["x"]
-                    out["T"] = [data["Te"], data["Tl"]]
-                    return("Successfully loaded from " + filename + ".json and " + current_file[0] + ".npz")
+        if flags["result_set"] and not flags["spin_temp"]:
+            with load(path + current_file[0] + ".npz") as data:
+                out["t"] = data["t"]
+                out["x"] = data["x"]
+                out["T"] = [data["Te"], data["Tl"]]
+                return("Successfully loaded from " + filename + ".json and " + current_file[0] + ".npz")
+        elif flags["result_set"] and flags["spin_temp"]:
+            with load(path + current_file[0] + ".npz") as data:
+                out["t"] = data["t"]
+                out["x"] = data["x"]
+                out["T"] = [data["Te"], data["Tl"], data["Ts"]]
+                return("Successfully loaded from " + filename + ".json and " + current_file[0] + ".npz")
         return("Successfully loaded from " + filename)
     except FileNotFoundError:
         return("Error: File " + filename + " not found.")
@@ -72,6 +81,7 @@ def new_file():
     laser.clear()
     layers.clear()
     nindex.clear()
+    layer_state.clear()
     time.clear()
   
     laser.update({  "energy":       None,
@@ -81,14 +91,19 @@ def new_file():
                     "angle":        None,
                     "polarization": None})
                     
-    flags.update({  "spinS_temp": False,
+    flags.update({  "spin_temp" : False,
                     "reflection": False,
+                    "substrate" : False,
                     "source_set": False,
+                    "almost_set": False,
                     "layers_set": False,
                     "result_set": False})
 
     time.update({   "simulation" : 0,
                     "computation": 0})
+    
+    out.clear()
+
 
     current_file[0] = "untitled"
     current_data[0] = ""

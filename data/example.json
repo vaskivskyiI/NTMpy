@@ -1,8 +1,10 @@
 {
     "flags": {
-        "spinS_temp": false,
+        "spin_temp": false,
         "reflection": false,
+        "substrate": false,
         "source_set": true,
+        "almost_set": true,
         "layers_set": true,
         "result_set": true
     },
@@ -16,49 +18,61 @@
     },
     "layers": [
         {
-            "name": "Ni",
-            "length": 3e-08,
+            "name": "Nichel",
+            "length": 3.0000000000000004e-08,
             "rho": 6500,
             "K": [
                 "8",
-                "0"
+                "0",
+                null
             ],
             "C": [
                 "0.112*T",
-                "450"
+                "450",
+                null
             ],
-            "G": "6e17"
+            "G": [
+                "6e17",
+                null,
+                null
+            ]
         },
         {
-            "name": "Si",
+            "name": "Silicon",
             "length": 8e-08,
             "rho": 5100,
             "K": [
                 "24",
-                "12"
+                "12",
+                null
             ],
             "C": [
                 "0.025*T",
-                "730"
+                "730",
+                null
             ],
-            "G": "6e17"
+            "G": [
+                "6e17",
+                null,
+                null
+            ]
         }
     ],
     "nindex": [
         {
-            "l": 1.9e-07,
-            "nr": 1,
-            "ni": 0
+            "l": 1e-07,
+            "nr": null,
+            "ni": null
         },
         {
-            "l": 1.9e-07,
-            "nr": 1,
-            "ni": 0
+            "l": 1e-07,
+            "nr": null,
+            "ni": null
         }
     ],
     "time": {
-        "simulation": 7.87979009573371e-12,
-        "computation": 0.14375567436218262
+        "simulation": 3.073285245564991e-11,
+        "computation": 0.6244771480560303
     },
-    "expdata": "./data/expdata.csv"
+    "expdata": ""
 }

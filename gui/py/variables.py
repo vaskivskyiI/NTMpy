@@ -16,12 +16,15 @@ global laser; laser = { "energy":       None,
                         "angle":        None,
                         "polarization": None}
 
-global flags; flags = { "spinS_temp": False,
+global flags; flags = { "spin_temp" : False,
                         "reflection": False,
+                        "substrate" : False,
                         "source_set": False,
+                        "almost_set": False,
                         "layers_set": False,
                         "result_set": False}
 
+global layer_state; layer_state = []
 
 global time; time = {"simulation": 0, "computation": 0}
 global out; out = {"x": None, "t": None, "T": None}

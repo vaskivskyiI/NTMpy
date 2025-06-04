@@ -8,6 +8,7 @@ import gui.py.fun_result # type: ignore
 import gui.py.main # type: ignore
 
 
+
 eel.init('.', allowed_extensions=['.js', '.html', '.css'])
 eel.start('gui/html/page_main.html', size=(1000, 850), jinja_templates='gui/html')    # Start
 

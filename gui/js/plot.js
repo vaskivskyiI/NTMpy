@@ -1,8 +1,8 @@
 // Define padding constants
-const PADDING_LX = 30; // Left padding
-const PADDING_RX = 30; // Right padding
-const PADDING_DW = 20; // Bottom padding
-const PADDING_UP =  10; // Top padding
+const PADDING_LX = 40; // Left padding
+const PADDING_RX = 40; // Right padding
+const PADDING_DW = 35; // Bottom padding
+const PADDING_UP = 10; // Top padding
 let plot_offset = 0;
 
 function drawAxis() {

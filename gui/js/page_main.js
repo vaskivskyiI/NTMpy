@@ -3,7 +3,7 @@ let selectedFile = null;
 $(document).ready(async function(){
 
     drawMaterial();
-    console.log("ready");
+
     $("#new_file" ).on("click", newFile);
     $("#save_file").on("click", saveFile);
     $("#load_file").on("click", loadFile);
@@ -33,7 +33,6 @@ $(document).ready(async function(){
     {    $("#sim_time").val((await eel.getTime("simulation")()).toExponential(4)); }
     if (await eel.getFlags("result_set")())
     {   $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds"); }
-    console.log("times loaded");
     
     checkFlags();
 
@@ -159,12 +158,14 @@ async function runSimulation() {
 }
 
 async function drawMaterial() {
-    layers = await eel.getLayers()();
+
+    const layers = await eel.getLayers()();
+    const layersState = await eel.checkLayers()();
 
     let labels = [];
-    layers.forEach(function(layer) {labels.push(layer.name);});
-    await drawMaterial_core(labels);
-};
+    layers.forEach(function(layer) { labels.push(layer.name); });
+    await drawMaterial_core(labels, layersState);
+}
 
 async function checkFlags() {
     if (await eel.getFlags("source_set")()) {

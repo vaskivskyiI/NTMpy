@@ -1,10 +1,9 @@
-let layer_num = 0;
-let spinTemp = false;
+let layerNum = 0;
 
-$(document).ready( function(){
+$(document).ready( async function(){
 
     drawMaterial();
-    drawMenu(false);
+    drawMenu();
 
     $("#insert_header").on("click", function() {
         $("#modify_panel").slideUp(300);
@@ -12,7 +11,7 @@ $(document).ready( function(){
     });
 
     $("#modify_header").on("click", function() {
-        if (layer_num > 0) {
+        if (layerNum > 0) {
             $("#insert_panel").slideUp(300);
             $("#modify_panel").slideToggle(300);    
         }
@@ -22,13 +21,14 @@ $(document).ready( function(){
     $("#moveL").on("click", function() {moveLayer(-1);})
     $("#moveR").on("click", function() {moveLayer(+1);})
     $("#update") .on("click", function() {updateLayer();})
-    $("#destroy").on("click", function() {eel.removeLayer(layer_num-1); drawMaterial();})
-    $("#duplicate").on("click", function() {eel.duplicateLayer(layer_num-1); drawMaterial();})
+    $("#destroy").on("click", function() {eel.removeLayer(layerNum-1); drawMaterial();})
+    $("#duplicate").on("click", function() {eel.duplicateLayer(layerNum-1); drawMaterial();})
     $(".canvas > div").on("click", selectLayer);
 
-    $("#check_2T").on("click", () => {drawMenu(false);});
-    $("#check_3T").on("click", () => {drawMenu(true); $("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");})
+    $("#check_2T").on("click", () => {setSpinTemp(false);});
+    $("#check_3T").on("click", () => {setSpinTemp( true);})
     $("#load_btn").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");})
+    $("#save_btn").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");})
 
 
     console.log("ready");
@@ -37,20 +37,50 @@ $(document).ready( function(){
 });
 
 async function drawMaterial() {
-    layers = await eel.getLayers()();
+
+    const layers = await eel.getLayers()();
+    const layersState = await eel.checkLayers()();
 
     let labels = [];
-    layers.forEach(function(layer) {labels.push(layer.name);});
-    await drawMaterial_core(labels);
+    layers.forEach(function(layer) { labels.push(layer.name); });
+    await drawMaterial_core(labels, layersState);
     $(".canvas > div").on("click", selectLayer);
-};
+}
+
+async function drawMenu() {
+
+    const spinTemp = await eel.getFlags("spin_temp")();
+
+    $(".table2 td:nth-child(4)").remove();
+    $(".table2 td:nth-child(4)").remove();
+    $(".table2 td:nth-child(4)").remove();
+    $(".table3").empty();
+
+    if (!spinTemp) {
+        $("#check_2T").prop("checked", true);
+        $(".table3").append("<label>Coupling:</label><input style='flex: 1;' class='G_input'></input>")
+
+    }
+    else if (spinTemp) {
+        $("#check_3T").prop("checked", true);
+        $(".table2 tr:nth-child(1)").append("<td>Spin</td>");
+        $(".table2 tr:nth-child(2)").append("<td><div><input class='K_input'></div></td>");
+        $(".table2 tr:nth-child(3)").append("<td><div><input class='C_input'></div></td>");
+        $(".table3").append("<label>Coupling EL:</label><input style='flex: 1;' class='G_input'></input>");
+        $(".table3").append("<label style='margin-left:12px'>ES:</label><input style='flex: 1;' class='G_input'></input>");
+        $(".table3").append("<label style='margin-left:12px'>LS:</label><input style='flex: 1;' class='G_input'></input>");
+    } 
+
+}
 
 async function addLayer() {
+
+    const spinTemp = eel.getFlags("spin_temp")();
 
     let complete = true;
     $("#insert_panel input").each(function() {complete &= ($(this).val() != '')})
 
-    const length = parseFloat($("#insert_panel .leng_input").val());
+    const length = parseFloat($("#insert_panel .leng_input").val()) * 1e-9;
     const density = parseFloat($("#insert_panel .dens_input").val());
     let valid = (length > 0) && (density > 0);
     
@@ -64,8 +94,15 @@ async function addLayer() {
             rho:    density,
             K: [$("#insert_panel .K_input:eq(0)").val(), $("#insert_panel .K_input:eq(1)").val()],
             C: [$("#insert_panel .C_input:eq(0)").val(), $("#insert_panel .C_input:eq(1)").val()],
-            G: $("#insert_panel .G_input:eq(0)").val()
+            G: [$("#insert_panel .G_input:eq(0)").val()]
         };
+
+        if (spinTemp) {
+            layer.K.push($("#insert_panel .K_input:eq(2)").val());
+            layer.C.push($("#insert_panel .C_input:eq(2)").val());
+            layer.G.push($("#insert_panel .G_input:eq(1)").val());
+            layer.G.push($("#insert_panel .G_input:eq(2)").val());
+        }
 
     
         await eel.setLayers(layer);
@@ -90,33 +127,41 @@ async function addLayer() {
 
 function selectLayer() {
 
-    layer_num = $(this).index();
+    layerNum = $(this).index();
+    spinTemp = eel.getFlags("spin_temp")();
 
-    $("#modify_header").text("Modify Layer " + layer_num + " Menu: " + layers[layer_num - 1].name)
+    $("#modify_header").text("Modify Layer " + layerNum + " Menu: " + layers[layerNum - 1].name)
     $("#modify_panel").slideDown(300);
     $("#insert_panel").slideUp(300);
 
-    $("#modify_panel .name_input").val(layers[layer_num - 1].name  )
-    $("#modify_panel .leng_input").val(layers[layer_num - 1].length)
-    $("#modify_panel .dens_input").val(layers[layer_num - 1].rho   )
+    $("#modify_panel .name_input").val(layers[layerNum - 1].name  )
+    $("#modify_panel .leng_input").val((layers[layerNum - 1].length * 1e9).toFixed(5))
+    $("#modify_panel .dens_input").val(layers[layerNum - 1].rho   )
 
-    $("#modify_panel .K_input:eq(0)").val(layers[layer_num - 1].K[0])
-    $("#modify_panel .K_input:eq(1)").val(layers[layer_num - 1].K[1])
-    $("#modify_panel .C_input:eq(0)").val(layers[layer_num - 1].C[0])
-    $("#modify_panel .C_input:eq(1)").val(layers[layer_num - 1].C[1])
-    $("#modify_panel .G_input:eq(0)").val(layers[layer_num - 1].G)
+    $("#modify_panel .K_input:eq(0)").val(layers[layerNum - 1].K[0])
+    $("#modify_panel .K_input:eq(1)").val(layers[layerNum - 1].K[1])
+    $("#modify_panel .C_input:eq(0)").val(layers[layerNum - 1].C[0])
+    $("#modify_panel .C_input:eq(1)").val(layers[layerNum - 1].C[1])
+    $("#modify_panel .G_input:eq(0)").val(layers[layerNum - 1].G[0])
+
+    if (spinTemp) {
+        $("#modify_panel .K_input:eq(2)").val(layers[layerNum - 1].K[2])
+        $("#modify_panel .C_input:eq(2)").val(layers[layerNum - 1].C[2])
+        $("#modify_panel .G_input:eq(1)").val(layers[layerNum - 1].G[1])
+        $("#modify_panel .G_input:eq(2)").val(layers[layerNum - 1].G[2])
+    }
 
 }
 
 async function moveLayer(move) {
     
-    if (layer_num + move > 0 && layer_num + move < layers.length + 1) {  
-        await eel.move_layer( layer_num - 1, layer_num - 1 + move);
-        layer_num += move;
+    if (layerNum + move > 0 && layerNum + move < layers.length + 1) {  
+        await eel.move_layer( layerNum - 1, layerNum - 1 + move);
+        layerNum += move;
     }
 
     await drawMaterial();    
-    $("#modify_header").text("Modify Layer " + layer_num + " Menu: " + layers[layer_num - 1].name)
+    $("#modify_header").text("Modify Layer " + layerNum + " Menu: " + layers[layerNum - 1].name)
 
 
 }
@@ -124,9 +169,9 @@ async function moveLayer(move) {
 async function updateLayer() {
 
     let complete = true;
-    $("#modify_panel input").each(function() {complete &= ($(this).val() != '')})
+    $("#modify_panel input").not("#save_name").each(function() {complete &= ($(this).val() != '')})
 
-    const length = parseFloat($("#modify_panel .leng_input").val());
+    const length = parseFloat($("#modify_panel .leng_input").val()) * 1e-9;
     const density = parseFloat($("#modify_panel .dens_input").val());
     let valid = (length > 0) && (density > 0);
     
@@ -140,12 +185,19 @@ async function updateLayer() {
             rho:    density,
             K: [$("#modify_panel .K_input:eq(0)").val(), $("#modify_panel .K_input:eq(1)").val()],
             C: [$("#modify_panel .C_input:eq(0)").val(), $("#modify_panel .C_input:eq(1)").val()],
-            G: $("#modify_panel .G_input:eq(0)").val()
+            G: [$("#modify_panel .G_input:eq(0)").val()]
         };
 
-    await eel.setLayers(layer, layer_num - 1);
+        if (spinTemp) {
+            layer.K.push($("#modify_panel .K_input:eq(2)").val());
+            layer.C.push($("#modify_panel .C_input:eq(2)").val());
+            layer.G.push($("#modify_panel .G_input:eq(1)").val());
+            layer.G.push($("#modify_panel .G_input:eq(2)").val());
+        }
+
+    await eel.setLayers(layer, layerNum - 1);
     await drawMaterial();
-    $("#modify_header").text("Modify Layer " + layer_num + " Menu: " + layers[layer_num - 1].name)
+    $("#modify_header").text("Modify Layer " + layerNum + " Menu: " + layers[layerNum - 1].name)
 
     $("#helpbar").css("color","#ffffff");
     $("#helpbar").text("Layer modified correctly");
@@ -162,33 +214,10 @@ async function updateLayer() {
 
 }
 
-async function setTempNum() {
-
+async function setSpinTemp(spinTemp) {
+    await eel.setFlags("spin_temp" , spinTemp);
+    await eel.setFlags("result_set", false);
+    drawMenu();
+    drawMaterial();
 }
 
-async function drawMenu(debug) {
-    
-    //const spinTemp = await eel.getFlags("spinS_temp")();
-    spinTemp = debug;
-
-    $(".table2 td:nth-child(4)").remove();
-    $(".table2 td:nth-child(4)").remove();
-    $(".table2 td:nth-child(4)").remove();
-    $(".table3").empty();
-
-    if (!spinTemp) {
-        $("#check_2T").prop("checked", true);
-        $(".table3").append("<label>Coupling:</label><input style='flex: 1;' class='G_input'></input>")
-
-    }
-    else if (spinTemp) {
-        $("check_3T").prop("checked", true);
-        $(".table2 tr:nth-child(1)").append("<td>Spin</td>");
-        $(".table2 tr:nth-child(2)").append("<td><div><input class='K_input'></div></td>");
-        $(".table2 tr:nth-child(3)").append("<td><div><input class='C_input'></div></td>");
-        $(".table3").append("<label>Coupling EL:</label><input style='flex: 1;' class='G_input'></input>");
-        $(".table3").append("<label style='margin-left:12px'>LS:</label><input style='flex: 1;' class='G_input'></input>");
-        $(".table3").append("<label style='margin-left:12px'>ES:</label><input style='flex: 1;' class='G_input'></input>");
-    } 
-
-}

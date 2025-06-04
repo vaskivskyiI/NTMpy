@@ -1,5 +1,5 @@
 import eel
-from gui.py.variables import layers, nindex, flags
+from gui.py.variables import layers, nindex, flags, layer_state
 
 
 # Material properties interfaces #################
@@ -37,5 +37,22 @@ def removeLayer(id):
     nindex.pop(id)
 
 @eel.expose
-def duplicate_layer():
-    pass
+def checkLayers():
+    layer_state.clear()
+    almost_set = True
+    for layer, refraction in zip(layers, nindex):
+        if flags["reflection"]:
+            props_s = not refraction["nr"] is None and not refraction["ni"] is None
+        else:
+            props_s = not refraction["l"] is None
+        almost_set &= props_s
+        if flags["spin_temp"]:
+            props_h  = not layer["C"][2] is None and not layer["K"][2] is None
+            props_h &= not layer["C"][2] is None and not layer["K"][2] is None
+        else:
+            props_h = True
+        layer_state.append(props_s and props_h)
+    flags["almost_set"] = almost_set
+    flags["layers_set"] = all(layer_state) and len(layers) > 0
+    return layer_state
+

@@ -17,8 +17,8 @@
             <table class="table1">
                 <tr>
                     <td>Name:</td>
-                    <td>Length:</td>
-                    <td>Density:</td>
+                    <td>Length [nm]:</td>
+                    <td>Density [kg/m<sup>2</sup>]:</td>
                 </tr>
                 <tr>
                     <td><input class="name_input"></td>
@@ -58,6 +58,11 @@
             </table>
             <span class="table3">
             </span>
+            <span id="save_menu">
+                <label style="align-content: center; width: 200px;">Save material in library:</label>
+                <input id="save_name">
+                <button class="button" id="save_btn">Save</button>
+            </span>
             <span style="display: flex; flex-direction: row;">
                 <button class="button" id="update">Update Layer</button>
             </span>
@@ -79,8 +84,8 @@
             <table class="table1">
                 <tr>
                     <td>Name:</td>
-                    <td>Length:</td>
-                    <td>Density:</td>
+                    <td>Length [nm]:</td>
+                    <td>Density [kg/m<sup>2</sup>]:</td>
                 </tr>
                 <tr>
                     <td><input class="name_input"></td>
@@ -121,7 +126,7 @@
             <span class="table3">
             </span>
             <span id="load_menu">
-                <label style="align-content: center;">Take from saved materials:</label>
+                <label style="align-content: center; width: 200px;">Take from saved materials:</label>
                 <select id="load_drop">
                     <option value="">Select a material...</option>
                     <option value="silicon">Silicon</option>

@@ -1,5 +1,4 @@
 let data;
-let result_set;
 let maxTemperature;
 
 let animation_set = false;
@@ -23,7 +22,7 @@ $(document).ready(async function() {
     plot_offset = 15;
     $(".canvas").remove();
 
-    result_set = await eel.getFlags("result_set")();
+    const result_set = await eel.getFlags("result_set")();
     if (result_set) finalTime = await eel.getTime("simulation")();
 
     $("#plot_time").on("click", plotTemperature);
@@ -48,6 +47,8 @@ $(document).ready(async function() {
 });
 
 async function plotTemperature() {
+
+    const result_set = await eel.getFlags("result_set")();
 
     if (result_set) {
         let penetration = 0;
@@ -90,6 +91,9 @@ async function plotTemperature() {
 }
 
 async function plotExperiment() {
+
+    const result_set = await eel.getFlags("result_set")();
+
     if (result_set) {
         plotTemperature();
         data = await eel.getExperimental($("#data_file").val())();
@@ -110,7 +114,10 @@ async function plotExperiment() {
 }
 
 
-function plotPython() {
+async function plotPython() {
+
+    const result_set = await eel.getFlags("result_set")();
+
     if (result_set) { eel.plotPython()(); }
     else {
         $("#helpbar").css("color","#ff5555");
@@ -119,6 +126,9 @@ function plotPython() {
 }
 
 async function setupAnimation() {
+
+    const result_set = await eel.getFlags("result_set")();
+
     clearInterval(timer);
     animationTime = 0;
     animation_running = false;

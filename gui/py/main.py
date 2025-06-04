@@ -1,6 +1,7 @@
 import eel
 
-from core.Sim2T import Sim2T # type: ignore
+from core.Sim2T import Sim2T
+from core.Sim3T import Sim3T
 from core.Source import source # type: ignore
 from numpy import array, savez, load # type: ignore
 import numpy as np
@@ -32,17 +33,29 @@ def run_simulation(final_time):
 
 # Build Material ####################################
 def build_material():
-    sim = Sim2T()
     safe_layers = sanitize(layers)
     if isinstance(safe_layers, int): return safe_layers
-    for layer in safe_layers:
-        length = layer["length"]
-        dens = layer["rho"]
-        cond = [eval(layer["K"][0]), eval(layer["K"][1])]
-        capc = [eval(layer["C"][0]), eval(layer["C"][1])]
-        coup =  eval(layer["G"])
-        sim.addLayer( length, cond, capc, dens, coup, 12)
-    return sim
+    
+    if not flags["spin_temp"]:
+        sim = Sim2T()
+        for layer in safe_layers:
+            length = layer["length"]
+            dens = layer["rho"]
+            cond = [eval(layer["K"][0]), eval(layer["K"][1])]
+            capc = [eval(layer["C"][0]), eval(layer["C"][1])]
+            coup =  eval(layer["G"][0])
+            sim.addLayer( length, cond, capc, dens, coup, 12)
+        return sim
+    else:
+        sim = Sim3T()
+        for layer in safe_layers:
+            length = layer["length"]
+            dens = layer["rho"]
+            cond = [eval(layer["K"][0]), eval(layer["K"][1]), eval(layer["K"][2])]
+            capc = [eval(layer["C"][0]), eval(layer["C"][1]), eval(layer["C"][2])]
+            coup = [eval(layer["G"][0]), eval(layer["G"][1]), eval(layer["G"][2])]
+            sim.addLayer( length, cond, capc, dens, coup, 12)
+        return sim
 
 # Initialize Source #################################
 def src_init():
@@ -79,8 +92,17 @@ def sanitize(layers):
         if safe_layers[index]["K"][0] == -1: return index
         safe_layers[index]["K"][1] = input_control(layer["K"][1])
         if safe_layers[index]["K"][1] == -1: return index
-        safe_layers[index]["G"] = input_control(layer["G"])
-        if safe_layers[index]["G"] == -1: return index
+        safe_layers[index]["G"][0] = input_control(layer["G"][0])
+        if safe_layers[index]["G"][0] == -1: return index
+        if flags["spin_temp"]:
+            safe_layers[index]["C"][2] = input_control(layer["C"][2])
+            if safe_layers[index]["C"][2] == -1: return index
+            safe_layers[index]["K"][2] = input_control(layer["K"][2])
+            if safe_layers[index]["K"][2] == -1: return index
+            safe_layers[index]["G"][1] = input_control(layer["G"][1])
+            if safe_layers[index]["G"][2] == -1: return index
+            safe_layers[index]["G"][2] = input_control(layer["G"][2])
+            if safe_layers[index]["G"][2] == -1: return index
     return safe_layers
 
 

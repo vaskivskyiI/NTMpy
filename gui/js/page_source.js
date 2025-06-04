@@ -1,3 +1,5 @@
+const COLORS1 = ['#b90000','#b97800','#9db900','#00b0b9','#004ab9','#5000b9'];
+const COLORS2 = ['#750000','#764500','#6a8600','#008086','#001786','#200086'];
 let layerNum = 0;
 
 $(document).ready(async function() {
@@ -136,7 +138,9 @@ async function selectLayer() {
     } else if (!reflection && nindex[layerNum - 1].l !== null) {
         $("#table_layer input:eq(0)").val(1e9 * nindex[layerNum - 1].l);
     }
-
+    const color = "linear-gradient(180deg," + COLORS1[(layerNum - 1) % 6] + ", " + COLORS2[(layerNum - 1) % 6] + ")"
+    $("#layer_header").css("background-image", color);
+    $("#update_layer").css("background-image", color);
 }
 
 async function setReflection(reflection){
@@ -249,7 +253,9 @@ async function plotSpace() {
 
     if (layersSet && (sourceSet || !reflection)) {
         drawCurve(await eel.plotSourceSpace()(), true, "#bbbbff");
-        spaceStep = layers.reduce((length, layer) => length + 1e9*layer.length, 0) / 4;
+        const substrate = await eel.getFlags("substrate")();
+        if (substrate) { spaceStep = layers.slice(0,-1).reduce((length, layer) => length + 1.2e9*layer.length, 0) / 4; }
+        else { spaceStep = layers.reduce((length, layer) => length + 1e9*layer.length, 0) / 4; }
         spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toFixed(1) + " nm");
         drawLabelsX(spaceArray);
         $("#helpbar").css("color","#ffffff");

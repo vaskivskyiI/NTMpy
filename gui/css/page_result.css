@@ -6,18 +6,11 @@
   background-image: linear-gradient(180deg, #e71a4d,#881a36)
 }
 
-#plot_python {
+#plot_python, #plot_expdat, #plot_time {
     background-image: linear-gradient(180deg, #2a398d,#162266);
 }
-#plot_python:hover {
+#plot_python:hover, #plot_expdat:hover, #plot_time:hover {
     background-image: linear-gradient(180deg, #475fe7,#2135a5);
-}
-
-#plot_expdat {
-    background-image: linear-gradient(180deg, #8e18a5,#640f75)
-}
-#plot_expdat:hover {
-    background-image: linear-gradient(180deg, #b222cf,#8a15a1)
 }
 
 #anim_play{
@@ -32,13 +25,6 @@
 }
 #anim_stop:hover {
     background-image: linear-gradient(180deg, #e71a4d,#881a36)
-}
-
-#plot_time {
-    background-image: linear-gradient(180deg, #c58103,#856600);
-}
-#plot_time:hover {
-    background-image: linear-gradient(180deg, #f3b303,#b68500);
 }
 
 #plot_anim {
@@ -62,11 +48,10 @@
 }
 
 .headerpanel {
-    background-image: linear-gradient(180deg, #dadada,#b1b1b1);
-    color: black;
+    background-image: linear-gradient(180deg, #2a398d,#162266);
     font-weight: bold;
 }
 
 .headerpanel:hover {
-    background-image: linear-gradient(180deg, #ffffff,#dfdfdf)
+    background-image: linear-gradient(180deg, #475fe7,#2135a5);
 }

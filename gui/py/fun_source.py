@@ -39,11 +39,15 @@ def setWave(wavelength, angle, polarization):
 @eel.expose
 def plotSourceSpace():
     src_init()
-    total_leng = np.sum([ layer["length"] for layer in layers])
-    if flags["reflection"]:
-        array = src.transfer_matrix(np.linspace(0,total_leng, 512))
+    
+    if not flags["substrate"]:
+        total_leng = np.sum([ layer["length"] for layer in layers])
     else:
-        array = src.lambert_beer(np.linspace(0,total_leng, 512))
+        total_leng = 1.2 * np.sum([layer["length"] for layer in layers[:-1]])
+    if flags["reflection"]:
+        array = src.transfer_matrix(np.linspace(0,total_leng, 1024))
+    else:
+        array = src.lambert_beer(np.linspace(0,total_leng, 1024))
     return [float(x) for x in array]
     
 

@@ -40,37 +40,27 @@ table input {
     width: 100%;
 }
 
-#layer_header, #update_layer, #plot_space {
+#update_source {
     background-image: linear-gradient(180deg, #ad1e42,#641327)
 }
-#layer_header:hover, #update_layer:hover, #plot_space:hover {
+#update_source:hover {
     background-image: linear-gradient(180deg, #e71a4d,#881a36)
 }
 
-#source_header, #update_source, #plot_time {
+#update_layer {
+    background-image: linear-gradient(180deg, #747474,#414141)
+}
+
+#update_layer:hover {
+    background-image: linear-gradient(180deg, #969696,#747474)
+}
+
+#source_header, #layer_header, #plot_space, #plot_time, #plot_save, #plot_pyplt,#plot_header {
     background-image: linear-gradient(180deg, #2a398d,#162266)
 }
-#source_header:hover, #update_source:hover, #plot_time:hover {
+#source_header:hover, #layer_header:hover, #plot_space:hover, #plot_time:hover, #plot_save:hover, #plot_pyplt:hover, #plot_header:hover {
     background-image: linear-gradient(180deg, #475fe7,#2135a5)
 }
 
-#plot_header {
-    background-image: linear-gradient(180deg, #c9be2d,#968919)
-}
-#plot_header:hover {
-    background-image: linear-gradient(180deg, #e9dc29,#a09218)
-}
 
-#plot_save{
-    background-image: linear-gradient(180deg, #498d2a,#366616)
-}
-#plot_save:hover {
-    background-image: linear-gradient(180deg, #5ce034,#40a521)
-}
 
-#plot_pyplt {
-    background-image: linear-gradient(180deg, #8e18a5,#640f75)
-}
-#plot_pyplt:hover {
-    background-image: linear-gradient(180deg, #b222cf,#8a15a1)
-}

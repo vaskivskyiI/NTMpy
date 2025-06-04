@@ -1,3 +1,5 @@
+const COLORS1 = ['#b90000','#b97800','#9db900','#00b0b9','#004ab9','#5000b9'];
+const COLORS2 = ['#750000','#764500','#6a8600','#008086','#001786','#200086'];
 let layerNum = 0;
 
 $(document).ready( async function(){
@@ -150,6 +152,9 @@ function selectLayer() {
         $("#modify_panel .G_input:eq(1)").val(layers[layerNum - 1].G[1])
         $("#modify_panel .G_input:eq(2)").val(layers[layerNum - 1].G[2])
     }
+
+    const color = "linear-gradient(180deg," + COLORS1[(layerNum - 1) % 6] + ", " + COLORS2[(layerNum - 1) % 6] + ")"
+    $("#modify_header").css("background-image", color);
 
 }
 

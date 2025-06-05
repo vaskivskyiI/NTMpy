@@ -2,9 +2,10 @@ from core.Source import source # type: ignore
 
 global src; src = source()
 
-global current_path; current_path = ["./data/"]
+global current_path; current_path = [""]
 global current_file; current_file = [""]
 global current_data; current_data = [""]
+global outdir; outdir = [""]
 
 global layers; layers = []
 global nindex; nindex = []

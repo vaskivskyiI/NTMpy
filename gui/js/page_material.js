@@ -7,6 +7,7 @@ $(document).ready( async function(){
 
     drawMaterial();
     drawMenu();
+    loadSavedMaterials();
 
     $("#insert_header").on("click", function() {
         $("#modify_panel").slideUp(300);
@@ -30,8 +31,8 @@ $(document).ready( async function(){
 
     $("#check_2T").on("click", () => {setSpinTemp(false);});
     $("#check_3T").on("click", () => {setSpinTemp( true);})
-    $("#load_btn").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");})
-    $("#save_btn").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");})
+    $("#load_btn").on("click", loadMaterial)
+    $("#save_btn").on("click", saveMaterial)
 
 
     console.log("ready");
@@ -241,3 +242,14 @@ async function setSpinTemp(spinTemp) {
     drawMaterial();
 }
 
+async function loadSavedMaterials() {
+    
+}
+
+async function loadMaterial() {
+
+}
+
+async function saveMaterial() {
+
+}

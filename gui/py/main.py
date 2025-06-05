@@ -12,7 +12,7 @@ from gui.py.variables import flags, laser, layers, nindex, src, out, time, curre
 
 # Run Simulation #################################
 @eel.expose
-def run_simulation(final_time):
+def runSimulation(final_time):
     time["simulation"] = final_time
     src_init()
     sim = build_material()

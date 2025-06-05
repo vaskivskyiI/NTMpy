@@ -1,0 +1,78 @@
+{
+    "flags": {
+        "spin_temp": false,
+        "reflection": false,
+        "substrate": false,
+        "source_set": true,
+        "almost_set": true,
+        "layers_set": true,
+        "result_set": true
+    },
+    "laser": {
+        "energy": 5,
+        "fwhm": 2e-12,
+        "delay": 2e-12,
+        "wavelength": null,
+        "angle": null,
+        "polarization": null
+    },
+    "layers": [
+        {
+            "name": "Nichel",
+            "length": 3.0000000000000004e-08,
+            "rho": 6500,
+            "K": [
+                "8",
+                "0",
+                null
+            ],
+            "C": [
+                "0.112*T",
+                "450",
+                null
+            ],
+            "G": [
+                "6e17",
+                null,
+                null
+            ]
+        },
+        {
+            "name": "Silicon",
+            "length": 8e-08,
+            "rho": 5100,
+            "K": [
+                "24",
+                "12",
+                null
+            ],
+            "C": [
+                "0.025*T",
+                "730",
+                null
+            ],
+            "G": [
+                "6e17",
+                null,
+                null
+            ]
+        }
+    ],
+    "nindex": [
+        {
+            "l": 1e-07,
+            "nr": null,
+            "ni": null
+        },
+        {
+            "l": 1e-07,
+            "nr": null,
+            "ni": null
+        }
+    ],
+    "time": {
+        "simulation": 3.0733e-11,
+        "computation": 0.25315070152282715
+    },
+    "expdata": ""
+}

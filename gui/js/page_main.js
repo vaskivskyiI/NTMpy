@@ -17,18 +17,20 @@ $(document).ready(async function(){
         $("#sim2T_panel").slideToggle(300);
     });
 
-    let currentFile = await eel.get_filename()();
+    let currentFile = await eel.getFilename()();
     $("#filename").val(currentFile);
 
-    const dirname = await eel.load_path()();
+    const dirname = await eel.loadPath()();
     $("#pathname").val(dirname);
     exploreFiles();
 
     $("#goto").on("click", async function() {
-        await exploreFiles($("#pathname").val());
+        path = $("#pathname").val();
+        if (!path.endsWith("/")) { path += "/"; }
+        $("#pathname").val(path);
+        await exploreFiles(path);
     });
 
-    console.log("page loaded");
     if (await eel.getTime("simulation")() > 0)
     {    $("#sim_time").val((await eel.getTime("simulation")()).toExponential(4)); }
     if (await eel.getFlags("result_set")())
@@ -39,7 +41,7 @@ $(document).ready(async function(){
 });
 
 async function exploreFiles(path = null) {
-    let files = await eel.explore_files(path)();
+    let files = await eel.exploreFiles(path)();
 
     $("#filetable td").remove();
     $("#filetable tr").remove();
@@ -51,7 +53,7 @@ async function exploreFiles(path = null) {
         let icon = file.endsWith('.json') ? '📄' : '📁';
         $("#filetable tr:last-child").append(`<td>${icon} ${file}</td>`);
     }
-    if (path) { eel.save_path(path); }
+    if (path) { eel.savePath(path); }
 
     $("#filetable td").on("click", async function() {
         const item = $(this).text();
@@ -59,10 +61,19 @@ async function exploreFiles(path = null) {
         if (item.startsWith('📁')) {
             // Handle folder click
             const folderName = item.slice(2).trim();
-            const currentPath = await eel.load_path()();
-            let newPath;
-            if (folderName === "..") { newPath = currentPath.slice(0, currentPath.lastIndexOf("/")); }
-            else { newPath = currentPath + "/" + folderName; }
+            const currentPath = await eel.loadPath()();
+            if (folderName === "..") {
+                newPath = currentPath.slice(0,-1);
+                if (newPath.endsWith("..") || !newPath.includes("/")) {
+                    newPath = newPath + "/../";
+                } else {
+                    newPath = newPath.slice(0, newPath.lastIndexOf("/")) + "/"
+                }
+                
+            }
+            else {
+                newPath = currentPath + folderName + "/";
+            }
 
             $("#pathname").val(newPath);
             await exploreFiles(newPath);
@@ -75,7 +86,7 @@ async function exploreFiles(path = null) {
 }
 
 async function newFile() {
-    await eel.new_file()();
+    await eel.newFile()();
     $("#helpbar").css("color", "#ffffff");
     $("#helpbar").text("New simulation file created");
     drawMaterial();
@@ -84,7 +95,8 @@ async function newFile() {
 
 async function saveFile() {
     const filename = $("#filename").val();
-    const message = await eel.save_file(filename)();
+    const pathname = $("#pathname").val()
+    const message = await eel.saveFile(filename, pathname)();
     const color = message.toLowerCase().includes("error")? "#ff0000" : "#ffffff";
     $("#helpbar").css("color", color);
     $("#helpbar").text(message);
@@ -93,7 +105,7 @@ async function saveFile() {
 
 async function loadFile() {
     if (selectedFile) {
-        const message = await eel.load_file(selectedFile)();
+        const message = await eel.loadFile(selectedFile)();
         selectedFile = selectedFile.slice(0, selectedFile.lastIndexOf(".json"));
         $("#filename").val(selectedFile);
         const color = message.toLowerCase().includes("error")? "#ff0000" : "#ffffff";
@@ -112,7 +124,7 @@ async function loadFile() {
 async function delFile() {
     if (selectedFile) {
         if (confirm("Delete "+ selectedFile + "?")) {
-            const message = await eel.delete_file(selectedFile)();
+            const message = await eel.deleteFile(selectedFile)();
             const color = message.toLowerCase().includes("error")? "#ff0000" : "#ffffff";
             $("#helpbar").css("color", color);
             $("#helpbar").text(message);
@@ -130,7 +142,7 @@ async function runSimulation() {
     if (!isNaN(finalTime) && finalTime > 0 && sourceSet && layersSet) {
         $("#helpbar").css("color", "#ffffff");
         $("#helpbar").text("Running simulation...");
-        error = await eel.run_simulation(finalTime)();
+        error = await eel.runSimulation(finalTime)();
         if (error) {
             $("#helpbar").css("color", "#ff0000");
             $("#helpbar").text(error);

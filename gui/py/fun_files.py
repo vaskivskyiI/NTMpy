@@ -1,12 +1,12 @@
 import eel
 import json, os
 from numpy import savez, load
-from gui.py.variables import flags, laser, layers, nindex, current_file, current_data, time, out, layer_state
+from gui.py.variables import flags, laser, layers, nindex, current_file, current_data, current_path, time, out, layer_state, outdir
 
 
 # Save File #####################################
 @eel.expose
-def save_file(filename="ntmpy_save", path="./data/"):
+def saveFile(filename="ntmpy_save", path="./data/models/"):
     data_to_save = {
         "flags"  :  flags,
         "laser"  :  laser,
@@ -19,11 +19,13 @@ def save_file(filename="ntmpy_save", path="./data/"):
     try:
         json.dump(data_to_save, open(path + filename + ".json", 'w'), indent=4)
         if flags["result_set"] and not flags["spin_temp"]:
-            savez(path + filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1])
-            return("Successfully saved to " + path + filename + ".json and " + path + filename + ".npz")
+            outdir[0] = "../output/" if path == "./data/models/" else ""
+            savez(path + outdir[0] + filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1])
+            return("Successfully saved to " + filename + ".json and " + filename + ".npz")
         elif flags["result_set"] and flags["spin_temp"]:
+            outdir[0] = "../output/" if path == "./data/models/" else ""
             savez(path + filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1], Ts=out["T"][2])
-            return("Successfully saved to " + path + filename + ".json and " + path + filename + ".npz")
+            return("Successfully saved to " + filename + ".json and " + filename + ".npz")
         return("Successfully saved to " + path + filename + ".json")
     except Exception as e:
         return("Error saving file: "+ str(e))
@@ -31,7 +33,9 @@ def save_file(filename="ntmpy_save", path="./data/"):
 
 # Load File #####################################
 @eel.expose
-def load_file(filename="ntmpy_save", path="./data/"):
+def loadFile(filename="ntmpy_save"):
+
+    path = current_path[0]
 
     try:
         with open(path + filename, 'r') as f:
@@ -56,13 +60,15 @@ def load_file(filename="ntmpy_save", path="./data/"):
         current_data[0] = data_loaded.get("expdata", "")
 
         if flags["result_set"] and not flags["spin_temp"]:
-            with load(path + current_file[0] + ".npz") as data:
+            outdir[0] = "../output/" if path == "./data/models/" else ""
+            with load(path + outdir[0] + current_file[0] + ".npz") as data:
                 out["t"] = data["t"]
                 out["x"] = data["x"]
                 out["T"] = [data["Te"], data["Tl"]]
                 return("Successfully loaded from " + filename + ".json and " + current_file[0] + ".npz")
         elif flags["result_set"] and flags["spin_temp"]:
-            with load(path + current_file[0] + ".npz") as data:
+            outdir[0] = "../output/" if path == "./data/models/" else ""
+            with load(path + outdir[0] + current_file[0] + ".npz") as data:
                 out["t"] = data["t"]
                 out["x"] = data["x"]
                 out["T"] = [data["Te"], data["Tl"], data["Ts"]]
@@ -75,7 +81,7 @@ def load_file(filename="ntmpy_save", path="./data/"):
 
 # Load File #####################################
 @eel.expose
-def new_file():
+def newFile():
 
     flags.clear()
     laser.clear()
@@ -111,43 +117,48 @@ def new_file():
 
 # Explore Files #################################
 @eel.expose
-def explore_files(path):
+def exploreFiles(path):
     if not path:
-        path = load_path()
+        path = loadPath()
+    if path == "./data/models/":
+        outdir[0] = "../output/"
+    else: 
+        outdir[0] = ""
     try:
         files = [f for f in os.listdir(path) if f.endswith('.json')]
         folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+        current_path[0] = path
         return folders + files
     except Exception as e:
         print("Error exploring files: " + str(e))
 
 # Delete File ###################################
 @eel.expose
-def delete_file(filename, path = "./data/"):
+def deleteFile(filename, path = "./data/models/"):
     try:
         os.remove(path + filename)
         if flags["result_set"]:
-            os.remove(path + filename.split(".")[0] + ".npz")
+            os.remove(path + outdir[0] + filename.split(".")[0] + ".npz")
         return("Successfully deleted " + filename + ".json and " + filename + ".npz")
     except Exception as e:
         return("Error deleting file: " + str(e))
 
 # Save and Load Preferences #####################
 @eel.expose
-def save_path(path):
+def savePath(path):
     with open("./gui/pref/last_path.txt", "w") as f:
         f.write(path)
 
 @eel.expose
-def load_path():
+def loadPath():
     with open("./gui/pref/last_path.txt", "r") as f:
         try:
             return f.read()
         except FileNotFoundError:
-            return "./data/"
+            return "./data/models/"
 
 @eel.expose
-def get_filename():
+def getFilename():
     return(current_file)
 
 

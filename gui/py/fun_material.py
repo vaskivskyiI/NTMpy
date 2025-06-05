@@ -12,7 +12,8 @@ def setLayers(layer, id = -1):
         flags["layers_set"] = False
     else:
         layers[id] = layer
-    if layers[-1]["length"] > 10 * sum([layer["length"] for layer in layers[:-1]]):
+
+    if len(layers) > 1 and layers[-1]["length"] > 10 * sum([layer["length"] for layer in layers[:-1]]):
         flags["substrate"] = True
     else:
         flags["substrate"] = False
@@ -29,16 +30,23 @@ def getLayers():
 def move_layer(id1, id2):
     layers[id1], layers[id2] = layers[id2], layers[id1]
     nindex[id1], nindex[id2] = nindex[id2], nindex[id1]
+    flags["result_set"] = False
 
 @eel.expose
 def duplicateLayer(id):
     layers.insert(id, layers[id].copy())
     nindex.insert(id, nindex[id].copy())
+    flags["result_set"] = False
 
 @eel.expose
 def removeLayer(id):
     layers.pop(id)
     nindex.pop(id)
+    if len(layers) < 2:
+        flags["substrate"] = False
+    if len(layers) < 1:
+        flags["layers_set"] = False
+    flags["result_set"] = False
 
 @eel.expose
 def checkLayers():

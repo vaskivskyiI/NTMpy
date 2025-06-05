@@ -69,6 +69,8 @@ class Sim2T1L(object):
         
         self.debug = np.array([])
 
+        self.computation_time = 0
+
 # ========================================================================================
 #
 # ----------------------------------------------------------------------------------------
@@ -168,11 +170,9 @@ class Sim2T1L(object):
         # Select Order of the Spline (future expert setting)
         order = self.order
         # Construct the Di Matrices
-        ratio = self.length/self.source.grid_step_hint()
-        base = self.find_scale(self.grd_points, -ratio, ratio - 1) ** self.grd_points
-        x  = base**(np.linspace( 0, 1, self.grd_points)) - 1
-        x *= self.length / (base - 1)
-        y  = np.linspace( 0, self.length, self.plt_points)
+        self.substrate_pnt()
+        x = np.logspace(0, np.log10(self.length + 1) , self.grd_points) - 1 
+        y = np.logspace(0, np.log10(self.length + 1) , self.plt_points) - 1
         self.x = x; self.y = y
         # Spline Generation
         knot_vector = aptknt( x, order)
@@ -194,15 +194,13 @@ class Sim2T1L(object):
         self.dt_ext = self.stability(LSM)
     
     # Sub function used to find the spacing between points
-    def find_scale(self, N, A, B):
-        x = 1.01
-        while x**N + A * x + B < 0:
-            x += .01
-        for i in range(16):
-            y  = x**N + A * x + B
-            m  = N * x**(N-1) + A
-            x -= y/m
-        return x
+    def substrate_pnt(self):
+        delta = 1.1 * self.source.grid_step_hint()
+        x = np.logspace( 0, np.log10(self.length + 1), self.grd_points)
+        while x[1] - x[0] > delta:
+            self.grd_points += 1
+            x = np.logspace(0, np.log10(self.length + 1), self.grd_points)
+        self.plt_points = self.grd_points * 10
 # ========================================================================================
 #
 # ----------------------------------------------------------------------------------------
@@ -319,6 +317,7 @@ class Sim2T1L(object):
             phi_E[i] = self.P0 @ c_E; phi_L[i] = self.P0 @ c_L
         # END OF THE MAIN LOOP
         end_EL = time.time()
+        self.computation_time = end_EL - start_EL
         self.warning(0, str(end_EL - start_EL))
         return self.y, self.t, np.transpose(np.dstack([phi_E, phi_L]))
 

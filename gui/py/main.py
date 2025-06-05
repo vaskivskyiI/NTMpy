@@ -2,6 +2,7 @@ import eel
 
 from core.Sim2T import Sim2T
 from core.Sim3T import Sim3T
+from core.Sim2T1L import Sim2T1L
 from core.Source import source # type: ignore
 from numpy import array, savez, load # type: ignore
 import numpy as np
@@ -35,7 +36,7 @@ def build_material():
     safe_layers = sanitize(layers)
     if isinstance(safe_layers, int): return safe_layers
     
-    if not flags["spin_temp"]:
+    if not flags["spin_temp"] and len(layers) > 1:
         sim = Sim2T()
         for layer in safe_layers:
             length = layer["length"]
@@ -44,6 +45,15 @@ def build_material():
             capc = [eval(layer["C"][0]), eval(layer["C"][1])]
             coup =  eval(layer["G"][0])
             sim.addLayer( length, cond, capc, dens, coup, 12)
+        return sim
+    elif not flags["spin_temp"] and len(layers) == 1:
+        sim = Sim2T1L()
+        length = safe_layers[0]["length"]
+        dens = safe_layers[0]["rho"]
+        cond = [eval(safe_layers[0]["K"][0]), eval(safe_layers[0]["K"][1])]
+        capc = [eval(safe_layers[0]["C"][0]), eval(safe_layers[0]["C"][1])]
+        coup =  eval(safe_layers[0]["G"][0])
+        sim.setMaterial( length, cond, capc, dens, coup, 12)
         return sim
     else:
         sim = Sim3T()

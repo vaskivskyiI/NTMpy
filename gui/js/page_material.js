@@ -25,7 +25,7 @@ $(document).ready( async function(){
     $("#moveL").on("click", function() {moveLayer(-1);})
     $("#moveR").on("click", function() {moveLayer(+1);})
     $("#update") .on("click", function() {updateLayer();})
-    $("#destroy").on("click", function() {eel.removeLayer(layerNum-1); drawMaterial();})
+    $("#destroy").on("click", function() {destroyLayer();})
     $("#duplicate").on("click", function() {eel.duplicateLayer(layerNum-1); drawMaterial();})
     $(".canvas > div").on("click", selectLayer);
 
@@ -166,6 +166,26 @@ function selectLayer() {
 
 }
 
+async function destroyLayer() {
+    eel.removeLayer(layerNum-1);
+    
+    const color1 = "linear-gradient(180deg, #747474, #414141)"
+    const color2 = "linear-gradient(180deg, #969696, #747474)"
+    $("#modify_header").css("background-image", color1);
+    $("#modify_header").mouseenter(()=>{$("#modify_header").css("background-image", color2);})
+    $("#modify_header").mouseout  (()=>{$("#modify_header").css("background-image", color1);})
+    $("#update").css("background-image", color1);
+    $("#update").mouseenter(()=>{$("#update").css("background-image", color2);})
+    $("#update").mouseout  (()=>{$("#update").css("background-image", color1);})
+    layerNum = 0;
+
+    $("#modify_header").text("Click on a layer to modify it");
+
+    drawMaterial();
+}
+
+
+
 async function moveLayer(move) {
     
     if (layerNum + move > 0 && layerNum + move < layers.length + 1) {  
@@ -196,7 +216,7 @@ async function updateLayer() {
     const density = parseFloat($("#modify_panel .dens_input").val());
     let valid = (length > 0) && (density > 0);
     
-    if (complete && valid) {
+    if (complete && valid && layerNum > 0) {
         
         console.log("Adding a new layer: " +  $("#modify_panel .name_input").val());
         
@@ -231,6 +251,10 @@ async function updateLayer() {
     else if (!complete) {
         $("#helpbar").css("color","#ff5555");
         $("#helpbar").text("Cannot modify the layer: Some material properties are missing");
+    }
+    else if (layerNum <= 0) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot modify the layer: No layer selected");
     }
 
 }

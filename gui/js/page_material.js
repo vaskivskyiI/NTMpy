@@ -394,7 +394,6 @@ async function saveMaterial() {
             material.G.push($("#modify_panel .G_input:eq(2)").val());
         }
     
-        // Save the material
         const result = await eel.saveMaterialToDB(saveName, material)();
         
         if (result.success) {

@@ -2,6 +2,7 @@ const COLORS0 = ['#dd2222','#dd9922','#bbdd22','#22dddd','#2266dd','#7722dd'];
 const COLORS1 = ['#bb0000','#bb7700','#99bb00','#00bbbb','#0044bb','#5500bb'];
 const COLORS2 = ['#770000','#774400','#668800','#008888','#001188','#220088'];
 let layerNum = 0;
+let plotType;
 
 $(document).ready(async function() {
 
@@ -30,8 +31,8 @@ $(document).ready(async function() {
     $("#plot_space").on("click", plotSpace);
     $("#plot_time" ).on("click", plotTime );
 
-    $("#plot_save" ).on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
-    $("#plot_pyplt").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
+    //$("#plot_save" ).on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
+    $("#plot_pyplt").on("click", plotWithPython);
 
     drawMaterial();
     drawMenu();
@@ -244,6 +245,7 @@ async function plotTime() {
         drawLabelsX(timeArray);
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Time plot generated");
+        plotType = "time";
     }
     else {
         $("#helpbar").css("color","#ff5555");
@@ -266,6 +268,7 @@ async function plotSpace() {
         drawLabelsX(spaceArray);
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text("Space plot generated");
+        plotType = "space";
     }
     else if (!layersSet){
         $("#helpbar").css("color","#ff5555");
@@ -276,3 +279,41 @@ async function plotSpace() {
         $("#helpbar").text("Cannot plot: When reflection is enabled, the source must be set");
     }
 }
+
+async function plotWithPython() {
+
+    const layersSet = await eel.getFlags("almost_set")();
+    const sourceSet = await eel.getFlags("source_set")();
+    const reflection = await eel.getFlags("reflection")();
+
+    if (plotType == "space") {
+        if (layersSet && (sourceSet || !reflection)) {
+            await eel.plotPythonSource(plotType)();
+            $("#helpbar").css("color","#ffffff");
+            $("#helpbar").text("Plot generated with Python");
+        }
+        else if (!layersSet){
+            $("#helpbar").css("color","#ff5555");
+            $("#helpbar").text("Cannot plot: Some layers' properties are missing");
+        }
+        else if (!sourceSet && reflection) {
+            $("#helpbar").css("color","#ff5555");
+            $("#helpbar").text("Cannot plot: Source is not set (reflection is enabled)");
+        }
+    }
+    else if (plotType == "time") {
+        if (sourceSet) {
+            await eel.plotPythonSource(plotType)();
+            $("#helpbar").css("color","#ffffff");
+            $("#helpbar").text("Plot generated with Python");
+        }
+        else {
+            $("#helpbar").css("color","#ff5555");
+            $("#helpbar").text("Cannot plot: Source is not set");
+        }
+    } else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot plot: You should define what to plot (buttons space or time)");
+    }
+}
+

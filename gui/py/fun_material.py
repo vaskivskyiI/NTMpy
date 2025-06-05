@@ -26,19 +26,21 @@ def setLayers(layer, id = -1):
 def getLayers():
     return layers 
 
-# Modify layers order 
+# Modify layers order ###########################
 @eel.expose
 def move_layer(id1, id2):
     layers[id1], layers[id2] = layers[id2], layers[id1]
     nindex[id1], nindex[id2] = nindex[id2], nindex[id1]
     flags["result_set"] = False
 
+# Duplicate layer ###############################
 @eel.expose
 def duplicateLayer(id):
     layers.insert(id, layers[id].copy())
     nindex.insert(id, nindex[id].copy())
     flags["result_set"] = False
 
+# Remove layer ##################################
 @eel.expose
 def removeLayer(id):
     layers.pop(id)
@@ -49,6 +51,7 @@ def removeLayer(id):
         flags["layers_set"] = False
     flags["result_set"] = False
 
+# Check layer properties ########################
 @eel.expose
 def checkLayers():
     layer_state.clear()
@@ -69,6 +72,7 @@ def checkLayers():
     flags["layers_set"] = all(layer_state) and len(layers) > 0
     return layer_state
 
+# Save materials from database ##################
 @eel.expose
 def saveMaterialToDB(name, material):
     base_filename = name.split(" ")[0].lower()
@@ -88,6 +92,7 @@ def saveMaterialToDB(name, material):
     except Exception as e:
         return {"success": False, "message": "Error saving material: " + str(e)}
 
+# Retrieve materials names from database ########
 @eel.expose
 def getMaterialsDB():
     
@@ -101,6 +106,7 @@ def getMaterialsDB():
             materials.append(material["id"])
     return materials
 
+# Load material from database ###################
 @eel.expose
 def loadMaterialFromDB(name):
     try:
@@ -110,6 +116,7 @@ def loadMaterialFromDB(name):
     except Exception as e:
         return {"success": False, "message": "Error loading material: " + str(e)}
 
+# Delete material from database #################
 @eel.expose
 def deleteMaterialFromDB(name):
     try:

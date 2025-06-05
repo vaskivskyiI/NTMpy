@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, './code')
+sys.path.insert(0, './core')
 
 from Source import source # type: ignore
 import numpy as np
@@ -11,16 +11,16 @@ s.setLaser(1, 1e-12)
 s.delay = 2e-12  # time the maximum intensity hits
 
 s.angle = np.pi / 4 * 0
+s.wavelength = 40e-9
 
 s.refraction = [1 + 4j, 2j]
-s.wavelength = 400e-9
-s.thickness = [10000e-9, 2e-8]
+s.thickness = [10e-6, 20e-9]
 
 s.refraction = [1.0433 + 3.0855j, 1.0454 + 3.2169j, 2.0150 + 2.8488j, 1.766]
-s.thickness = [3e-9, 15e-9, 5e-9, 25e-9]
+s.thickness = [30e-9, 15e-9, 50e-9, 25e-9]
 
 s.refraction = [1 + .1j, 1 + .1j]
-s.thickness = [4e-6, 4e-6]
+s.thickness = [40e-9, 40e-9]
 s.absorption = [1e-7, 1e-7]
 
 end = np.sum(s.thickness)

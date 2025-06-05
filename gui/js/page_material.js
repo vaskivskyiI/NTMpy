@@ -9,6 +9,12 @@ $(document).ready( async function(){
     drawMenu();
     loadSavedMaterials();
 
+    $("#load_drop").on("change", function() {
+        const selectedMaterial = $(this).val();
+        $("#canc_btn").prop("disabled", !selectedMaterial);
+    });
+
+    $("#canc_btn").on("click", deleteMaterial);
     $("#insert_header").on("click", function() {
         $("#modify_panel").slideUp(300);
         $("#insert_panel").slideToggle(300);
@@ -264,16 +270,140 @@ async function setSpinTemp(spinTemp) {
     await eel.setFlags("result_set", false);
     drawMenu();
     drawMaterial();
+    loadSavedMaterials()
 }
 
 async function loadSavedMaterials() {
+    const materials = await eel.getMaterialsDB()();
     
+    $("#load_drop").empty();
+    $("#load_drop").append('<option value="">Select a material...</option>');
+    
+    materials.forEach(material => {
+        $("#load_drop").append(`<option value="${material}">${material}</option>`);
+    });
 }
 
 async function loadMaterial() {
+    const materialName = $("#load_drop").val();
+    
+    if (!materialName) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Please select a material to load");
+        return;
+    }
+    
+    const result = await eel.loadMaterialFromDB(materialName)();
+    
+    if (result.success) {
+        const material = result.material;
+        
+        // Update the insert panel fields with the loaded material
+        $("#insert_panel .name_input").val(material.name);
+        $("#insert_panel .leng_input").val((material.length * 1e9).toFixed(5));
+        $("#insert_panel .dens_input").val(material.rho);
+        
+        // Set thermal conductivity values
+        $("#insert_panel .K_input:eq(0)").val(material.K[0]);
+        $("#insert_panel .K_input:eq(1)").val(material.K[1]);
+        if (material.K.length > 2) {
+            $("#insert_panel .K_input:eq(2)").val(material.K[2]);
+        }
+        
+        // Set thermal capacity values
+        $("#insert_panel .C_input:eq(0)").val(material.C[0]);
+        $("#insert_panel .C_input:eq(1)").val(material.C[1]);
+        if (material.C.length > 2) {
+            $("#insert_panel .C_input:eq(2)").val(material.C[2]);
+        }
+        
+        // Set coupling values
+        $("#insert_panel .G_input:eq(0)").val(material.G[0]);
+        if (material.G.length > 1) {
+            $("#insert_panel .G_input:eq(1)").val(material.G[1]);
+            $("#insert_panel .G_input:eq(2)").val(material.G[2]);
+        }
+        
+        $("#helpbar").css("color","#ffffff");
+        $("#helpbar").text(`Material ${materialName} loaded successfully`);
+        
+        // Reset the dropdown
+        $("#load_drop").val("");
+        
+    } else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text(result.message);
+    }
+}
 
+async function deleteMaterial() {
+    const materialName = $("#load_drop").val();
+    
+    if (!materialName) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Please select a material to delete");
+        return;
+    }
+    
+    const result = await eel.deleteMaterialFromDB(materialName)();
+    
+    if (result.success) {
+        $("#helpbar").css("color","#ffffff");
+        $("#helpbar").text(result.message);
+        loadSavedMaterials();  // Refresh the materials list
+    } else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text(result.message);
+    }
 }
 
 async function saveMaterial() {
+    let complete = true;
+    $("#modify_panel input").each(function() {complete &= ($(this).val() != '')})
 
+    const saveName = $("#save_name").val();
+
+    if (layerNum <= 0) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot save material: No layer selected");
+    }
+    else if (!saveName) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot save material: Please provide a name");
+    }
+    else if (!complete) {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text("Cannot save material: Some material properties are missing");
+    }
+    else if (complete && saveName) {
+        // Get all the material properties
+        const material = {
+            id: saveName,
+            num_temp: await eel.getFlags("spin_temp")() ? 3 : 2,
+            name: $("#modify_panel .name_input").val(),
+            rho:  $("#modify_panel .dens_input").val(),
+            K: [$("#modify_panel .K_input:eq(0)").val(), $("#modify_panel .K_input:eq(1)").val()],
+            C: [$("#modify_panel .C_input:eq(0)").val(), $("#modify_panel .C_input:eq(1)").val()],
+            G: [$("#modify_panel .G_input:eq(0)").val()]
+        };
+    
+        if (material.num_temp == 3) {
+            material.K.push($("#modify_panel .K_input:eq(2)").val());
+            material.C.push($("#modify_panel .C_input:eq(2)").val());
+            material.G.push($("#modify_panel .G_input:eq(1)").val());
+            material.G.push($("#modify_panel .G_input:eq(2)").val());
+        }
+    
+        // Save the material
+        const result = await eel.saveMaterialToDB(saveName, material)();
+        
+        if (result.success) {
+            $("#helpbar").css("color","#ffffff");
+            $("#helpbar").text(result.message);
+            loadSavedMaterials();
+        } else if (!result.success) {
+            $("#helpbar").css("color","#ff5555");
+            $("#helpbar").text(result.message);
+        }
+    }
 }

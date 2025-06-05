@@ -1,0 +1,17 @@
+{
+    "id": "Silicon - github NTMpy",
+    "num_temp": 2,
+    "name": "Silicon",
+    "rho": "5100",
+    "K": [
+        "24",
+        "12"
+    ],
+    "C": [
+        "0.025*T",
+        "730"
+    ],
+    "G": [
+        "6e17"
+    ]
+}

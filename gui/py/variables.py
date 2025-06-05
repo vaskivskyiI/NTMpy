@@ -30,4 +30,6 @@ global layer_state; layer_state = []
 global time; time = {"simulation": 0, "computation": 0}
 global out; out = {"x": None, "t": None, "T": None}
 
+global materialsDB; materialsDB = {}
+
 

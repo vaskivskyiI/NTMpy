@@ -53,7 +53,7 @@ class source(object):
         if self.type_x.lower() in ["beerlambert","beer","lambert","lambertbeer","lb"]:
             return np.min(self.absorption)/6
         elif self.type_x.lower() in ["tmm","reflected","reflection"]:
-            return np.min(self.wavelength * np.cos(self.angle) / np.imag(np.array(np.refraction))) / 6
+            return np.min(self.wavelength * np.cos(self.angle) / np.imag(np.array(self.refraction))) / 6
         return 5e-9
 
 # ========================================================================================

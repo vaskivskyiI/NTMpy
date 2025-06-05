@@ -109,10 +109,10 @@
 }
 
 
-#destroy {
+#destroy, #canc_btn {
   background-image: linear-gradient(180deg, #ad1e42,#641327)
 }
-#destroy:hover {
+#destroy:hover, #canc_btn:hover {
   background-image: linear-gradient(180deg, #e71a4d,#881a36)
 }
 
@@ -130,19 +130,21 @@
 
 #load_drop, #save_name {
   flex: none;
-  width: 500px;
+  width: 480px;
   height: 25px;
 }
 
-#load_btn, #save_btn {
+#load_btn, #save_btn, #udat_btn, #canc_btn {
   padding: 2px;
   flex: none;
-  width: 200px;
-  height: 30px;
+  width: 120px;
+  height: 30px
+}
+#load_btn, #save_btn, #udat_btn {
   background-image: linear-gradient(180deg, #ccbb00,#997700)
 }
 
-#load_btn:hover, #save_btn:hover {
+#load_btn:hover, #save_btn:hover, #udat_btn:hover {
   background-image: linear-gradient(180deg, #eedd00,#bbaa00)
 }
 

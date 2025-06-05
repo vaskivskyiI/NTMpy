@@ -1,4 +1,4 @@
-const colors = ['#b90000','#b97800','#9db900','#00b0b9','#004ab9','#5000b9'];
+const colors = ['#bb0000','#bb7700','#99bb00','#00bbbb','#0044bb','#5500bb'];
 let layers;
 
 async function drawMaterial_core(labels, labelStates) {

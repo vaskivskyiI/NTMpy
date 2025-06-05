@@ -1,6 +1,6 @@
 // Define padding constants
 const PADDING_LX = 40; // Left padding
-const PADDING_RX = 40; // Right padding
+const PADDING_RX = 50; // Right padding
 const PADDING_DW = 35; // Bottom padding
 const PADDING_UP = 10; // Top padding
 let plot_offset = 0;
@@ -56,7 +56,7 @@ function drawLabelsX(text) {
     ctx.fillStyle = "white";
     ctx.lineWidth = 1;
     ctx.font = "18px Times New Roman";
-    for (k = 0; k <= 4; k++) { ctx.fillText(text[k], (k*x1 + (4-k)*x0)/4 - 25, y1 + 20);}
+    for (k = 0; k <= 4; k++) { ctx.fillText(text[k], (k*x1 + (4-k)*x0)/4 - 30, y1 + 20);}
 }
 
 function drawLabelsY(text) {
@@ -72,7 +72,7 @@ function drawLabelsY(text) {
     ctx.fillStyle = "white";
     ctx.lineWidth = 1;
     ctx.font = "18px Times New Roman";
-    for (k = 0; k <= 2; k++) { ctx.fillText(text[k], x0 - 40, (k*y0 + (2-k)*y1)/2 + 5);}
+    for (k = 0; k <= 2; k++) { ctx.fillText(text[k], x0 - 50, (k*y0 + (2-k)*y1)/2 + 5);}
 }
 
 function drawCurve(data, clear = true, color = "white", scale = 0.9) {
@@ -130,7 +130,7 @@ function drawDots(dataX, dataY, color = "white", scale = 0.9) {
     for (var i = 0; i < dataX.length; i++) {
         x = x0 + dataX[i] * (x1-x0);
         y = y1 - dataY[i] * (y1-y0);
-        
+
         // Draw a dot at each data point
         ctx.beginPath();
         ctx.arc(x, y, 3, 0, 2 * Math.PI); 
@@ -138,7 +138,4 @@ function drawDots(dataX, dataY, color = "white", scale = 0.9) {
         ctx.fill();
     };
 
-    ctx.stroke();
-    
-    drawAxis();
 }

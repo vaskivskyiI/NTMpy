@@ -1,5 +1,6 @@
-const COLORS1 = ['#b90000','#b97800','#9db900','#00b0b9','#004ab9','#5000b9'];
-const COLORS2 = ['#750000','#764500','#6a8600','#008086','#001786','#200086'];
+const COLORS0 = ['#dd2222','#dd9922','#bbdd22','#22dddd','#2266dd','#7722dd'];
+const COLORS1 = ['#bb0000','#bb7700','#99bb00','#00bbbb','#0044bb','#5500bb'];
+const COLORS2 = ['#770000','#774400','#668800','#008888','#001188','#220088'];
 let layerNum = 0;
 
 $(document).ready( async function(){
@@ -153,8 +154,14 @@ function selectLayer() {
         $("#modify_panel .G_input:eq(2)").val(layers[layerNum - 1].G[2])
     }
 
-    const color = "linear-gradient(180deg," + COLORS1[(layerNum - 1) % 6] + ", " + COLORS2[(layerNum - 1) % 6] + ")"
-    $("#modify_header").css("background-image", color);
+    const color1 = "linear-gradient(180deg," + COLORS1[(layerNum - 1) % 6] + ", " + COLORS2[(layerNum - 1) % 6] + ")"
+    const color2 = "linear-gradient(180deg," + COLORS0[(layerNum - 1) % 6] + ", " + COLORS1[(layerNum - 1) % 6] + ")"
+    $("#modify_header").css("background-image", color1);
+    $("#modify_header").mouseenter(()=>{$("#modify_header").css("background-image", color2);})
+    $("#modify_header").mouseout  (()=>{$("#modify_header").css("background-image", color1);})
+    $("#update").css("background-image", color1);
+    $("#update").mouseenter(()=>{$("#update").css("background-image", color2);})
+    $("#update").mouseout  (()=>{$("#update").css("background-image", color1);})
 
 }
 

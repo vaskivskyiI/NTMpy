@@ -41,24 +41,24 @@ table input {
 }
 
 #update_source {
-    background-image: linear-gradient(180deg, #ad1e42,#641327)
+    background-image: linear-gradient(180deg, #2a398d,#162266)
 }
 #update_source:hover {
-    background-image: linear-gradient(180deg, #e71a4d,#881a36)
+    background-image: linear-gradient(180deg, #475fe7,#2135a5)
 }
 
-#update_layer {
+#update_layer, #layer_header {
     background-image: linear-gradient(180deg, #747474,#414141)
 }
 
-#update_layer:hover {
+#update_layer:hover, #layer_header:hover {
     background-image: linear-gradient(180deg, #969696,#747474)
 }
 
-#source_header, #layer_header, #plot_space, #plot_time, #plot_save, #plot_pyplt,#plot_header {
+#source_header, #plot_space, #plot_time, #plot_save, #plot_pyplt,#plot_header {
     background-image: linear-gradient(180deg, #2a398d,#162266)
 }
-#source_header:hover, #layer_header:hover, #plot_space:hover, #plot_time:hover, #plot_save:hover, #plot_pyplt:hover, #plot_header:hover {
+#source_header:hover, #plot_space:hover, #plot_time:hover, #plot_save:hover, #plot_pyplt:hover, #plot_header:hover {
     background-image: linear-gradient(180deg, #475fe7,#2135a5)
 }
 

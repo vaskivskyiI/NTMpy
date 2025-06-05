@@ -17,9 +17,12 @@ const FRAME_DURATION = 1000 / FRAME_PER_SECOND;
 const MIN_TEMP = 295;
 const INIT_TEMP = 300;
 
-$(document).ready(async function() {
+const PLOT_OFFSET = 25;
 
-    plot_offset = 15;
+
+$(document).ready(async function() {
+    plot_offset = PLOT_OFFSET;
+
     $(".canvas").remove();
 
     const result_set = await eel.getFlags("result_set")();
@@ -54,7 +57,7 @@ async function plotTemperature() {
         let penetration = 0;
         $("#time_val").text("");
         if ($("#plot_exp").prop("checked")) {
-            penetration = parseFloat($("#penetration").val());
+            penetration = parseFloat($("#penetration").val()) * 1e-9;
             if (isNaN(penetration) || penetration <= 0) {
                 $("#helpbar").css("color","#ff5555");
                 $("#helpbar").text("Penetration depth must be a positive number");
@@ -74,12 +77,12 @@ async function plotTemperature() {
 
         drawCurve(Telectron,  true, "#ee5555", scaleE);
         drawCurve( Tlattice, false, "#5555ee", scaleL);
-        timeStep = data[0][1] / 4;
-        timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toExponential(1));
+        timeStep = 1e12 * data[0][1] / 4;
+        timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toFixed(1) + " ps");
         timeArray[0] = "";
         drawLabelsX(timeArray);
 
-        const labels = Array.from({length: 3}, (_, i) => (INIT_TEMP + 0.45*i*absoluteMax).toFixed(0))
+        const labels = Array.from({length: 3}, (_, i) => (INIT_TEMP + 0.45*i*absoluteMax).toFixed(0) + " K")
         drawLabelsY(labels);
 
         $("#helpbar").css("color","#ffffff");
@@ -95,7 +98,7 @@ async function plotExperiment() {
     const result_set = await eel.getFlags("result_set")();
 
     if (result_set) {
-        plotTemperature();
+        await plotTemperature();
         data = await eel.getExperimental($("#data_file").val())();
         if (data instanceof Array) {
             data[1] = data[1].map(R => R*0.9);
@@ -147,12 +150,12 @@ async function setupAnimation() {
         drawCurve(Telectron,  true, "#ee5555", scaleE);
         drawCurve( Tlattice, false, "#5555ee", scaleL);
         
-        spaceStep = data[0][1] / 4;
-        spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
+        spaceStep = 1e9 * data[0][1] / 4;
+        spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toFixed(1) + " nm");
         spaceArray[0] = "";
         drawLabelsX(spaceArray);
 
-        const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + 0.45*i*maxTemperature).toFixed(0))
+        const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + 0.45*i*maxTemperature).toFixed(0) + " K")
         drawLabelsY(labels);
 
         animation_set = true;

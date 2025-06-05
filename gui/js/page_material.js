@@ -175,6 +175,14 @@ async function moveLayer(move) {
     await drawMaterial();    
     $("#modify_header").text("Modify Layer " + layerNum + " Menu: " + layers[layerNum - 1].name)
 
+    const color1 = "linear-gradient(180deg," + COLORS1[(layerNum - 1) % 6] + ", " + COLORS2[(layerNum - 1) % 6] + ")"
+    const color2 = "linear-gradient(180deg," + COLORS0[(layerNum - 1) % 6] + ", " + COLORS1[(layerNum - 1) % 6] + ")"
+    $("#modify_header").css("background-image", color1);
+    $("#modify_header").mouseenter(()=>{$("#modify_header").css("background-image", color2);})
+    $("#modify_header").mouseout  (()=>{$("#modify_header").css("background-image", color1);})
+    $("#update").css("background-image", color1);
+    $("#update").mouseenter(()=>{$("#update").css("background-image", color2);})
+    $("#update").mouseout  (()=>{$("#update").css("background-image", color1);})
 
 }
 

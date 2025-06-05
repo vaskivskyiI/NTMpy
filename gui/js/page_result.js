@@ -28,6 +28,11 @@ $(document).ready(async function() {
     const result_set = await eel.getFlags("result_set")();
     if (result_set) finalTime = await eel.getTime("simulation")();
 
+    if (await eel.getFlags("spin_temp")()) {
+        $("#legend").append("<div style='height:4px; width: 20px; background-color:rgb(172, 238, 85);'></div>")
+        $("#legend").append("<label  style='margin: 0 10 0 10;'>Spin temperature</label>");
+    }
+
     $("#plot_time").on("click", plotTemperature);
     $("#plot_anim").on("click", setupAnimation);
     $("#anim_play").on("click", playAnimation);

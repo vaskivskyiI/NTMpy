@@ -189,7 +189,6 @@ class source(object):
             fun_x[index] = self.dissipation(self.wave[-1], layer, depth)
             layer += 1
             
-        fun_x /= np.cos(self.angle)
         self.wave.append( self.Mn[-1] @ self.wave[-1] )
         return fun_x
 

@@ -186,11 +186,10 @@ class source(object):
             index = np.logical_and(x > interfaces[layer], x < interfaces[layer + 1])
             index = np.where(index)
             depth = x[index] - interfaces[layer]
-            fun_x[index] = self.div_poynting(self.wave[-1], layer, depth)
+            fun_x[index] = self.dissipation(self.wave[-1], layer, depth)
             layer += 1
             
         self.wave.append( self.Mn[-1] @ self.wave[-1] )
-        fun_x *=  self.wavelength / np.pi / np.cos(self.angle)
         return fun_x
 
 # ========================================================================================
@@ -201,10 +200,10 @@ class source(object):
         k0 = 2 * np.pi / self.wavelength
         k2 = np.array([k1[0], np.sqrt( k0**2 * n2**2 - k1[0]**2) ])
         
-        if   self.polarization.lower() == 's':
+        if   self.polarization.upper() in ["S", "TE"]:
             K1 = k1[1]
             K2 = k2[1]
-        elif self.polarization.lower() == 'p':
+        elif self.polarization.upper() in ["P", "TM"]:
             K1 = n2**2 * k1[1]
             K2 = n1**2 * k2[1]
         else:
@@ -218,27 +217,15 @@ class source(object):
 # ========================================================================================
 #
 # ----------------------------------------------------------------------------------------
-    def div_poynting(self, EH, layer, x):
+    def dissipation(self, E, layer, x):
         
         k = self.k[layer+1]
-        n = self.refraction[layer]
-        
-        FW = -2*np.imag(k[1])*x
-        BW = np.min(np.vstack([FW,np.tile(100,x.size)]),0)
-        
-        if   self.polarization.lower() == 's':
-            Sf = np.abs(EH[0])**2 * np.cos(np.angle(k[1])) * np.exp(FW)
-            Sb = np.abs(EH[1])**2 * np.cos(np.angle(k[1])) * np.exp(BW)
-            S  = np.abs(k[1]) * np.imag(k[1]) * (Sf+Sb)
-        elif self.polarization.lower() == 'p':
-            Sf = np.cos(np.angle(k[1]) - 2*np.angle(n)) * np.exp(FW)
-            Sb = np.cos(np.angle(k[1]) - 2*np.angle(n)) * np.exp(BW)
-            S  = np.abs(EH[0])**2 * Sf + np.abs(EH[1])**2 * Sb
-            S *= np.abs(k[1]) * np.imag(k[1]) / np.abs(n**2)
-        else:
-            print("!!! Source Error: Unknown polarization type !!!")
-            print("Polarization: " + self.polarization)
-        
+        s = np.imag(self.refraction[layer]**2) * 1.6689e-2 / self.wavelength
+        phi = 1j * k[-1] * x
+
+        E = E[0] * np.exp(phi) + E[1] * np.exp(-phi)
+        S = s * np.abs(E)**2 * 376.73
+
         return S
 
 # ========================================================================================

@@ -10,8 +10,8 @@ s = source()  # default option, Gaussian pulse
 s.setLaser(1, 1e-12)
 s.delay = 2e-12  # time the maximum intensity hits
 
-s.angle = np.pi / 4 * 0
-s.wavelength = 40e-9
+s.angle = np.pi / 4
+s.wavelength = 10e-9
 
 s.refraction = [1 + 4j, 2j]
 s.thickness = [10e-6, 20e-9]
@@ -20,11 +20,11 @@ s.refraction = [1.0433 + 3.0855j, 1.0454 + 3.2169j, 2.0150 + 2.8488j, 1.766]
 s.thickness = [30e-9, 15e-9, 50e-9, 25e-9]
 
 s.refraction = [1 + .1j, 1 + .1j]
-s.thickness = [40e-9, 40e-9]
-s.absorption = [1e-7, 1e-7]
+s.thickness = [100e-9, 100e-9]
+s.absorption = [1e-8, 1e-8]
 
 end = np.sum(s.thickness)
-x = np.linspace(0, end, 4000)
+x = np.linspace(0, end, 1000)
 t = np.linspace(0, 4e-12, 2000)
 
 SL = s.create(x, t)

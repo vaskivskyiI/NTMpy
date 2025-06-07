@@ -175,7 +175,7 @@ class source(object):
         fun_x = np.zeros(len(x))
         layer = 0
         
-        while layer < len(self.Mn) - 1 and np.abs(self.wave[-1][0]) > 1e-8:
+        while layer < len(self.Mn) and np.abs(self.wave[-1][0]) > 1e-8:
             # Update Wave at the next Interface (positive side)
             self.wave.append( self.Mn[layer] @ self.wave[-1] )
             # Avoid Numerical Instability
@@ -189,6 +189,7 @@ class source(object):
             fun_x[index] = self.dissipation(self.wave[-1], layer, depth)
             layer += 1
             
+        fun_x /= np.cos(self.angle)
         self.wave.append( self.Mn[-1] @ self.wave[-1] )
         return fun_x
 
@@ -220,11 +221,16 @@ class source(object):
     def dissipation(self, E, layer, x):
         
         k = self.k[layer+1]
-        s = np.imag(self.refraction[layer]**2) * 1.6689e-2 / self.wavelength
+        n = self.refraction[layer] if layer < len(self.refraction) else 1
+        s = np.imag(n**2) * 1.6689e-2 / self.wavelength
         phi = 1j * k[-1] * x
+
+        phi[phi.real < -100] = -100
 
         E = E[0] * np.exp(phi) + E[1] * np.exp(-phi)
         S = s * np.abs(E)**2 * 376.73
+
+        if self.polarization.upper() in ["P", "TM"]: S /= np.abs(n)**2
 
         return S
 

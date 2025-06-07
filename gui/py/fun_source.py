@@ -68,7 +68,7 @@ def plotPythonSource(type):
         else:
             source = src.lambert_beer(np.linspace(0,total_leng, 2048))
         source /= source[1]
-        plt.plot(np.linspace(0, total_leng*1e9, 2048), source)
+        plt.plot(np.linspace(0, total_leng*1e9, 2048), source / np.max(source))
         plt.title("Source as a function of space")
         plt.xlabel("Depth [nm]")
         plt.ylabel("Intensity [a.u.]")

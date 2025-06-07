@@ -217,7 +217,7 @@ class source(object):
 # ========================================================================================
 #
 # ----------------------------------------------------------------------------------------
-    def dissipation(self, E, layer, x):
+    def dissipation(self, EH, layer, x):
         
         k = self.k[layer+1]
         n = self.refraction[layer] if layer < len(self.refraction) else 1
@@ -226,10 +226,15 @@ class source(object):
 
         phi[phi.real < -100] = -100
 
-        E = E[0] * np.exp(phi) + E[1] * np.exp(-phi)
-        S = s * np.abs(E)**2 * 376.73
+        F = EH[0] * np.exp(phi) + EH[1] * np.exp(-phi)
+        
+        if self.polarization.upper() in ["S", "TE"]:
+            S = s * np.abs(F)**2 * 376.73
+        if self.polarization.upper() in ["P", "TM"]:
+            S = s * (np.abs(k[0])**2 + np.abs(k[1])**2) * np.abs(F)**2
+            S *= self.wavelength**2 /  np.abs(n)**4 * 9.54285
 
-        if self.polarization.upper() in ["P", "TM"]: S /= np.abs(n)**2
+        #TM must be corrected
 
         return S
 

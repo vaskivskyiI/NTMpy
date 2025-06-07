@@ -10,7 +10,7 @@ s = source()  # default option, Gaussian pulse
 s.setLaser(1, 1e-12)
 s.delay = 2e-12  # time the maximum intensity hits
 
-s.angle = 45 * np.pi / 180  # angle in radians
+s.angle = 0 * np.pi / 180  # angle in radians
 s.wavelength = 10e-9
 
 s.refraction = [1 + .5j, 1 + .4j]

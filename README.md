@@ -1,9 +1,9 @@
-# Update
-The graphical inteface is available on this repository. 
-
 <p align="center"><img src="https://github.com/VaSca92/NTMpy/blob/master/gui/img/logo_NTMpy.png" width="500" height="250" /></p>
 
-## Installation
+#### Latest Update 08/06/25
+The graphical inteface is available on this repository. 
+
+# Installation
 At the moment, this new version of NTMpy is not available on pip. NTMpy does not require an installation: donwload this repository, unzip the files, and click on `launch.py` to open the user interface.
 The GUI needs eel and jinja2 as dependencies, which can be installed typing the command `pip install eel[jinja2]` on the command promtpt.
 

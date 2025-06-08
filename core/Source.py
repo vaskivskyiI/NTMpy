@@ -244,5 +244,5 @@ class source(object):
     def setLaser(self, fluence, FWHM):
         self.time = FWHM/np.sqrt(8*np.log(2))
         self.peak = fluence/np.sqrt(2*np.pi*self.time**2)
-        self.time_step_hint = FWHM/10
+        self.time_step_hint = FWHM/16
 

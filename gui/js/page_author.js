@@ -1,12 +1,4 @@
 $(document).ready(function() {
 
-    drawMaterial();
+    $(".canvas").remove();
 })
-
-async function drawMaterial() {
-    layers = await eel.getLayers()();
-
-    let labels = [];
-    layers.forEach(function(layer) {labels.push(layer.name);});
-    await drawMaterial_core(labels);
-};

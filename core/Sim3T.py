@@ -104,6 +104,8 @@ class Sim3T(object):
         self.zeroE = []  # boolean: layer with zero conductivity (elec)
         self.zeroL = []  # boolean: layer with zero conductivity (latt)
         self.zeroS = []  # boolean: layer with zero conductivity (spin)
+
+        self.computation_time = 0
         
 
 # ========================================================================================
@@ -463,6 +465,7 @@ class Sim3T(object):
         # STABILITY EVALUATION ###########################################################
         # Calculating the preferred time step
         idealtimestep  = np.min(self.dt_ext)
+        idealtimestep  = np.min([idealtimestep, self.source.time_step_hint])
         # Warnings for missing or bad time step !!!
         if not self.time_step:
             self.time_step  = idealtimestep
@@ -607,6 +610,7 @@ class Sim3T(object):
             phi_E[i] = self.P0 @ c_E; phi_L[i] = self.P0 @ c_L; phi_S[i] = self.P0 @ c_S;
         # END OF THE MAIN LOOP
         end_EL = time.time()
+        self.computation_time = end_EL - start_EL
         self.warning(0, str(end_EL - start_EL))
         return self.y, self.t, np.transpose(np.dstack([phi_E, phi_L, phi_S]))
 

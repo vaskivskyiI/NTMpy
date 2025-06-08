@@ -51,7 +51,7 @@ async function drawMaterial() {
     if (reflection) {
         nindex.forEach(function(layer) {
             if (layer.nr !== null && layer.ni !== null){
-                labels.push("<i>n</i> = " + layer.nr + " + " + layer.ni + "<i>i</i>");
+                labels.push("<i>n</i> = " + layer.nr.toFixed(2) + " + " + layer.ni.toFixed(2) + "<i>i</i>");
             }
             else { labels.push(""); }
         });
@@ -113,10 +113,10 @@ async function drawMenu() {
         if (sourceSet) {
         source = await eel.getSource()();
         $("#input_energy").val(source.energy);
-        $("#input_fwhm"  ).val((source.fwhm  * 1e12).toFixed(5));
-        $("#input_delay" ).val((source.delay * 1e12).toFixed(5));
+        $("#input_fwhm"  ).val((source.fwhm  * 1e12).toFixed(4));
+        $("#input_delay" ).val((source.delay * 1e12).toFixed(4));
         if (reflection) {
-            $(".k_input:eq(0)").val(source.wavelength * 1e9);
+            $(".k_input:eq(0)").val((source.wavelength * 1e9).toFixed(3));
             $(".k_input:eq(1)").val(source.angle * 180 / Math.PI);
             if (source.polarization === "S") { $("#checkS").prop("checked", true); }
             else { $("#checkP").prop("checked", true); }

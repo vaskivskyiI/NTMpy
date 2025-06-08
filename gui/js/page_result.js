@@ -9,6 +9,8 @@ let multiplier;
 let finalTime;
 let animationTime = 0;
 
+let spinTemp;
+
 const FRAME_PER_SECOND = 20;
 const ANIMATION_DURATION = 10;
 const TOTAL_FRAMES = ANIMATION_DURATION * FRAME_PER_SECOND;
@@ -82,6 +84,14 @@ async function plotTemperature() {
 
         drawCurve(Telectron,  true, "#ee5555", scaleE);
         drawCurve( Tlattice, false, "#5555ee", scaleL);
+
+        if (data.length == 4) {
+            const Tspin = data[3].map(T => T - INIT_TEMP);
+            const TmaxSpin  = Math.max(...Tspin );
+            const scaleS = 0.9 * TmaxSpin  / absoluteMax;
+            drawCurve( Tspin, false, "#acee55", scaleS);
+        }
+
         timeStep = 1e12 * data[0][1] / 4;
         timeArray = Array.from({length: 5}, (_, i) => (i*timeStep).toFixed(1) + " ps");
         timeArray[0] = "";
@@ -142,6 +152,7 @@ async function setupAnimation() {
     animation_running = false;
 
     if (result_set) {
+        spinTemp = await eel.getFlags("spin_temp")();
         $("#time_val").text("time = 0.00000 ns");
         maxTemperature = await eel.getMaxTemperature()() - MIN_TEMP;
         data = await eel.getResultsSpace(0)();
@@ -155,6 +166,12 @@ async function setupAnimation() {
         drawCurve(Telectron,  true, "#ee5555", scaleE);
         drawCurve( Tlattice, false, "#5555ee", scaleL);
         
+        if (spinTemp) {
+            const Tspin = data[3].map(T => T - MIN_TEMP);
+            const scaleS = 0.9 * Math.max(...Tspin ) / maxTemperature;
+            drawCurve( Tspin, false, "#acee55", scaleS);
+        }
+
         spaceStep = 1e9 * data[0][1] / 4;
         spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toFixed(1) + " nm");
         spaceArray[0] = "";
@@ -215,10 +232,14 @@ async function animateStep() {
     const scaleE = 0.9 * Math.max(...Telectron) / maxTemperature;
     const scaleL = 0.9 * Math.max(...Tlattice ) / maxTemperature;
 
-    drawCurve(Telectron,  true, "#ee5555", scaleE);;
-
     drawCurve(Telectron,  true, "#ee5555", scaleE);
     drawCurve( Tlattice, false, "#5555ee", scaleL);
+
+    if (spinTemp) {
+        const Tspin = data[3].map(T => T - MIN_TEMP);
+        const scaleS = 0.9 * Math.max(...Tspin ) / maxTemperature;
+        drawCurve( Tspin, false, "#acee55", scaleS);
+    }
 
     spaceStep = data[0][1] / 4;
     spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));

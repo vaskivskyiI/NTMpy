@@ -66,9 +66,11 @@ async function drawMenu() {
     $(".table2 td:nth-child(4)").remove();
     $(".table3").empty();
 
+    unit = "[W m<sup>-3</sup> K<sup>-1</sup>]";
+
     if (!spinTemp) {
         $("#check_2T").prop("checked", true);
-        $(".table3").append("<label>Coupling:</label><input style='flex: 1;' class='G_input'></input>")
+        $(".table3").append("<label>Coupling " + unit + ":</label><input style='flex: 1;' class='G_input'></input>")
 
     }
     else if (spinTemp) {
@@ -76,9 +78,10 @@ async function drawMenu() {
         $(".table2 tr:nth-child(1)").append("<td>Spin</td>");
         $(".table2 tr:nth-child(2)").append("<td><div><input class='K_input'></div></td>");
         $(".table2 tr:nth-child(3)").append("<td><div><input class='C_input'></div></td>");
-        $(".table3").append("<label>Coupling EL:</label><input style='flex: 1;' class='G_input'></input>");
-        $(".table3").append("<label style='margin-left:12px'>ES:</label><input style='flex: 1;' class='G_input'></input>");
-        $(".table3").append("<label style='margin-left:12px'>LS:</label><input style='flex: 1;' class='G_input'></input>");
+        $(".table3").append("<span style='width:160 px; flex:none'>Coupling " + unit + "</span>");
+        $(".table3").append("<label style='margin-left:12px'>EL:</label><input style='flex: 1;' size='10' class='G_input'></input>");
+        $(".table3").append("<label style='margin-left:12px'>ES:</label><input style='flex: 1;' size='10' class='G_input'></input>");
+        $(".table3").append("<label style='margin-left:12px'>LS:</label><input style='flex: 1;' size='10' class='G_input'></input>");
     } 
 
 }

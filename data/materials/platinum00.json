@@ -1,0 +1,17 @@
+{
+    "id": "Platinum - paper NTMpy Alber 2021",
+    "num_temp": 2,
+    "name": "Platinum",
+    "rho": "1",
+    "K": [
+        "72",
+        "72"
+    ],
+    "C": [
+        "740*T",
+        "2.78e6"
+    ],
+    "G": [
+        "2.5e17"
+    ]
+}

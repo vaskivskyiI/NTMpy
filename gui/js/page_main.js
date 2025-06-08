@@ -32,10 +32,12 @@ $(document).ready(async function(){
     });
 
     if (await eel.getTime("simulation")() > 0)
-    {    $("#sim_time").val((await eel.getTime("simulation")()).toExponential(4)); }
+    {    $("#sim_time").val(((await eel.getTime("simulation")())*1e12).toFixed(3)); }
     if (await eel.getFlags("result_set")())
     {   $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds"); }
     
+    $("#step_mode").on("click", changeMode)
+
     checkFlags();
 
 });
@@ -134,7 +136,9 @@ async function delFile() {
 }
 
 async function runSimulation() {
-    const finalTime = parseFloat($("#sim_time").val());
+    let finalTime;
+    if ($("#step_mode").is(":checked")) { finalTime = parseFloat($("#sim_time").val()); }
+    else { finalTime = parseInt($("#sim_time").val())*1e-12; }
     const sourceSet = await eel.getFlags("source_set")();
     const layersSet = await eel.getFlags("layers_set")();
     
@@ -148,7 +152,8 @@ async function runSimulation() {
             $("#helpbar").text(error);
             return;
         }
-        $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds");
+        $("#comp_time").text((await eel.getTime("computation")()).toExponential(4) + " seconds");
+        $("#step_mode").prop("checked",false)
         $("#helpbar").css("color", "#00ff00");
         $("#helpbar").text("Simulation finished");
     }
@@ -197,13 +202,26 @@ async function checkFlags() {
     if (await eel.getFlags("result_set")()) {
         $("#resultStatus .light").css("background-color","#00ff00")
         $("#resultStatus .text" ).text("Results available");
-        $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds");
-        $( "#sim_time").val((await eel.getTime("simulation" )()).toExponential(4));
+        $("#comp_time").text((await eel.getTime("computation")()).toExponential(4) + " seconds");
+        $( "#sim_time").val(((await eel.getTime("simulation" )())*1e12).toFixed(3));
     } else {
         $("#resultStatus .light").css("background-color","#ff0000")
         $("#resultStatus .text" ).text("Results not available");
         $("#comp_time").text("Never run");
     }
     
+}
+
+function changeMode() {
+    const stepMode = $(this).is(":checked");
+    if (stepMode) {
+        $("#sim_type").text("Total simulation steps");
+        $("#helpbar").css("color", "#ffffff");
+        $("#helpbar").text("Step mode enabled");
+    } else {
+        $("#sim_type").text("Total simulation time [ps]");
+        $("#helpbar").css("color", "#ffffff");
+        $("#helpbar").text("Step mode disabled");
+    }
 }
 

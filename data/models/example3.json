@@ -1,0 +1,53 @@
+{
+    "flags": {
+        "spin_temp": true,
+        "reflection": true,
+        "substrate": false,
+        "source_set": true,
+        "almost_set": true,
+        "layers_set": true,
+        "result_set": true
+    },
+    "laser": {
+        "energy": 50,
+        "fwhm": 1e-13,
+        "delay": 5e-13,
+        "wavelength": 4.0000000000000003e-07,
+        "angle": 0.7853981633974483,
+        "polarization": "P"
+    },
+    "layers": [
+        {
+            "name": "Nichel",
+            "length": 2e-08,
+            "rho": 8908,
+            "K": [
+                "1",
+                "1",
+                "1"
+            ],
+            "C": [
+                "6e3/8908*T",
+                "2.2e6/8908",
+                "0.180*T"
+            ],
+            "G": [
+                "8e17",
+                "6e17",
+                "0.3e17"
+            ]
+        }
+    ],
+    "nindex": [
+        {
+            "l": null,
+            "nr": 1.7163,
+            "ni": 2.5925
+        }
+    ],
+    "time": {
+        "simulation": 1e-11,
+        "computation": 0.19780778884887695
+    },
+    "expdata": ""
+}

@@ -1,0 +1,78 @@
+{
+    "flags": {
+        "spin_temp": false,
+        "reflection": true,
+        "substrate": true,
+        "source_set": true,
+        "almost_set": true,
+        "layers_set": true,
+        "result_set": true
+    },
+    "laser": {
+        "energy": 60,
+        "fwhm": 1e-13,
+        "delay": 2e-13,
+        "wavelength": 4.0000000000000003e-07,
+        "angle": 0.7853981633974483,
+        "polarization": "P"
+    },
+    "layers": [
+        {
+            "name": "Platinum",
+            "length": 1e-08,
+            "rho": 1,
+            "K": [
+                "72",
+                "72",
+                null
+            ],
+            "C": [
+                "740*T",
+                "2.78e6",
+                null
+            ],
+            "G": [
+                "2.5e17",
+                null,
+                null
+            ]
+        },
+        {
+            "name": "Silicon",
+            "length": 0.0001,
+            "rho": 1,
+            "K": [
+                "130",
+                "130",
+                null
+            ],
+            "C": [
+                "150*T",
+                "1.6e6",
+                null
+            ],
+            "G": [
+                "18e17",
+                null,
+                null
+            ]
+        }
+    ],
+    "nindex": [
+        {
+            "l": null,
+            "nr": 1.7176,
+            "ni": 2.844
+        },
+        {
+            "l": null,
+            "nr": 5.5674,
+            "ni": 0.38612
+        }
+    ],
+    "time": {
+        "simulation": 7e-12,
+        "computation": 14.386352300643921
+    },
+    "expdata": ""
+}

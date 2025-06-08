@@ -24,7 +24,7 @@ def saveFile(filename="ntmpy_save", path="./data/models/"):
             return("Successfully saved to " + filename + ".json and " + filename + ".npz")
         elif flags["result_set"] and flags["spin_temp"]:
             outdir[0] = "../output/" if path == "./data/models/" else ""
-            savez(path + filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1], Ts=out["T"][2])
+            savez(path + outdir[0] + filename, x = out["x"], t=out["t"], Te=out["T"][0], Tl=out["T"][1], Ts=out["T"][2])
             return("Successfully saved to " + filename + ".json and " + filename + ".npz")
         return("Successfully saved to " + path + filename + ".json")
     except Exception as e:

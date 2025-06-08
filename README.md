@@ -43,12 +43,6 @@ Further informations can be found on the [paper](https://www.sciencedirect.com/s
 
 ------------------------------------------------------------------------------------------------------------------
 
-# How to install
-The standard version of NTMpy, which follows the documentation on the original udcm-su [repository](https://github.com/udcm-su/NTMpy), can be installed via `pip install NTMpy`.</br>
-The version on this repository is a successive version, currently under development. You can use it by cloning the repository and instering the code fonder in your path or by manually importing it.
-
-------------------------------------------------------------------------------------------------------------------
-
 # How to use NTMpy
 NTMpy provides a set of classes to simulate coupled heat equation with 2 or 3 temperature in a multilayer system.
 The simulation parameters are customizable, but the codes can choose them automatically if not given by the user.
@@ -126,9 +120,7 @@ Please, cite the reference [paper](https://www.sciencedirect.com/science/article
 }`
 
 ## Dependencies
-NTMpy has four dependencies: [Numpy](http://www.numpy.org/), [Matplotlib](https://matplotlib.org/), [B-splines](https://github.com/johntfoster), and [Progressbar](https://pypi.org/project/tqdm/2.2.3/)
-
-You can download the package via `pip install NTMpy` a automatically install the missing packages. Note that the NTMpy available on PyPi is an old version!
+NTMpy has four dependencies: [Numpy](http://www.numpy.org/), [Matplotlib](https://matplotlib.org/), [B-splines](https://github.com/johntfoster), [Eel-Jinja2](https://github.com/python-eel/Eel) and [Progressbar](https://pypi.org/project/tqdm/2.2.3/)
 
   
 

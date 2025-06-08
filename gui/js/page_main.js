@@ -34,7 +34,7 @@ $(document).ready(async function(){
     if (await eel.getTime("simulation")() > 0)
     {    $("#sim_time").val(((await eel.getTime("simulation")())*1e12).toFixed(3)); }
     if (await eel.getFlags("result_set")())
-    {   $("#comp_time").text((await eel.getTime("computation")()).toExponential(3) + " seconds"); }
+    {   $("#comp_time").text((await eel.getTime("computation")()).toFixed(4) + " seconds"); }
     
     $("#step_mode").on("click", changeMode)
 
@@ -152,7 +152,7 @@ async function runSimulation() {
             $("#helpbar").text(error);
             return;
         }
-        $("#comp_time").text((await eel.getTime("computation")()).toExponential(4) + " seconds");
+        $("#comp_time").text((await eel.getTime("computation")()).toFixed(4) + " seconds");
         $("#step_mode").prop("checked",false)
         $("#helpbar").css("color", "#00ff00");
         $("#helpbar").text("Simulation finished");
@@ -202,7 +202,7 @@ async function checkFlags() {
     if (await eel.getFlags("result_set")()) {
         $("#resultStatus .light").css("background-color","#00ff00")
         $("#resultStatus .text" ).text("Results available");
-        $("#comp_time").text((await eel.getTime("computation")()).toExponential(4) + " seconds");
+        $("#comp_time").text((await eel.getTime("computation")()).toFixed(4) + " seconds");
         $( "#sim_time").val(((await eel.getTime("simulation" )())*1e12).toFixed(3));
     } else {
         $("#resultStatus .light").css("background-color","#ff0000")

@@ -43,7 +43,8 @@ def getResultsSpace(time):
     if not flags["substrate"]:
         equispaced = np.linspace(space[0], space[-1], 512)
     else:
-        equispaced = np.linspace(0, 1.2 * np.sum([layer["length"] for layer in layers[:-1]]), 512)
+        equispaced = np.linspace(0, 4/3 * np.sum([layer["length"] for layer in layers[:-1]]), 512)
+        
     temp_electron = np.interp(equispaced, space, temp_electron)
     temp_lattice  = np.interp(equispaced, space, temp_lattice )
 
@@ -52,6 +53,9 @@ def getResultsSpace(time):
         temp_spin += out["T"][2][:, int(np.ceil( t_index))] * weight2
         temp_spin  = np.interp(equispaced, space, temp_spin)
         return [[space[0], space[-1]], list(temp_electron), list(temp_lattice), list(temp_spin)]
+
+    if flags["substrate"]:
+        space = [0, 4/3 * np.sum([layer["length"] for layer in layers[:-1]])]
 
     return [[space[0], space[-1]], list(temp_electron), list(temp_lattice)] 
 

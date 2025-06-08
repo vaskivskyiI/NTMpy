@@ -39,7 +39,7 @@
         },
         {
             "name": "Silicon",
-            "length": 0.0001,
+            "length": 1.0000000000000002e-06,
             "rho": 1,
             "K": [
                 "130",
@@ -71,8 +71,8 @@
         }
     ],
     "time": {
-        "simulation": 7e-12,
-        "computation": 14.386352300643921
+        "simulation": 5e-12,
+        "computation": 13.845133781433105
     },
     "expdata": ""
 }

@@ -153,7 +153,7 @@ async function setupAnimation() {
 
     if (result_set) {
         spinTemp = await eel.getFlags("spin_temp")();
-        $("#time_val").text("time = 0.00000 ns");
+        $("#time_val").text("time = 0.000 ps");
         maxTemperature = await eel.getMaxTemperature()() - MIN_TEMP;
         data = await eel.getResultsSpace(0)();
         
@@ -241,17 +241,17 @@ async function animateStep() {
         drawCurve( Tspin, false, "#acee55", scaleS);
     }
 
-    spaceStep = data[0][1] / 4;
-    spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toExponential(1));
+    spaceStep = 1e9 * data[0][1] / 4;
+    spaceArray = Array.from({length: 5}, (_, i) => (i*spaceStep).toFixed(1) + " nm");
     spaceArray[0] = "";
     drawLabelsX(spaceArray);
-
-    const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + 0.45*i*maxTemperature).toFixed(0))
+    
+    const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + 0.45*i*maxTemperature).toFixed(0) + " K")
     drawLabelsY(labels);
 
     const timeStep = finalTime / TOTAL_FRAMES;
     animationTime += timeStep * multiplier;
-    $("#time_val").text("time = " + (1e9*animationTime).toFixed(5) + " ns");
+    $("#time_val").text("time = " + (1e12*animationTime).toFixed(3) + " ps");
     
     if (animationTime < 0 || animationTime > finalTime) {
         clearInterval(timer);

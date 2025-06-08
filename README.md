@@ -96,7 +96,8 @@ Any collaboration would be very appreciated
 ------------------------------------------------------------------------------------------------------------------
 
 ## About the authors 
-NTMpy was a project of the [Ultrafast Condensed Matter physics groupe](http://udcm.fysik.su.se/) at the Stockholm University. The main contributors are: 
+NTMpy was a project of the [Ultrafast Condensed Matter physics groupe](http://udcm.fysik.su.se/) at the Stockholm University.</br>
+The main contributors are: 
 * [Valentino Scalera](https://github.com/VaSca92)
 * [Lukas Alber](https://github.com/luksen99)
 * [Vivek Unikandanunni](https://github.com/VivekUUnni)

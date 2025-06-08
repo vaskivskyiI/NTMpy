@@ -8,25 +8,47 @@
     <div class="headerpanel">Curve Fitting</div>
 
     <div class="content">
+        
         <div style="flex: none; display: flex; flex-direction: column; justify-content: flex-start;">
-            <canvas id="error_plot" width="550" height="200" style="margin-top: 10px;"></canvas>
-            <canvas id="temp_plot" width="550" height="200"></canvas>
+            <canvas id="error_plot" width="520" height="220" style="margin-top: 10px;"></canvas>
+            <canvas id="temp_plot" width="520" height="220"></canvas>
         </div>
-        <div style="flex: 1; display: flex; flex-direction: column; ">
-            <label>Layer selected:<span> <i style="margin-left: 2px;">Click on a layer to select it</i></span></label>
-            <label>Fitting parameter:</label>
-            <select id="curve_select" class="dropdown">
-                <option value="0">Electron-Lattice Coupling</option>
-            </select>
-            <label>Expression:</label>
-            <input>
-            <label style="display: flex; justify-content: space-between;">
-                <span>Initial value:</span><input style="flex: 1; margin-left: 10px;">
-            </label>
-            <span display="flex" style="margin-top: 10px; justify-content: space-between;">
-                <button class="button" style="flex: 1;">Start</button>
-                <button class="button" style="flex: 1;">Stop</button>
-            </span>
+
+        <div style="flex: 1; display: flex; flex-direction: column;">
+            <div style="flex:1; display: flex; flex-direction: column;">
+                <label>Layer selected:<span> <i style="margin-left: 2px;">Click on a layer to select it</i></span></label>
+                <label>Fitting parameter:</label>
+                <select id="curve_select" class="dropdown">
+                    <option value="-1">Select the property to fit...</option>
+                    <option value="0">Electron Thermal Capacity    </option>
+                    <option value="1">Electron Thermal Conductivity</option>
+                    <option value="2">Lattice Thermal Capacity     </option>
+                    <option value="3">Lattice Thermal Conductivity </option>
+                    <option value="4">Electron-Lattice Coupling    </option>
+                </select>
+                <label>Expression:</label>
+                <input style="margin-bottom: 10px;">
+                <label style="display: flex; justify-content: space-between;">
+                    <span style="width:170px; text-align: right;">Initial value:</span>
+                    <input size="10" style="flex: 1; margin-left: 10px;">
+                </label>
+                <label style="display: flex; justify-content: space-between;">
+                    <span style="width:170px; text-align: right;">Experimental data file:</span>
+                    <input size="10" style="flex: 1; margin-left: 10px;">
+                </label>
+                <label style="display: flex; justify-content: space-between;">
+                    <span style="width:170px; text-align: right;">Iteration number:</span>
+                    <input type="number" size="10" style="flex: 1; margin-left: 10px;">
+                </label>
+            </div>
+            
+            <div style="display: flex; flex-direction: column;">
+                <span style="text-align: center; margin: 10px;"><label>Fitting value: </label><label id="result"></label></span>
+                <span style="display: flex; margin-top: 10px; margin-bottom: 15px;">
+                    <button id="start" class="button" style="flex: 1;">Start</button>
+                    <button id="stop"  class="button" style="flex: 1;">Stop</button>
+                </span>
+            </div>
         </div>  
     </div>
 

@@ -1,17 +1,17 @@
-#navbar a:nth-child(5) {
+#navbar a:nth-child(5), #start {
   background-image: linear-gradient(180deg, #ad1e42,#641327)
 }
 
-#navbar a:nth-child(5):hover {
+#navbar a:nth-child(5):hover, #start:hover {
   background-image: linear-gradient(180deg, #e71a4d,#881a36)
 }
 
-.headerpanel {
+.headerpanel, #stop {
     background-image: linear-gradient(180deg, #2a398d,#162266);
     font-weight: bold;
 }
 
-.headerpanel:hover {
+.headerpanel:hover, #stop:hover {
     background-image: linear-gradient(180deg, #475fe7,#2135a5);
 }
 .content {
@@ -21,5 +21,9 @@
 }
 
 .content label {
-  margin: 18 0 8 0;
+  margin: 8 0 8 0;
+}
+
+input, select {
+  height: 30px;
 }

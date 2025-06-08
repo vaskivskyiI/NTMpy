@@ -1,9 +1,11 @@
+const PLOT_PADDING = [-0,-20,-30,-20];
+
 $(document).ready(function() {
 
 
     drawMaterial()
-    drawAxis("error_plot", [-10,-10,-10,-10])
-    drawAxis( "temp_plot", [-10,-10,-10,-10]);
+    drawAxis("error_plot", PLOT_PADDING)
+    drawAxis( "temp_plot", PLOT_PADDING);
 });
 
 

@@ -5,15 +5,15 @@ const PADDING_DW = 35; // Bottom padding
 const PADDING_UP = 10; // Top padding
 let plot_offset = 0;
 
-function drawAxis() {
-    let canvas = document.getElementById("plot") 
+function drawAxis(id = "plot", margin = [0, 0, 0, 0]) {
+    let canvas = document.getElementById(id) 
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
 
-    let y0 = PADDING_UP;
-    let y1 = canvas.height - PADDING_DW;
-    let x0 = PADDING_LX + plot_offset;
-    let x1 = canvas.width - PADDING_RX;
+    let y0 = PADDING_UP + margin[0];
+    let y1 = canvas.height - PADDING_DW - margin[1];
+    let x0 = PADDING_LX + plot_offset + margin[2];
+    let x1 = canvas.width - PADDING_RX - margin[3];
 
     ctx.lineWidth = 2;
     ctx.setLineDash([2,0]); 
@@ -43,13 +43,13 @@ function drawAxis() {
 
 }
 
-function drawLabelsX(text) {
+function drawLabelsX(text, margin = [0, 0, 0, 0]) {
     let canvas = document.getElementById("plot"); 
     let ctx = canvas.getContext("2d");
-    let y0 = PADDING_UP;
-    let y1 = canvas.height - PADDING_DW;
-    let x0 = PADDING_LX + plot_offset;
-    let x1 = canvas.width - PADDING_RX;
+    let y0 = PADDING_UP + margin[0];
+    let y1 = canvas.height - PADDING_DW - margin[1];
+    let x0 = PADDING_LX + plot_offset + margin[2];
+    let x1 = canvas.width - PADDING_RX - margin[3];
 
     ctx.strokeStyle = "white";
 
@@ -59,13 +59,13 @@ function drawLabelsX(text) {
     for (k = 0; k <= 4; k++) { ctx.fillText(text[k], (k*x1 + (4-k)*x0)/4 - 30, y1 + 20);}
 }
 
-function drawLabelsY(text) {
+function drawLabelsY(text, margin = [0, 0, 0, 0]) {
     let canvas = document.getElementById("plot"); 
     let ctx = canvas.getContext("2d");
-    let y0 = PADDING_UP;
-    let y1 = canvas.height - PADDING_DW;
-    let x0 = PADDING_LX + plot_offset;
-    let x1 = canvas.width - PADDING_RX;
+    let y0 = PADDING_UP + margin[0];
+    let y1 = canvas.height - PADDING_DW - margin[1];
+    let x0 = PADDING_LX + plot_offset + margin[2];
+    let x1 = canvas.width - PADDING_RX - margin[3];
 
     ctx.strokeStyle = "white";
 
@@ -75,15 +75,15 @@ function drawLabelsY(text) {
     for (k = 0; k <= 2; k++) { ctx.fillText(text[k], x0 - 50, (k*y0 + (2-k)*y1)/2 + 5);}
 }
 
-function drawCurve(data, clear = true, color = "white", scale = 0.9) {
+function drawCurve(data, clear = true, color = "white", scale = 0.9, margin = [0, 0, 0, 0]) {
     let canvas = document.getElementById("plot"); 
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
 
-    let y0 =  0;
-    let y1 = canvas.height - PADDING_DW;
-    let x0 = PADDING_LX + plot_offset;
-    let x1 = canvas.width - PADDING_RX;
+    let y0 = PADDING_UP + margin[0];
+    let y1 = canvas.height - PADDING_DW - margin[1];
+    let x0 = PADDING_LX + plot_offset + margin[2];
+    let x1 = canvas.width - PADDING_RX - margin[3];
     
     // Clear canvas
     if (clear) {ctx.clearRect(0, 0, canvas.width, canvas.height); }

@@ -1,14 +1,23 @@
 $(document).ready(function() {
 
 
-    $("#advanced_header").on("click", function() {
-        $("#advanced_panel").slideToggle(300);
-    });
-
-    $("#sim_type").on("change", async function() {
-        const simType = $(this).val();
-        // TODO: Handle simulation type change
-        $("#helpbar").css("color", "#ffffff");
-        $("#helpbar").text("Simulation type changed to " + simType);
-    });
+    drawMaterial()
+    drawAxis("error_plot", [-10,-10,-10,-10])
+    drawAxis( "temp_plot", [-10,-10,-10,-10]);
 });
+
+
+async function drawMaterial() {
+
+    const layers = await eel.getLayers()();
+    const layersState = await eel.checkLayers()();
+
+    let labels = [];
+    layers.forEach(function(layer) { labels.push(layer.name); });
+    await drawMaterial_core(labels, layersState);
+    $(".canvas > div").on("click", selectLayer);
+}
+
+async function selectLayer() {
+
+}

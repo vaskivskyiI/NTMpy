@@ -5,3 +5,21 @@
 #navbar a:nth-child(5):hover {
   background-image: linear-gradient(180deg, #e71a4d,#881a36)
 }
+
+.headerpanel {
+    background-image: linear-gradient(180deg, #2a398d,#162266);
+    font-weight: bold;
+}
+
+.headerpanel:hover {
+    background-image: linear-gradient(180deg, #475fe7,#2135a5);
+}
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+}
+
+.content label {
+  margin: 18 0 8 0;
+}

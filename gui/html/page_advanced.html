@@ -5,12 +5,30 @@
 <link rel="stylesheet" type="text/css" href="../css/page_advanced.css">
 
 <div style="flex: 1;">
-    <div class="headerpanel" id="advanced_header">Save material</div>
-    <div class="content" id="advanced_panel">
-        <div class="data_container">
-            Under development
+    <div class="headerpanel">Curve Fitting</div>
+
+    <div class="content">
+        <div style="flex: none; display: flex; flex-direction: column; justify-content: flex-start;">
+            <canvas id="error_plot" width="550" height="200" style="margin-top: 10px;"></canvas>
+            <canvas id="temp_plot" width="550" height="200"></canvas>
         </div>
+        <div style="flex: 1; display: flex; flex-direction: column; ">
+            <label>Layer selected:<span> <i style="margin-left: 2px;">Click on a layer to select it</i></span></label>
+            <label>Fitting parameter:</label>
+            <select id="curve_select" class="dropdown">
+                <option value="0">Electron-Lattice Coupling</option>
+            </select>
+            <label>Expression:</label>
+            <input>
+            <label style="display: flex; justify-content: space-between;">
+                <span>Initial value:</span><input style="flex: 1; margin-left: 10px;">
+            </label>
+            <span display="flex" style="margin-top: 10px; justify-content: space-between;">
+                <button class="button" style="flex: 1;">Start</button>
+                <button class="button" style="flex: 1;">Stop</button>
+            </span>
+        </div>  
     </div>
+
 </div>
 {% endblock %}
- 

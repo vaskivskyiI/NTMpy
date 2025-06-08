@@ -107,7 +107,8 @@ You can contact me via [email](mailto:valentino.scalera@uniparthenope.it) if you
 
 ## How to cite 
 Please, cite the reference [paper](https://www.sciencedirect.com/science/article/pii/S0010465521001028):</br>
-`@article{alber2020ntmpy,
+```
+@article{alber2020ntmpy,
     title={NTMpy: An open source package for solving coupled parabolic differential equations in the framework of the three-temperature model},
     author = {Lukas Alber and Valentino Scalera and Vivek Unikandanunni and Daniel Schick and Stefano Bonetti},
     journal = {Computer Physics Communications},
@@ -117,7 +118,8 @@ Please, cite the reference [paper](https://www.sciencedirect.com/science/article
     issn = {0010-4655},
     doi = {https://doi.org/10.1016/j.cpc.2021.107990},
     url = {https://www.sciencedirect.com/science/article/pii/S0010465521001028}
-}`
+}
+```
 
 ## Dependencies
 NTMpy has four dependencies: [Numpy](http://www.numpy.org/), [Matplotlib](https://matplotlib.org/), [B-splines](https://github.com/johntfoster), [Eel-Jinja2](https://github.com/python-eel/Eel) and [Progressbar](https://pypi.org/project/tqdm/2.2.3/)

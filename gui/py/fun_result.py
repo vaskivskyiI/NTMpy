@@ -1,6 +1,7 @@
 import eel
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 from gui.py.variables import out, current_data, flags, layers
 
@@ -66,35 +67,83 @@ def getMaxTemperature():
 
 # Plot with matplotlib ##########################
 @eel.expose
-def plotPython():
-    plt.plot(out["t"]*1e12, out["T"][0][0])
-    plt.plot(out["t"]*1e12, out["T"][1][0])
-    if flags["spin_temp"]:
-        plt.plot(out["t"]*1e12, out["T"][2][0])
+def plotPython(penetration = 0):
+    if penetration > 0:
+        penetration  = np.exp(-out["x"]/penetration)
+        penetration *= np.append(np.diff(out["x"]), 0.0)
+        penetration /= np.sum(penetration)
+        temp_electron = penetration @ out["T"][0]
+        temp_lattice  = penetration @ out["T"][1]
+    else:
+        temp_electron = out["T"][0][0]
+        temp_lattice  = out["T"][1][0]
+    plt.plot(out["t"]*1e12, temp_electron)
+    plt.plot(out["t"]*1e12, temp_lattice)
     plt.grid()
     plt.xlim(out["t"][0]*1e12, out["t"][-1]*1e12)
     plt.ylim(300, (max(np.max(out["T"][0][0]),np.max(out["T"][1][0])) - 300) * 1.1 + 300) 
     legend = ["Electron temperature", "Lattice temperature"]
-    if flags["spin_temp"]: 
+
+    if flags["spin_temp"]:
+        temp_spin = penetration @ out["T"][2] if penetration > 0 else out["T"][2][0]
+        plt.plot(out["t"]*1e12, temp_spin)
         legend.append("Spin temperature")
+    
+    try:
+        data = np.loadtxt(current_data[0], delimiter=",")
+        def interpolant(x, a, b):
+            return a * np.interp(x, out["t"], temp_electron) + b
+
+        fit = curve_fit(interpolant, data[:,0], data[:,1])[0]
+
+        data[:,1] -= fit[1]
+        data[:,1] /= fit[0]
+
+        data[:,0] *= 1e12
+
+        plt.plot(data[:,0], data[:,1], "o")
+        legend.append("Experimental data")
+    except:
+        pass
+
     plt.legend(legend)
     plt.xlabel("Time [ps]")
     plt.ylabel("Temperature [K]")
     plt.show()
+    
 
 # Read experimental data ########################
 @eel.expose
-def getExperimental(filename = "./data/"):
+def getExperimental(filename = "./data/", penetration = 0.0):
     try:
         data = np.loadtxt(filename, delimiter=",")
-        data[:,0] /= out["t"][-1]
-        data[:,1] -= data[0,1]
-        ratio = (out["T"][0][0][-1]-300) / (np.max(out["T"][0][0])-300)
-        data[:,1] *= ratio / data[-1][-1]
-        current_data[0] = filename
-        return [list(data[:,0]), list(data[:,1])]
     except:
         return "Error: data not found or invalid format"
+
+    if penetration > 0:
+        penetration  = np.exp(-out["x"]/penetration)
+        penetration *= np.append(np.diff(out["x"]), 0.0)
+        penetration /= np.sum(penetration)
+        temp_electron = penetration @ out["T"][0] - 300
+    else:
+        temp_electron = out["T"][0][0] - 300
+
+    def interpolant(x, a, b):
+        return a * np.interp(x, out["t"], temp_electron) + b
+
+    fit = curve_fit(interpolant, data[:,0], data[:,1])[0]
+
+    data[:,1] -= fit[1]
+    data[:,1] /= fit[0]
+    data[:,1] /= np.max(temp_electron)
+
+    data[:,0] -= out["t"][0]
+    data[:,0] /= out["t"][-1] - out["t"][0]
+
+
+    current_data[0] = filename
+    return [list(data[:,0]), list(data[:,1])]
+
     
 @eel.expose
 def getDataFilename():

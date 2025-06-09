@@ -7,9 +7,9 @@ from gui.py.variables import out, current_data, flags, layers
 
 # Plot Temperature in time ######################
 @eel.expose
-def getResultsTime(penetration_depth = 0.0):
-    if penetration_depth > 0.0:
-        penetration  = np.exp(-out["x"]/penetration_depth)
+def getResultsTime(penetration = 0.0):
+    if penetration > 0.0:
+        penetration  = np.exp(-out["x"]/penetration)
         penetration *= np.append(np.diff(out["x"]), 0.0)
         penetration /= np.sum(penetration)
         temp_electron = penetration @ out["T"][0]
@@ -22,7 +22,7 @@ def getResultsTime(penetration_depth = 0.0):
     temp_lattice  = np.interp(time, out["t"], temp_lattice)
 
     if flags["spin_temp"]:
-        temp_spin = penetration @ out["T"][2] if penetration_depth > 0.0 else out["T"][2][0]
+        temp_spin = penetration @ out["T"][2] if np.any(penetration) > 0.0 else out["T"][2][0]
         temp_spin = np.interp(time, out["t"], temp_spin)
         return [[time[0], time[-1]], list(temp_electron), list(temp_lattice), list(temp_spin)]
     
@@ -81,11 +81,11 @@ def plotPython(penetration = 0):
     plt.plot(out["t"]*1e12, temp_lattice)
     plt.grid()
     plt.xlim(out["t"][0]*1e12, out["t"][-1]*1e12)
-    plt.ylim(300, (max(np.max(out["T"][0][0]),np.max(out["T"][1][0])) - 300) * 1.1 + 300) 
+    plt.ylim(300, (max(np.max(temp_electron), np.max(temp_lattice)) - 300) * 1.1 + 300) 
     legend = ["Electron temperature", "Lattice temperature"]
 
     if flags["spin_temp"]:
-        temp_spin = penetration @ out["T"][2] if penetration > 0 else out["T"][2][0]
+        temp_spin = penetration @ out["T"][2] if np.any(penetration) > 0 else out["T"][2][0]
         plt.plot(out["t"]*1e12, temp_spin)
         legend.append("Spin temperature")
     

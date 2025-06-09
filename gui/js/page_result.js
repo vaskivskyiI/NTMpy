@@ -97,7 +97,7 @@ async function plotTemperature() {
         timeArray[0] = "";
         drawLabelsX(timeArray);
 
-        const labels = Array.from({length: 3}, (_, i) => (INIT_TEMP + 0.45*i*absoluteMax).toFixed(0) + " K")
+        const labels = Array.from({length: 3}, (_, i) => (INIT_TEMP + i/1.8*absoluteMax).toFixed(0) + " K")
         drawLabelsY(labels);
 
         $("#helpbar").css("color","#ffffff");
@@ -114,7 +114,10 @@ async function plotExperiment() {
 
     if (result_set) {
         await plotTemperature();
-        data = await eel.getExperimental($("#data_file").val())();
+        if ($("#plot_exp").prop("checked") && !isNaN(parseFloat($("#penetration").val()))) {
+            penetration = parseFloat($("#penetration").val());
+        } else {penetration = 0;}
+        data = await eel.getExperimental($("#data_file").val(), penetration)();
         if (data instanceof Array) {
             data[1] = data[1].map(R => R*0.9);
             drawDots(data[0], data[1], "#88ff00");
@@ -136,7 +139,13 @@ async function plotPython() {
 
     const result_set = await eel.getFlags("result_set")();
 
-    if (result_set) { eel.plotPython()(); }
+    if (result_set) {
+        if ($("#plot_exp").prop("checked") && !isNaN(parseFloat($("#penetration").val()))) {
+            penetration = parseFloat($("#penetration").val());
+        } else {penetration = 0;}
+        
+        eel.plotPython(penetration)();
+    }
     else {
         $("#helpbar").css("color","#ff5555");
         $("#helpbar").text("No results available")
@@ -177,7 +186,7 @@ async function setupAnimation() {
         spaceArray[0] = "";
         drawLabelsX(spaceArray);
 
-        const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + 0.45*i*maxTemperature).toFixed(0) + " K")
+        const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + i/1.8*maxTemperature).toFixed(0) + " K")
         drawLabelsY(labels);
 
         animation_set = true;
@@ -246,7 +255,7 @@ async function animateStep() {
     spaceArray[0] = "";
     drawLabelsX(spaceArray);
     
-    const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + 0.45*i*maxTemperature).toFixed(0) + " K")
+    const labels = Array.from({length: 3}, (_, i) => (MIN_TEMP + i/1.8*maxTemperature).toFixed(0) + " K")
     drawLabelsY(labels);
 
     const timeStep = finalTime / TOTAL_FRAMES;

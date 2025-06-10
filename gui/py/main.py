@@ -16,7 +16,7 @@ from gui.py.variables import flags, laser, layers, nindex, src, out, time, curre
 def runSimulation(final_time):
     time["simulation"] = final_time
     src_init()
-    sim = build_material()
+    sim = build_material(layers)
     if flags["substrate"]: sim.substrate = True
     if isinstance(sim, int):
         return "Error: some material property is not valid (maybe layer " + str(sim+1) + ")"
@@ -32,7 +32,7 @@ def runSimulation(final_time):
     
 
 # Build Material ####################################
-def build_material():
+def build_material(layers=layers):
     safe_layers = sanitize(layers)
     if isinstance(safe_layers, int): return safe_layers
     
@@ -120,20 +120,20 @@ def input_control(input):
     try:
         f = eval(input)
         return input
-    except:
-        try:
-            if not flags["spin_temp"]:
-                f = eval("lambda Te, Tl:" + input)
-                dummy = f(array([1,2,3]), array([1,2,3]))
-                return "lambda Te, Tl:" + input
-            else:
-                f = eval("lambda Te, Tl, Ts:" + input)
-                dummy = f(array([1,2,3]), array([1,2,3]))
-                return "lambda Te, Tl:" + input
-        except:
-            try:
-                f = eval("lambda T:" + input)
-                dummy = f(array([1,2,3]))
-                return "lambda T:" + input
-            except:
-                return -1
+    except: pass
+    try:
+        if not flags["spin_temp"]:
+            f = eval("lambda Te, Tl:" + input)
+            dummy = f(array([1,2,3]), array([1,2,3]))
+            return "lambda Te, Tl:" + input
+        else:
+            f = eval("lambda Te, Tl, Ts:" + input)
+            dummy = f(array([1,2,3]), array([1,2,3]))
+            return "lambda Te, Tl:" + input
+    except: pass
+    try:
+        f = eval("lambda T:" + input)
+        dummy = f(array([1,2,3]))
+        return "lambda T:" + input
+    except: pass
+    return -1

@@ -5,6 +5,7 @@ import gui.py.fun_material # type: ignore
 import gui.py.fun_source # type: ignore
 import gui.py.fun_files # type: ignore
 import gui.py.fun_result # type: ignore
+import gui.py.fun_fit # type: ignore
 import gui.py.main # type: ignore
 
 

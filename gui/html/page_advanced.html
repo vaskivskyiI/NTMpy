@@ -39,18 +39,27 @@
                     <input size="10" style="flex: 1; margin-left: 10px;">
                 </label>
                 <label style="display: flex; justify-content: space-between;">
+                    <span style="width:170px; text-align: right;">Penetration depth:</span>
+                    <input size="10" style="flex: 1; margin-left: 10px;">
+                </label>
+                <label style="display: flex; justify-content: space-between;">
                     <span style="width:170px; text-align: right;">Iteration number:</span>
                     <input type="number" size="10" style="flex: 1; margin-left: 10px;">
                 </label>
             </div>
             
             <div style="display: flex; flex-direction: column;">
-                <span style="text-align: center; margin: 10px;">
-                    <label>Fitting value: </label><label id="result"></label>
+                <span style="text-align: center; margin: 10px; display: flex; justify-content: space-between;">
+                    <label style="width: 25%">fitting value: </label><label id="result1" style="width: 20%;"></label>
+                    <span style="width: 10%"></span>
+                    <label style="width: 25%">fitting error: </label><label id="result2" style="width: 20%;"></label>
                 </span>
-                <span style="display: flex; margin-top: 10px; margin-bottom: 15px;">
+                <span style="display: flex; margin-top: 10px; margin-bottom: 0px;">
                     <button id="start" class="button" style="flex: 1;">Start</button>
                     <button id="stop"  class="button" style="flex: 1;">Stop</button>
+                </span>
+                <span style="display: flex; margin-top: 0px; margin-bottom: 15px;">
+                    <button id="apply"  class="button" style="flex: 1;">Apply to the model</button>
                 </span>
             </div>
         </div>  

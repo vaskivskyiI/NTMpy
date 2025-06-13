@@ -6,7 +6,8 @@ const PADDING_UP = 10; // Top padding
 let plot_offset = 0;
 
 function drawAxis(id = "plot", margin = [0, 0, 0, 0]) {
-    let canvas = document.getElementById(id) 
+    let canvas = document.getElementById(id)
+    if (!canvas) canvas =  document.getElementById("temp_plot");
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
 
@@ -44,7 +45,7 @@ function drawAxis(id = "plot", margin = [0, 0, 0, 0]) {
 }
 
 function drawLabelsX(text, margin = [0, 0, 0, 0]) {
-    let canvas = document.getElementById("plot"); 
+    let canvas = document.getElementById("plot");
     let ctx = canvas.getContext("2d");
     let y0 = PADDING_UP + margin[0];
     let y1 = canvas.height - PADDING_DW - margin[1];
@@ -60,7 +61,7 @@ function drawLabelsX(text, margin = [0, 0, 0, 0]) {
 }
 
 function drawLabelsY(text, margin = [0, 0, 0, 0]) {
-    let canvas = document.getElementById("plot"); 
+    let canvas = document.getElementById("plot");
     let ctx = canvas.getContext("2d");
     let y0 = PADDING_UP + margin[0];
     let y1 = canvas.height - PADDING_DW - margin[1];
@@ -76,7 +77,8 @@ function drawLabelsY(text, margin = [0, 0, 0, 0]) {
 }
 
 function drawCurve(data, clear = true, color = "white", scale = 0.9, margin = [0, 0, 0, 0]) {
-    let canvas = document.getElementById("plot"); 
+    let canvas = document.getElementById("plot");
+    if (!canvas) canvas =  document.getElementById("temp_plot");
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
 
@@ -107,18 +109,19 @@ function drawCurve(data, clear = true, color = "white", scale = 0.9, margin = [0
 
     ctx.stroke();
     
-    drawAxis();
+    drawAxis("plot", margin);
 }
 
-function drawDots(dataX, dataY, color = "white", scale = 0.9) {
-    let canvas = document.getElementById("plot"); 
+function drawDots(dataX, dataY, color = "white", scale = 0.9, margin = [0,0,0,0]) {
+    let canvas = document.getElementById("plot");
+    if (!canvas) canvas =  document.getElementById("temp_plot");
     let ctx = canvas.getContext("2d");
     ctx.strokeStyle = "white";
 
-    let y0 =  0;
-    let y1 = canvas.height - PADDING_DW;
-    let x0 = PADDING_LX + plot_offset;
-    let x1 = canvas.width - PADDING_RX;
+    let y0 = PADDING_UP + margin[0];
+    let y1 = canvas.height - PADDING_DW - margin[1];
+    let x0 = PADDING_LX + plot_offset + margin[2];
+    let x1 = canvas.width - PADDING_RX - margin[3];
     
     
     // Plot data

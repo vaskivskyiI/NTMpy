@@ -48,10 +48,8 @@ def fitSetup(fun, target, value, depth, path):
 
 
         out = fit_eval(fit["point"][0])
-        fit["coeff"].append(out[0])
         fit["value"].append(out[1])
         out = fit_eval(fit["point"][1])
-        fit["coeff"].append(out[0])
         fit["value"].append(out[1])
 
         return {"success":True}
@@ -61,21 +59,60 @@ def fitSetup(fun, target, value, depth, path):
 
 @eel.expose
 def fitRun():
-    Xbst = fit["point"][0] if fit["value"][0] <= fit["value"][1] else fit["point"][1]
-    Xwst = fit["point"][1] if fit["value"][0] <= fit["value"][1] else fit["point"][0]
-    Fbst = fit["value"][0] if fit["value"][0] >  fit["value"][1] else fit["value"][1]
-    Fwst = fit["value"][1] if fit["value"][0] >  fit["value"][1] else fit["value"][0]
+    best  = 0 if fit["value"][0] <= fit["value"][1] else 1
+    worst = 1 if fit["value"][0] <= fit["value"][1] else 0
+
+    Fbst = fit["value"][best]
+    Fwst = fit["value"][worst]
     
-    Xctr   = (Xbst + Xwst) / 2.0
-    Xref = Xctr + 0.5*(Xctr - Xwst)
+    Xctr = fit["point"][best]
+    Xref = Xctr + 1*(Xctr - fit["point"][worst])
     out = fit_eval(Xref)
     Fref = out[1]
 
+    if Fref < Fbst:
+        Xexp  = Xctr + 2*(Xref - Xctr)
+        out = fit_eval(Xexp)
+        Fexp = out[1]
 
-
+        if Fexp < Fref:
+            fit["point"][worst] = Xexp
+            fit["value"][worst] = Fexp
+            fit["coeff"] = out[0]
+            return {"success": True, "coeff": fit["coeff"], "value": Fref, "point": Xexp}
+        else:
+            fit["point"][worst] = Xref
+            fit["value"][worst] = Fref
+            fit["coeff"] = out[0]
+            return {"success": True, "coeff": fit["coeff"], "value": Fref, "point": Xref}
     
+    elif Fref < Fwst:
+        Xcon = Xctr + 0.5*(Xref - Xctr)
+        out = fit_eval(Xcon)
+        Fcon = out[1]
 
-    Xexpansion  = Xctr + 0.5*(Xref - Xctr)
+        if Fcon < Fref:
+            fit["point"][worst] = Xcon
+            fit["value"][worst] = Fcon
+            fit["coeff"] = out[0]
+            return {"success": True, "coeff": fit["coeff"], "value": Fcon, "point": Xcon}
+
+    elif Fref >= Fwst:
+        Xcon = Xctr + 0.25*(fit["point"][worst] - Xctr)
+        if Fcon < Fwst:
+            fit["point"][worst] = Xcon
+            fit["value"][worst] = Fcon
+            fit["coeff"] = out[0]
+            return {"success": True, "coeff": fit["coeff"], "value": Fcon, "point": Xcon}
+
+    Xsrk = fit["point"][best] + 0.5*(fit["point"][worst] - fit["point"][best])
+    out = fit_eval(Xsrk)
+    Fsrk = out[1]
+    fit["point"][worst] = Xsrk
+    return {"success": True, "coeff": out[0], "value": Fsrk, "point": Xsrk}
+   
+
+
 
 
 

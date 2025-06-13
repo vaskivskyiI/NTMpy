@@ -16,18 +16,17 @@ def fitSetup(fun, target, value, depth, path):
         mod_layers.extend(copy(layers))
 
         fit["target"].extend(target) 
-        print("Target: ", fit["target"])
         
         fit["function"] = fun
         fit["point"].append(0.95*value)
         fit["point"].append(1.05*value)
     
         src_init()
-        print(mod_layers)
         sim = build_material(mod_layers, 10)
         sim.setSource(src)
         if flags["substrate"]: sim.substrate = True
         sim.final_time = 2
+        sim.log = False
         x, t, phi =  sim.run()
     
         if depth > 0:
@@ -62,10 +61,10 @@ def fitSetup(fun, target, value, depth, path):
 
 @eel.expose
 def fitRun():
-    Xbst = fit["point"][0] if fit["value"][0] < fit["value"][1] else fit["point"][1]
-    Xwst = fit["point"][1] if fit["value"][0] < fit["value"][1] else fit["point"][0]
-    Fbst = fit["value"][0] if fit["value"][0] < fit["value"][1] else fit["value"][1]
-    Fwst = fit["value"][1] if fit["value"][0] < fit["value"][1] else fit["value"][0]
+    Xbst = fit["point"][0] if fit["value"][0] <= fit["value"][1] else fit["point"][1]
+    Xwst = fit["point"][1] if fit["value"][0] <= fit["value"][1] else fit["point"][0]
+    Fbst = fit["value"][0] if fit["value"][0] >  fit["value"][1] else fit["value"][1]
+    Fwst = fit["value"][1] if fit["value"][0] >  fit["value"][1] else fit["value"][0]
     
     Xctr   = (Xbst + Xwst) / 2.0
     Xref = Xctr + 0.5*(Xctr - Xwst)
@@ -89,6 +88,7 @@ def fit_eval(value):
     sim.setSource(src)
     if flags["substrate"]: sim.substrate = True
     sim.final_time = time["simulation"]
+    sim.log = False
     x, t, phi =  sim.run()
 
     temp = fit["weight"] @ phi[0]

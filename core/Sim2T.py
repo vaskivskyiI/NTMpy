@@ -91,6 +91,7 @@ class Sim2T(object):
         self.zeroL = []  # boolean: layer with zero conductivity (latt)
         
         self.computation_time = 0
+        self.log = True
 
 # ========================================================================================
 #
@@ -379,7 +380,7 @@ class Sim2T(object):
         # Warnings for missing or bad time step !!!
         if not self.time_step:
             self.time_step  = idealtimestep
-            self.warning(1, str(idealtimestep))
+            if self.log: self.warning(1, str(idealtimestep))
         if (self.time_step - idealtimestep)/idealtimestep > 0.5:
             self.warning(2, str(self.time_step), str(idealtimestep))
         if(self.time_step - idealtimestep)/idealtimestep < -0.5:
@@ -481,7 +482,7 @@ class Sim2T(object):
         # END OF THE MAIN LOOP
         end_EL = time.time()
         self.computation_time = end_EL - start_EL
-        self.warning(0, str(end_EL - start_EL))
+        if self.log: self.warning(0, str(end_EL - start_EL))
         return self.y, self.t, np.transpose(np.dstack([phi_E, phi_L]))
 
 

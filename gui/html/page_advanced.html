@@ -18,9 +18,9 @@
 
         <div style="flex: 1; display: flex; flex-direction: column;">
             <div style="flex:1; display: flex; flex-direction: column;">
-                <label>Layer selected:<span> <i style="margin-left: 2px;">Click on a layer to select it</i></span></label>
+                <label id="layer_lbl">Layer selected:<span> <i style="margin-left: 2px;">Click on a layer to select it</i></span></label>
                 <label>Fitting parameter:</label>
-                <select id="curve_select" class="dropdown">
+                <select id="target" class="dropdown">
                     <option value="-1">Select the property to fit...</option>
                     <option value="0">Electron Thermal Capacity    </option>
                     <option value="1">Electron Thermal Conductivity</option>
@@ -29,21 +29,21 @@
                     <option value="4">Electron-Lattice Coupling    </option>
                 </select>
                 <label>Expression:</label>
-                <input style="margin-bottom: 10px;">
+                <input style="margin-bottom: 10px;" id="function" value="X">
                 <label style="display: flex; justify-content: space-between;">
-                    <span style="width:170px; text-align: right;">Initial value:</span>
-                    <input size="10" style="flex: 1; margin-left: 10px;">
+                    <span style="width:190px; text-align: right;">Initial value:</span>
+                    <input size="10" style="flex: 1; margin-left: 10px;" id="start_point">
                 </label>
                 <label style="display: flex; justify-content: space-between;">
-                    <span style="width:170px; text-align: right;">Experimental data file:</span>
-                    <input size="10" style="flex: 1; margin-left: 10px;">
+                    <span style="width:190px; text-align: right;">Experimental data file:</span>
+                    <input size="10" style="flex: 1; margin-left: 10px;" id="data_file">
                 </label>
                 <label style="display: flex; justify-content: space-between;">
-                    <span style="width:170px; text-align: right;">Penetration depth:</span>
-                    <input size="10" style="flex: 1; margin-left: 10px;">
+                    <span style="width:190px; text-align: right;">Penetration depth [nm]:</span>
+                    <input size="10" style="flex: 1; margin-left: 10px;" id="depth" value="0">
                 </label>
                 <label style="display: flex; justify-content: space-between;">
-                    <span style="width:170px; text-align: right;">Iteration number:</span>
+                    <span style="width:190px; text-align: right;">Iteration number:</span>
                     <input type="number" size="10" style="flex: 1; margin-left: 10px;">
                 </label>
             </div>

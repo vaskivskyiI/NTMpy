@@ -1,11 +1,22 @@
-const PLOT_PADDING = [-0,-20,-30,-20];
+let layerNum;
 
-$(document).ready(function() {
+let debug;
+
+const PLOT_PADDING = [-0,-20,-30,-20];
+const TARGET_PROPERTY = [["C",0],["C",1],["K",0],["K",1],["G",0]]
+
+$(document).ready(async function() {
 
 
     drawMaterial()
     drawAxis("error_plot", PLOT_PADDING)
     drawAxis( "temp_plot", PLOT_PADDING);
+
+    $("#start").on("click", startFitting);
+
+    const filename = await eel.getDataFilename()();
+    $("#data_file").val(filename ? filename : (await eel.loadPath()()));
+
 });
 
 
@@ -21,5 +32,24 @@ async function drawMaterial() {
 }
 
 async function selectLayer() {
+    layerNum = $(this).index();
+    const layers = await eel.getLayers()();
+    $("#layer_lbl").text("Layer selected " + (layerNum) + ":");
+    $("#layer_lbl").append("<span style='margin-left: 10px'>" + layers[layerNum-1].name + "</span>");
+    if ($("#target").val() >= 0) {
+        const target = TARGET_PROPERTY[$("#target").val()];
+        $("#start_point").val(layers[layerNum][target[0]][target[1]]);
+    }
 
+
+}
+
+async function startFitting() {
+
+    const fun = $("#function").val();
+    const point = parseFloat($("#start_point").val());
+    const target = [layerNum].concat(TARGET_PROPERTY[$("#target").val()]);
+    const datafile = $("#data_file").val();
+    const depth = parseFloat($("#depth").val());
+    debug = await eel.fitSetup( fun, target, point, depth, datafile)()
 }

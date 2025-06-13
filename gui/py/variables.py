@@ -32,4 +32,16 @@ global out; out = {"x": None, "t": None, "T": None}
 
 global materialsDB; materialsDB = {}
 
+global fit; fit = { "point"   : [],
+                    "value"   : [],
+                    "coeff"   : [],
+                    "target"  : [],
+                    "function": None,
+                    "weight"  : None,
+                    "data"    : None,
+                    "init"    : False}
+
+global mod_layers; mod_layers = []
+
+
 

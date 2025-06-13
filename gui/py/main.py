@@ -32,7 +32,7 @@ def runSimulation(final_time):
     
 
 # Build Material ####################################
-def build_material(layers=layers):
+def build_material(layers=layers, precision=15):
     safe_layers = sanitize(layers)
     if isinstance(safe_layers, int): return safe_layers
     
@@ -44,7 +44,7 @@ def build_material(layers=layers):
             cond = [eval(layer["K"][0]), eval(layer["K"][1])]
             capc = [eval(layer["C"][0]), eval(layer["C"][1])]
             coup =  eval(layer["G"][0])
-            sim.addLayer( length, cond, capc, dens, coup, 12)
+            sim.addLayer( length, cond, capc, dens, coup, precision)
         return sim
     elif not flags["spin_temp"] and len(layers) == 1:
         sim = Sim2T1L()

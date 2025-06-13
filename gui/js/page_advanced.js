@@ -54,6 +54,11 @@ async function startFitting() {
     const datafile = $("#data_file").val();
     const depth = parseFloat($("#depth").val());
     debug = await eel.fitSetup( fun, target, point, depth, datafile)()
+
+    while (parseInt($("#iteration").val()) > 0) {
+        await update();
+        $("#iteration").val(parseInt($("#iteration").val()) - 1);
+    }
 }
 
 async function update() {
@@ -69,7 +74,10 @@ async function update() {
     dataX = time_exp.map(t => t / time_sim.slice(-1)[0])
     dataY = temp_exp.map(T => 0.9 * (T - 300) / Math.max(...temp_sim))
 
+    residual.push(out.value)
+
+
     drawCurve( temp_sim, true, "#ff5555", 0.9, PLOT_PADDING)
     drawDots(dataX, dataY, "#55ff55", 0.9, PLOT_PADDING)
-
+    drawErr(residual, "#ff5555", PLOT_PADDING)
 }

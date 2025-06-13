@@ -44,7 +44,6 @@ def build_material(layers=layers, precision=15):
             cond = [eval(layer["K"][0]), eval(layer["K"][1])]
             capc = [eval(layer["C"][0]), eval(layer["C"][1])]
             coup =  eval(layer["G"][0])
-            print(coup)
             sim.addLayer( length, cond, capc, dens, coup, precision)
         return sim
     elif not flags["spin_temp"] and len(layers) == 1:

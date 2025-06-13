@@ -423,7 +423,7 @@ class Sim2T(object):
         # HERE STARTS THE MAIN LOOP
         start_EL = time.time()
         
-        for i in tqdm(range(1,len(self.t))):
+        for i in tqdm(range(1,len(self.t)), disable = not self.log):
             # Go from coefficient c to phi and its derivatives
             phi0_E = self.D0 @ c_E; phi0_L = self.D0 @ c_L
             phi1_E = self.D1 @ c_E; phi1_L = self.D1 @ c_L

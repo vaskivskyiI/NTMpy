@@ -62,10 +62,22 @@ def fitSetup(fun, target, value, depth, path):
 
 @eel.expose
 def fitRun():
-    best  = fit["point"][0] if fit["value"][0] < fit["value"][1] else fit["point"][1]
-    worst = fit["point"][1] if fit["value"][0] < fit["value"][1] else fit["point"][0]
-    centroid  = (best + worst) / 2.0
-    reflected = best + 0.5*(best - worst)
+    Xbst = fit["point"][0] if fit["value"][0] < fit["value"][1] else fit["point"][1]
+    Xwst = fit["point"][1] if fit["value"][0] < fit["value"][1] else fit["point"][0]
+    Fbst = fit["value"][0] if fit["value"][0] < fit["value"][1] else fit["value"][1]
+    Fwst = fit["value"][1] if fit["value"][0] < fit["value"][1] else fit["value"][0]
+    
+    Xctr   = (Xbst + Xwst) / 2.0
+    Xref = Xctr + 0.5*(Xctr - Xwst)
+    out = fit_eval(Xref)
+    Fref = out[1]
+
+
+
+    
+
+    Xexpansion  = Xctr + 0.5*(Xref - Xctr)
+
 
 
 
@@ -82,7 +94,13 @@ def fit_eval(value):
     temp = fit["weight"] @ phi[0]
 
     def interpolant(x, a, b):
-        return a * np.interp(x, t, temp) + b 
+        return a * (np.interp(x, t, temp) - b) 
 
-    return curve_fit(interpolant, fit["data"][:,0], fit["data"][:,1])
+    coeff = curve_fit(interpolant, fit["data"][:,0], fit["data"][:,1])[0]
+    value = np.sum((np.interp(fit["data"][:,0], t, temp) - fit["data"][:,1]/coeff[0] - coeff[1])**2)
+    value /= fit["data"].size
+
+    # print("Fit value: ", value, " for X = ", coeff)
+
+    return coeff, value
 

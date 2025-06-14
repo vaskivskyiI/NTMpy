@@ -106,6 +106,7 @@ class Sim3T(object):
         self.zeroS = []  # boolean: layer with zero conductivity (spin)
 
         self.computation_time = 0
+        self.log = True
         
 
 # ========================================================================================
@@ -469,7 +470,7 @@ class Sim3T(object):
         # Warnings for missing or bad time step !!!
         if not self.time_step:
             self.time_step  = idealtimestep
-            self.warning(1, str(idealtimestep))
+            if self.log: self.warning(1, str(idealtimestep))
         if (self.time_step - idealtimestep)/idealtimestep > 0.5:
             self.warning(2, str(self.time_step), str(idealtimestep))
         if(self.time_step - idealtimestep)/idealtimestep < -0.5:
@@ -522,7 +523,7 @@ class Sim3T(object):
         DS = self.diffusionS
         # HERE STARTS THE MAIN LOOP
         start_EL = time.time()
-        for i in tqdm(range(1,len(self.t))):
+        for i in tqdm(range(1,len(self.t)), disable = not self.log):
             # Go from coefficient c to phi and its derivatives
             phi0_E = self.D0 @ c_E; phi0_L = self.D0 @ c_L; phi0_S = self.D0 @ c_S
             phi1_E = self.D1 @ c_E; phi1_L = self.D1 @ c_L; phi1_S = self.D1 @ c_S
@@ -611,7 +612,7 @@ class Sim3T(object):
         # END OF THE MAIN LOOP
         end_EL = time.time()
         self.computation_time = end_EL - start_EL
-        self.warning(0, str(end_EL - start_EL))
+        if self.log: self.warning(0, str(end_EL - start_EL))
         return self.y, self.t, np.transpose(np.dstack([phi_E, phi_L, phi_S]))
 
 

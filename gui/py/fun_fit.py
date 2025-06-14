@@ -1,7 +1,7 @@
 import eel
 
 from gui.py.variables import fit, mod_layers, flags, layers, time, src, store
-from gui.py.main import build_material
+from gui.py.main import build_material, input_control
 from gui.py.fun_source import src_init
 import numpy as np
 from scipy.optimize import curve_fit
@@ -17,6 +17,9 @@ def fitSetup(fun, target, value, depth, path):
             fit["data"] = np.loadtxt(path, delimiter=",")
         except:
             return {"success": False, "message": "Error: could not load data file."}
+
+        if input_control(fun.replace("X", str(value))) == -1:
+            return {"success": False, "message": "Error: Expression not evaluable"}
 
         mod_layers.clear()
         mod_layers.extend(copy(layers))
@@ -162,3 +165,18 @@ def fit_eval(value):
 def applyFitted():
     layers.clear()
     layers.extend(copy(mod_layers))
+
+@eel.expose
+def getFitData():
+    if fit["init"]:
+        return {"init": True, "target": fit["target"], "function": fit["function"]}
+    else:
+        return {"init": False}
+    
+@eel.expose
+def resetFit():
+    if (fit["init"]): print("Fit reset")
+    mod_layers.clear()
+    store["residual"].clear()
+    fit["init"] = False
+    

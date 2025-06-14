@@ -59,6 +59,24 @@ def loadFile(filename="ntmpy_save"):
         current_file[0] = filename.split(".")[0]
         current_data[0] = data_loaded.get("expdata", "")
 
+        store.clear()
+        store.update({  "time_sim" : None,
+                        "temp_sim" : None,
+                        "time_exp" : None,
+                        "temp_exp" : None,
+                        "residual" : []})
+    
+        fit.clear()
+        fit.update({    "point"   : [],
+                        "value"   : [],
+                        "coeff"   : [],
+                        "target"  : [],
+                        "function": None,
+                        "weight"  : None,
+                        "data"    : None,
+                        "init"    : False})
+
+
         if flags["result_set"] and not flags["spin_temp"]:
             outdir[0] = "../output/" if path == "./data/models/" else ""
             with load(path + outdir[0] + current_file[0] + ".npz") as data:

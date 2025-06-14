@@ -9,9 +9,11 @@ const TARGET_PROPERTY = [["C",0],["C",1],["K",0],["K",1],["G",0]]
 $(document).ready(async function() {
 
 
-    drawMaterial()
-    drawAxis("error_plot", PLOT_PADDING)
+    drawMaterial();
+    drawAxis("error_plot", PLOT_PADDING);
     drawAxis( "temp_plot", PLOT_PADDING);
+
+    setupMenu();
 
     $("#start").on("click", startFitting);
     filename = await eel.getDataFilename()();
@@ -20,7 +22,8 @@ $(document).ready(async function() {
     $("#data_file").val(filename);
 
     $("#target").change(setTarget);
-    $("#stop").on("click", function () {$("#iteration").val(1)});
+    $("#stop").on("click", function () {$("#iteration").val(0)});
+    $("#start_point").change(() => {resetFit();})
     $("#apply").on("click", applyChange)
 
 });
@@ -38,6 +41,7 @@ async function drawMaterial() {
 }
 
 async function selectLayer() {
+    if ($(this).index() != layerNum) {eel.resetFit();}
     layerNum = $(this).index();
     const layers = await eel.getLayers()();
     $("#layer_lbl").text("Layer selected " + (layerNum) + ":");
@@ -96,6 +100,7 @@ async function update() {
 async function setTarget() {
     if ($("#target").val() >= 0 && !target_selected)
     {   $("#target option:first-child").remove(); target_selected = true;}
+    await eel.resetFit();
     if (layerNum > 0) {
         const layers = await eel.getLayers()();
         const target = TARGET_PROPERTY[$("#target").val()];
@@ -105,4 +110,22 @@ async function setTarget() {
 
 async function applyChange() {
     eel.applyFitted();
+}
+
+async function setupMenu() {
+    data = await eel.getFitData()();
+    if (data.init) {
+        data = await eel.getFitPlots()()
+
+        data.temp_sim = data.temp_sim.map(T => T - 300)
+        dataX = data.time_exp.map(t => t / data.time_sim.slice(-1)[0])
+        dataY = data.temp_exp.map(T => 0.9 * (T - 300) / Math.max(...data.temp_sim))
+
+        drawCurve( data.temp_sim, true, "#ff5555", 0.9, PLOT_PADDING)
+        drawDots(dataX, dataY, "#55ff55", 0.9, PLOT_PADDING)
+        drawErr(data.residual.slice(1), "#ff5555", PLOT_PADDING)
+
+        $("#result1").text((await eel.getFitValue()()).toExponential(6))
+        $("#function").val(data.function)
+    }
 }

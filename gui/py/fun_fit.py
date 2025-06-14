@@ -32,6 +32,8 @@ def fitSetup(fun, target, value, depth, path):
 
         value = eval(value)
 
+        mod_layers.clear()
+        store["residual"].clear()
         fit["point"].clear()
         fit["value"].clear()
         mod_layers.clear()
@@ -75,6 +77,8 @@ def fitSetup(fun, target, value, depth, path):
 
 @eel.expose
 def fitRun():
+    minimum = 1e-3 if fit["target"][1] == "C" else 0
+
     best  = 0 if fit["value"][0] <= fit["value"][1] else 1
     worst = 1 if fit["value"][0] <= fit["value"][1] else 0
 
@@ -82,12 +86,12 @@ def fitRun():
     Fwst = fit["value"][worst]
     
     Xctr = fit["point"][best]
-    Xref = max(Xctr + 1*(Xctr - fit["point"][worst]), 0)
+    Xref = max(Xctr + 1*(Xctr - fit["point"][worst]), minimum)
     out_ref = fit_eval(Xref)
     Fref = out_ref[1]
 
     if Fref < Fbst:
-        Xexp  = max(Xctr + 2*(Xref - Xctr), 0)
+        Xexp  = max(Xctr + 2*(Xref - Xctr), minimum)
         out_exp = fit_eval(Xexp)
         Fexp = out_exp[1]
 
@@ -105,7 +109,7 @@ def fitRun():
             return {"success": True, "value": Fref, "point": Xref}
     
     elif Fref < Fwst:
-        Xcon = max(Xctr + 0.5*(Xref - Xctr), 0)
+        Xcon = max(Xctr + 0.5*(Xref - Xctr), minimum)
         out_con = fit_eval(Xcon)
         Fcon = out_con[1]
 
@@ -117,7 +121,7 @@ def fitRun():
             return {"success": True, "value": Fcon, "point": Xcon}
 
     elif Fref >= Fwst:
-        Xcon = max(Xctr + 0.5*(fit["point"][worst] - Xctr), 0)
+        Xcon = max(Xctr + 0.5*(fit["point"][worst] - Xctr), minimum)
         out_con = fit_eval(Xcon)
         Fcon = out_con[1]
         if Fcon < Fwst:
@@ -127,7 +131,7 @@ def fitRun():
             prepare_plot(out_con[2], out_con[3], out_con[0], Fcon)
             return {"success": True, "value": Fcon, "point": Xcon}
 
-    Xsrk = max(fit["point"][best] + 0.5*(fit["point"][worst] - fit["point"][best]), 0)
+    Xsrk = max(fit["point"][best] + 0.5*(fit["point"][worst] - fit["point"][best]), minimum)
     out_srk = fit_eval(Xsrk)
     Fsrk = out_srk[1]
     fit["point"][worst] = Xsrk
@@ -182,7 +186,8 @@ def applyFitted():
 
 @eel.expose
 def getFitData():
-    if fit["init"]:
+    init = (len(fit["target"]) > 2) and (fit["function"])
+    if init:
         return {"init": True, "target": fit["target"], "function": fit["function"]}
     else:
         return {"init": False}
@@ -190,7 +195,5 @@ def getFitData():
 @eel.expose
 def resetFit():
     if (fit["init"]): print("Fit reset")
-    mod_layers.clear()
-    store["residual"].clear()
     fit["init"] = False
     

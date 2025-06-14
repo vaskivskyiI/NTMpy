@@ -1,10 +1,9 @@
 let layerNum = 0;
 let target_selected = false;
-let debug;
 let running = false;
 
 const PLOT_PADDING = [-0,-20,-30,-20];
-const TARGET_PROPERTY = [["C",0],["C",1],["K",0],["K",1],["G",0]]
+const TARGET_PROPERTY = [["C",0],["K",0],["C",1],["K",1],["G",0]]
 
 $(document).ready(async function() {
 
@@ -120,6 +119,18 @@ async function applyChange() {
 async function setupMenu() {
     data = await eel.getFitData()();
     if (data.init) {
+        target_selected = true;
+        option = TARGET_PROPERTY.findIndex((x) => x[0] == data.target[1] && x[1] == data.target[2]);
+        $("#target option[value=" + option + "]").prop("selected", true);
+        $("#target option:first-child").remove();
+
+        layerNum = data.target[0] + 1;
+        const layers = await eel.getLayers()();
+        $("#layer_lbl").text("Layer selected " + (layerNum) + ":");
+        $("#layer_lbl").append("<span style='margin-left: 10px'>" + layers[layerNum-1].name + "</span>");
+
+       $("#function").val(data.function)
+
         data = await eel.getFitPlots()()
 
         data.temp_sim = data.temp_sim.map(T => T - 300)
@@ -130,8 +141,9 @@ async function setupMenu() {
         drawDots(dataX, dataY, "#55ff55", 0.9, PLOT_PADDING)
         drawErr(data.residual.slice(1), "#ff5555", PLOT_PADDING)
 
-        $("#result1").text((await eel.getFitValue()()).toExponential(6))
-        $("#function").val(data.function)
+        value = await eel.getFitValue()();
+        $("#result1").text(value.toExponential(6))
+        $("#start_point").val(value.toExponential(3))
     }
 }
 

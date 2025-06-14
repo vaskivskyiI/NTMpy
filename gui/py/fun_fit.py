@@ -13,14 +13,27 @@ from copy import deepcopy as copy
 def fitSetup(fun, target, value, depth, path):
     if not fit["init"]:
 
+        if   target[0] < 0: return {"success": False, "message": "Error: No layer selected"}
+        if len(target) < 3: return {"success": False, "message": "Error: No property selected"}
+
         try:
             fit["data"] = np.loadtxt(path, delimiter=",")
         except:
             return {"success": False, "message": "Error: could not load data file."}
 
-        if input_control(fun.replace("X", str(value))) == -1:
-            return {"success": False, "message": "Error: Expression not evaluable"}
+        try:
+            if not isinstance(eval(value), (int, float)):
+                return {"success": False, "message": "Error: initial value not evaluable"}
+        except:
+            return {"success": False, "message": "Error: initial value not evaluable"}
 
+        if input_control(fun.replace("X", str(value))) == -1:
+            return {"success": False, "message": "Error: expression not evaluable"}
+
+        value = eval(value)
+
+        fit["point"].clear()
+        fit["value"].clear()
         mod_layers.clear()
         mod_layers.extend(copy(layers))
 
@@ -29,8 +42,8 @@ def fitSetup(fun, target, value, depth, path):
         
         fit["function"] = fun
         fit["point"].clear()
-        fit["point"].append(0.95*value)
-        fit["point"].append(1.05*value)
+        fit["point"].append(0.8*value)
+        fit["point"].append(1.2*value)
     
         src_init()
         sim = build_material(mod_layers, 12)
@@ -157,7 +170,8 @@ def fit_eval(value):
     coeff = curve_fit(interpolant, fit["data"][:,0], fit["data"][:,1], p0 = [5,300], maxfev=5000)[0]
     residue = np.sum((np.interp(fit["data"][:,0], t, temp) - fit["data"][:,1]/coeff[0] - coeff[1])**2)
     residue /= fit["data"].size
-    print(f"Fit value: {residue:1.4e} for X = {value:1.4e}  -  simulation time: {sim.computation_time:1.5f}")
+    residue /= (np.max(temp) - np.min(temp))**2
+    print(f"Residue value: {residue:1.4e} for X = {value:1.4e}  -  simulation time: {sim.computation_time:1.5f}")
 
     return coeff, residue, t, temp
 

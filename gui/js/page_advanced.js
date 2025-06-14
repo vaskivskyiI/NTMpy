@@ -1,7 +1,7 @@
-let layerNum = -1;
+let layerNum = 0;
 let target_selected = false;
 let debug;
-
+let running = false;
 
 const PLOT_PADDING = [-0,-20,-30,-20];
 const TARGET_PROPERTY = [["C",0],["C",1],["K",0],["K",1],["G",0]]
@@ -21,9 +21,11 @@ $(document).ready(async function() {
     filename = filename == "./data/models/" ? "./data/expdata/" : filename
     $("#data_file").val(filename);
 
+
     $("#target").change(setTarget);
-    $("#stop").on("click", function () {$("#iteration").val(0)});
-    $("#start_point").change(() => {resetFit();})
+    $("#stop").on("click", stopFit);
+    $("#start_point").change(() => {eel.resetFit(); $("iteration").val(20)})
+    $("#function   ").change(() => {eel.resetFit(); $("iteration").val(20)})
     $("#apply").on("click", applyChange)
 
 });
@@ -57,21 +59,24 @@ async function selectLayer() {
 async function startFitting() {
 
     const fun = $("#function").val();
-    const point = parseFloat($("#start_point").val());
+    const point = $("#start_point").val();
     const target = [layerNum-1].concat(TARGET_PROPERTY[$("#target").val()]);
     const datafile = $("#data_file").val();
     const depth = parseFloat($("#depth").val());
+    $("#helpbar").css("color","#ffffff");
     $("#helpbar").text("Initializing the fitting...");
     result = await eel.fitSetup( fun, target, point, depth, datafile)()
 
     if (result.success) {
         $("#helpbar").css("color","#ffffff");
         $("#helpbar").text(result.message);
-        while (parseInt($("#iteration").val()) > 0) {
+        running = true;
+        while (running && parseInt($("#iteration").val()) > 0) {
             $("#helpbar").text("Fitting in progress...");
             await update();
             $("#iteration").val(parseInt($("#iteration").val()) - 1);
         }
+        running = false;
         $("#helpbar").text("Fitting cycles ended");
     } else {
         $("#helpbar").css("color","#ff5555");
@@ -128,4 +133,14 @@ async function setupMenu() {
         $("#result1").text((await eel.getFitValue()()).toExponential(6))
         $("#function").val(data.function)
     }
+}
+
+async function stopFit() {
+    $("#helpbar").css("color","#ffffff");
+    $("#helpbar").text("Arresting the fit procedure...");
+    running= false;
+    $("#iteration").val(0);
+    await eel.resetFit()();
+    $("#iteration").val(20);
+    $("#helpbar").text("Fit procedure arrested");
 }

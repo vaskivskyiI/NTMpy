@@ -94,7 +94,7 @@ def plotPython(penetration = 0):
         def interpolant(x, a, b):
             return a * np.interp(x, out["t"], temp_electron) + b
 
-        fit = curve_fit(interpolant, data[:,0], data[:,1])[0]
+        fit = curve_fit(interpolant, data[:,0], data[:,1], maxfev=10000, p0=[1, -300])[0]
 
         data[:,1] -= fit[1]
         data[:,1] /= fit[0]

@@ -1,6 +1,6 @@
 import eel
 
-from gui.py.variables import fit, mod_layers, flags, layers, time, src
+from gui.py.variables import fit, mod_layers, flags, layers, time, src, store
 from gui.py.main import build_material
 from gui.py.fun_source import src_init
 import numpy as np
@@ -12,16 +12,25 @@ from copy import deepcopy as copy
 @eel.expose
 def fitSetup(fun, target, value, depth, path):
     if not fit["init"]:
+
+        try:
+            fit["data"] = np.loadtxt(path, delimiter=",")
+        except:
+            return {"success": False, "message": "Error: could not load data file."}
+
+        mod_layers.clear()
         mod_layers.extend(copy(layers))
 
+        fit["target"].clear()
         fit["target"].extend(target) 
         
         fit["function"] = fun
+        fit["point"].clear()
         fit["point"].append(0.95*value)
         fit["point"].append(1.05*value)
     
         src_init()
-        sim = build_material(mod_layers, 15)
+        sim = build_material(mod_layers, 12)
         sim.setSource(src)
         if flags["substrate"]: sim.substrate = True
         sim.final_time = 2
@@ -37,24 +46,15 @@ def fitSetup(fun, target, value, depth, path):
             fit["weight"] = np.zeros_like(x)
             fit["weight"][0] = 1.0
 
-    
-        try:
-            fit["data"] = np.loadtxt(path, delimiter=",")
-        except:
-            fit["init"] = True
-            return {"success": False, "message": "Error: could not load data file."}
-        
-
-
         out = fit_eval(fit["point"][0])
         fit["value"].append(out[1])
         out = fit_eval(fit["point"][1])
         fit["value"].append(out[1])
 
         fit["init"] = True
-        return {"success":True}
+        return {"success":True, "message": "Fit initialized"}
     else:
-        return {"success": False, "message": "Error: fit already initialized."}
+        return {"success": True, "message": "Fit already initialized."}
 
 
 @eel.expose
@@ -66,12 +66,12 @@ def fitRun():
     Fwst = fit["value"][worst]
     
     Xctr = fit["point"][best]
-    Xref = Xctr + 1*(Xctr - fit["point"][worst])
+    Xref = max(Xctr + 1*(Xctr - fit["point"][worst]), 0)
     out_ref = fit_eval(Xref)
     Fref = out_ref[1]
 
     if Fref < Fbst:
-        Xexp  = Xctr + 2*(Xref - Xctr)
+        Xexp  = max(Xctr + 2*(Xref - Xctr), 0)
         out_exp = fit_eval(Xexp)
         Fexp = out_exp[1]
 
@@ -79,17 +79,17 @@ def fitRun():
             fit["point"][worst] = Xexp
             fit["value"][worst] = Fexp
             fit["coeff"] = out_exp[0]
-            plot = prepare_plot(out_exp[2], out_exp[3], out_exp[0])
-            return {"success": True, "value": Fref, "point": Xexp, "plot": plot}
+            prepare_plot(out_exp[2], out_exp[3], out_exp[0], Fexp)
+            return {"success": True, "value": Fref, "point": Xexp}
         else:
             fit["point"][worst] = Xref
             fit["value"][worst] = Fref
             fit["coeff"] = out_ref[0]
-            plot = prepare_plot(out_ref[2], out_ref[3], out_ref[0])
-            return {"success": True, "value": Fref, "point": Xref, "plot": plot}
+            prepare_plot(out_ref[2], out_ref[3], out_ref[0], Fref)
+            return {"success": True, "value": Fref, "point": Xref}
     
     elif Fref < Fwst:
-        Xcon = Xctr + 0.5*(Xref - Xctr)
+        Xcon = max(Xctr + 0.5*(Xref - Xctr), 0)
         out_con = fit_eval(Xcon)
         Fcon = out_con[1]
 
@@ -97,42 +97,49 @@ def fitRun():
             fit["point"][worst] = Xcon
             fit["value"][worst] = Fcon
             fit["coeff"] = out_con[0]
-            plot = prepare_plot(out_con[2], out_con[3], out_con[0])
-            return {"success": True, "value": Fcon, "point": Xcon, "plot": plot}
+            prepare_plot(out_con[2], out_con[3], out_con[0], Fcon)
+            return {"success": True, "value": Fcon, "point": Xcon}
 
     elif Fref >= Fwst:
-        Xcon = Xctr + 0.5*(fit["point"][worst] - Xctr)
+        Xcon = max(Xctr + 0.5*(fit["point"][worst] - Xctr), 0)
         out_con = fit_eval(Xcon)
         Fcon = out_con[1]
         if Fcon < Fwst:
             fit["point"][worst] = Xcon
             fit["value"][worst] = Fcon
             fit["coeff"] = out_con[0]
-            plot = prepare_plot(out_con[2], out_con[3], out_con[0])
-            return {"success": True, "value": Fcon, "point": Xcon, "plot": plot}
+            prepare_plot(out_con[2], out_con[3], out_con[0], Fcon)
+            return {"success": True, "value": Fcon, "point": Xcon}
 
-    Xsrk = fit["point"][best] + 0.5*(fit["point"][worst] - fit["point"][best])
+    Xsrk = max(fit["point"][best] + 0.5*(fit["point"][worst] - fit["point"][best]), 0)
     out_srk = fit_eval(Xsrk)
     Fsrk = out_srk[1]
     fit["point"][worst] = Xsrk
-    plot = prepare_plot(out_srk[2], out_srk[3], out_srk[0])
-    return {"success": True, "value": Fsrk, "point": Xsrk, "plot": plot}
+    prepare_plot(out_srk[2], out_srk[3], out_srk[0], Fsrk)
+    return {"success": True, "value": Fsrk, "point": Xsrk}
    
+@eel.expose
+def getFitPlots():
+    return store
 
-def prepare_plot(time, value, coeff):
-    data = []
-    data.append(list(np.linspace(time[0], time[-1], 1000)))
-    data.append(list(np.interp(data[0], time, value)))
-    data.append(list(fit["data"][:,0]))
-    data.append(list(fit["data"][:,1]/ coeff[0] + coeff[1]))
-    return data
+@eel.expose
+def getFitValue():
+    return float(fit["point"][-1])
+
+def prepare_plot(time, value, coeff, residue):
+
+    store["time_sim"] = list(np.linspace(time[0], time[-1], 1000))
+    store["temp_sim"] = list(np.interp(store["time_sim"], time, value))
+    store["time_exp"] = list(fit["data"][:,0])
+    store["temp_exp"] = list(fit["data"][:,1]/ coeff[0] + coeff[1])
+    store["residual"].append(residue)
 
 
 def fit_eval(value):
     mod_layers[fit["target"][0]][fit["target"][1]][fit["target"][2]] =  fit["function"].replace("X", str(value))
 
     src_init()
-    sim = build_material(mod_layers, 10)
+    sim = build_material(mod_layers, 12)
     sim.setSource(src)
     if flags["substrate"]: sim.substrate = True
     sim.final_time = time["simulation"]
@@ -144,11 +151,14 @@ def fit_eval(value):
     def interpolant(x, a, b):
         return a * (np.interp(x, t, temp) - b) 
 
-    coeff = curve_fit(interpolant, fit["data"][:,0], fit["data"][:,1])[0]
+    coeff = curve_fit(interpolant, fit["data"][:,0], fit["data"][:,1], p0 = [5,300], maxfev=5000)[0]
     residue = np.sum((np.interp(fit["data"][:,0], t, temp) - fit["data"][:,1]/coeff[0] - coeff[1])**2)
     residue /= fit["data"].size
-
-    print("Fit value: ", residue, " for X = ", value)
+    print(f"Fit value: {residue:1.4e} for X = {value:1.4e}  -  simulation time: {sim.computation_time:1.5f}")
 
     return coeff, residue, t, temp
 
+@eel.expose
+def applyFitted():
+    layers.clear()
+    layers.extend(copy(mod_layers))

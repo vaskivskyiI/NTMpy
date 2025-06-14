@@ -43,5 +43,10 @@ global fit; fit = { "point"   : [],
 
 global mod_layers; mod_layers = []
 
+global store; store = {"time_sim" : None,
+                       "temp_sim" : None,
+                       "time_exp" : None,
+                       "temp_exp" : None,
+                       "residual" : []}
 
 

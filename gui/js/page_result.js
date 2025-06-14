@@ -41,8 +41,10 @@ $(document).ready(async function() {
     $("#anim_stop").on("click", stopAnimation);
     $("#plot_expdat" ).on("click", plotExperiment);
     $("#plot_python").on("click", plotPython);
-    const filename = await eel.getDataFilename()();
-    $("#data_file").val(filename ? filename : (await eel.loadPath()()));
+    filename = await eel.getDataFilename()();
+    filename = filename ? filename : (await eel.loadPath()())
+    filename = filename == "./data/models/" ? "./data/expdata/" : filename
+    $("#data_file").val(filename);
 
     $("#extend_sim").on("click", () => {$("#helpbar").css("color","#aaaaff"); $("#helpbar").text("not implemented yet :(");});
     

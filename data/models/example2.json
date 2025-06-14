@@ -74,5 +74,5 @@
         "simulation": 5e-12,
         "computation": 13.845133781433105
     },
-    "expdata": ""
+    "expdata": "./data/expdata/expdata2.csv"
 }

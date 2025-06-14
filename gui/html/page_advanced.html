@@ -28,31 +28,31 @@
                     <option value="3">Lattice Thermal Conductivity </option>
                     <option value="4">Electron-Lattice Coupling    </option>
                 </select>
-                <label>Expression:</label>
-                <input style="margin-bottom: 10px;" id="function" value="X">
+                <label>Experimental data file:</label>
+                <input style="margin-bottom: 10px;" id="data_file">
                 <label style="display: flex; justify-content: space-between;">
                     <span style="width:190px; text-align: right;">Initial value:</span>
                     <input size="10" style="flex: 1; margin-left: 10px;" id="start_point">
                 </label>
                 <label style="display: flex; justify-content: space-between;">
-                    <span style="width:190px; text-align: right;">Experimental data file:</span>
-                    <input size="10" style="flex: 1; margin-left: 10px;" id="data_file">
+                    <span style="width:190px; text-align: right;">Expression:</span>
+                    <input size="10" style="flex: 1; margin-left: 10px;" id="function" placeholder="X fitting param">
                 </label>
                 <label style="display: flex; justify-content: space-between;">
                     <span style="width:190px; text-align: right;">Penetration depth [nm]:</span>
                     <input size="10" style="flex: 1; margin-left: 10px;" id="depth" value="0">
                 </label>
                 <label style="display: flex; justify-content: space-between;">
-                    <span style="width:190px; text-align: right;">Iteration number:</span>
+                    <span style="width:190px; text-align: right;">Iterations:</span>
                     <input type="number" size="10" style="flex: 1; margin-left: 10px;" id="iteration" value="10">
                 </label>
             </div>
             
             <div style="display: flex; flex-direction: column;">
-                <span style="text-align: center; margin: 10px; display: flex; justify-content: space-between;">
-                    <label style="width: 25%">fitting value: </label><label id="result1" style="width: 20%;"></label>
-                    <span style="width: 10%"></span>
-                    <label style="width: 25%">fitting error: </label><label id="result2" style="width: 20%;"></label>
+                <span style="text-align: center; margin: 10px; display: flex; justify-content: space-evenly;">
+                    <label style="width: 25%">fitting value: </label><label id="result1" style="width: 200px;"></label>
+                    <!--span style="width: 10%"></span-->
+                    <!--label style="width: 25%">fitting error: </label><label id="result2" style="width: 20%;"></label-->
                 </span>
                 <span style="display: flex; margin-top: 10px; margin-bottom: 0px;">
                     <button id="start" class="button" style="flex: 1;">Start</button>

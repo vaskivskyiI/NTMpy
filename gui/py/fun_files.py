@@ -1,7 +1,7 @@
 import eel
 import json, os
 from numpy import savez, load
-from gui.py.variables import flags, laser, layers, nindex, current_file, current_data, current_path, time, out, layer_state, outdir
+from gui.py.variables import flags, laser, layers, nindex, current_file, current_data, current_path, time, out, layer_state, outdir, fit, store
 
 
 # Save File #####################################
@@ -89,6 +89,8 @@ def newFile():
     nindex.clear()
     layer_state.clear()
     time.clear()
+    fit.clear()
+    store.clear()
   
     laser.update({  "energy":       None,
                     "fwhm":         None,
@@ -107,7 +109,22 @@ def newFile():
 
     time.update({   "simulation" : 0,
                     "computation": 0})
-    
+
+    store.update({  "time_sim" : None,
+                    "temp_sim" : None,
+                    "time_exp" : None,
+                    "temp_exp" : None,
+                    "residual" : []})
+
+    fit.update({    "point"   : [],
+                    "value"   : [],
+                    "coeff"   : [],
+                    "target"  : [],
+                    "function": None,
+                    "weight"  : None,
+                    "data"    : None,
+                    "init"    : False})
+
     out.clear()
 
 

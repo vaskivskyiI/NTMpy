@@ -1,8 +1,7 @@
-let layerNum;
-
+let layerNum = -1;
+let target_selected = false;
 let debug;
 
-let residual = [];
 
 const PLOT_PADDING = [-0,-20,-30,-20];
 const TARGET_PROPERTY = [["C",0],["C",1],["K",0],["K",1],["G",0]]
@@ -15,9 +14,14 @@ $(document).ready(async function() {
     drawAxis( "temp_plot", PLOT_PADDING);
 
     $("#start").on("click", startFitting);
+    filename = await eel.getDataFilename()();
+    filename = filename ? filename : (await eel.loadPath()())
+    filename = filename == "./data/models/" ? "./data/expdata/" : filename
+    $("#data_file").val(filename);
 
-    const filename = await eel.getDataFilename()();
-    $("#data_file").val(filename ? filename : (await eel.loadPath()()));
+    $("#target").change(setTarget);
+    $("#stop").on("click", function () {$("#iteration").val(1)});
+    $("#apply").on("click", applyChange)
 
 });
 
@@ -40,7 +44,7 @@ async function selectLayer() {
     $("#layer_lbl").append("<span style='margin-left: 10px'>" + layers[layerNum-1].name + "</span>");
     if ($("#target").val() >= 0) {
         const target = TARGET_PROPERTY[$("#target").val()];
-        $("#start_point").val(layers[layerNum][target[0]][target[1]]);
+        $("#start_point").val(layers[layerNum-1][target[0]][target[1]]);
     }
 
 
@@ -53,31 +57,52 @@ async function startFitting() {
     const target = [layerNum-1].concat(TARGET_PROPERTY[$("#target").val()]);
     const datafile = $("#data_file").val();
     const depth = parseFloat($("#depth").val());
-    debug = await eel.fitSetup( fun, target, point, depth, datafile)()
+    $("#helpbar").text("Initializing the fitting...");
+    result = await eel.fitSetup( fun, target, point, depth, datafile)()
 
-    while (parseInt($("#iteration").val()) > 0) {
-        await update();
-        $("#iteration").val(parseInt($("#iteration").val()) - 1);
+    if (result.success) {
+        $("#helpbar").css("color","#ffffff");
+        $("#helpbar").text(result.message);
+        while (parseInt($("#iteration").val()) > 0) {
+            $("#helpbar").text("Fitting in progress...");
+            await update();
+            $("#iteration").val(parseInt($("#iteration").val()) - 1);
+        }
+        $("#helpbar").text("Fitting cycles ended");
+    } else {
+        $("#helpbar").css("color","#ff5555");
+        $("#helpbar").text(result.message);
     }
+
 }
 
 async function update() {
 
-    out = await eel.fitRun()();
-    
-    time_sim = out.plot[0]
-    temp_sim = out.plot[1]
-    time_exp = out.plot[2]
-    temp_exp = out.plot[3]
+    await eel.fitRun()();
+    data = await eel.getFitPlots()()
 
-    temp_sim = temp_sim.map(T => T - 300)
-    dataX = time_exp.map(t => t / time_sim.slice(-1)[0])
-    dataY = temp_exp.map(T => 0.9 * (T - 300) / Math.max(...temp_sim))
+    data.temp_sim = data.temp_sim.map(T => T - 300)
+    dataX = data.time_exp.map(t => t / data.time_sim.slice(-1)[0])
+    dataY = data.temp_exp.map(T => 0.9 * (T - 300) / Math.max(...data.temp_sim))
 
-    residual.push(out.value)
-
-
-    drawCurve( temp_sim, true, "#ff5555", 0.9, PLOT_PADDING)
+    drawCurve( data.temp_sim, true, "#ff5555", 0.9, PLOT_PADDING)
     drawDots(dataX, dataY, "#55ff55", 0.9, PLOT_PADDING)
-    drawErr(residual, "#ff5555", PLOT_PADDING)
+    drawErr(data.residual.slice(1), "#ff5555", PLOT_PADDING)
+
+    $("#result1").text((await eel.getFitValue()()).toExponential(6))
+    //$("#result2").text(data.residual.slice(-1)[0].toFixed(4))
+}
+
+async function setTarget() {
+    if ($("#target").val() >= 0 && !target_selected)
+    {   $("#target option:first-child").remove(); target_selected = true;}
+    if (layerNum > 0) {
+        const layers = await eel.getLayers()();
+        const target = TARGET_PROPERTY[$("#target").val()];
+        $("#start_point").val(layers[layerNum-1][target[0]][target[1]]);
+    }
+}
+
+async function applyChange() {
+    eel.applyFitted();
 }

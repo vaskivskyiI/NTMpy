@@ -117,6 +117,13 @@ async function applyChange() {
 }
 
 async function setupMenu() {
+    if (!(await eel.getFlags("spin_temp")())) {
+        $("#target option").eq(-1).remove();
+        $("#target option").eq(-1).remove();
+        $("#target option").eq(-2).remove();
+        $("#target option").eq(-2).remove();
+    }
+
     data = await eel.getFitData()();
     if (data.init) {
         target_selected = true;

@@ -213,7 +213,7 @@ class Sim3T(object):
         typecheckL = type(lambda x: x)
         if isinstance(fun, typecheckL):
             try:
-                dummy = fun(0,0)
+                dummy = fun(300,300)
                 return lambda x, y: fun(x,y)*multiplyer
             except:
                 if   arg == 1:
@@ -232,7 +232,7 @@ class Sim3T(object):
         typecheckL = type(lambda x: x)
         if isinstance(fun, typecheckL):
             try:
-                dummy = fun(0,0,0)
+                dummy = fun(300,300,300)
                 return lambda x, y, z: fun(x,y,z)*multiplyer
             except:
                 if   arg == 1:

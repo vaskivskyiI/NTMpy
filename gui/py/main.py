@@ -124,12 +124,12 @@ def input_control(input):
     try:
         if not flags["spin_temp"]:
             f = eval("lambda Te, Tl:" + input)
-            dummy = f(array([1,2,3]), array([1,2,3]))
+            dummy = f(array([300,300,300]), array([300,300,300]))
             return "lambda Te, Tl:" + input
         else:
             f = eval("lambda Te, Tl, Ts:" + input)
-            dummy = f(array([1,2,3]), array([1,2,3]))
-            return "lambda Te, Tl:" + input
+            dummy = f(array([300,300,300]), array([300,300,300]), array([300,300,300]))
+            return "lambda Te, Tl, Ts:" + input
     except: pass
     try:
         f = eval("lambda T:" + input)

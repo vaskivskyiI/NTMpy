@@ -11,5 +11,5 @@ import gui.py.main # type: ignore
 
 
 eel.init('.', allowed_extensions=['.js', '.html', '.css'])
-eel.start('gui/html/page_main.html', size=(1000, 800), jinja_templates='gui/html')    # Start
+eel.start('gui/html/page_main.html', size=(1000, 800), jinja_templates='gui/html', host='localhost', port=8000)    # Start
 

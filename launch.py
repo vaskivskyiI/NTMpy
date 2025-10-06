@@ -8,6 +8,12 @@ import gui.py.fun_result # type: ignore
 import gui.py.fun_fit # type: ignore
 import gui.py.main # type: ignore
 
+print("============================================================================================================")
+print("Welcome to NTMpy GUI")
+print("============================================================================================================")
+print("This software was developed by Valentino Scalera and Lukas Alber with the collaboration of the SU-UDCM Group")
+print("Please, report any bug or feature request to valentino.scalera@uniparthenope.it")
+print("The graphical user interface is starting, please wait (the first time it may take 2-10 seconds)\n")
 
 
 eel.init('.', allowed_extensions=['.js', '.html', '.css'])

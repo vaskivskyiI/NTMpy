@@ -22,12 +22,12 @@
                 <label>Fitting parameter:</label>
                 <select id="target" class="dropdown">
                     <option value="-1">Select the property to fit...</option>
-                    <option value="0">Ce &nbsp;- Electron Thermal Capacity    </option>
-                    <option value="1">ke &nbsp;- Electron Thermal Conductivity</option>
-                    <option value="2">Cl &nbsp;- Lattice &nbsp;Thermal Capacity     </option>
-                    <option value="3">kl &nbsp;- Lattice &nbsp;Thermal Conductivity </option>
-                    <option value="5">Cs &nbsp;- Spin &nbsp;Thermal Capacity     </option>
-                    <option value="6">ks &nbsp;- Spin &nbsp;Thermal Conductivity </option>
+                    <option value="0">Ce &nbsp;- Electron Capacity    </option>
+                    <option value="1">ke &nbsp;- Electron Conductivity</option>
+                    <option value="2">Cl &nbsp;- Lattice &nbsp; Capacity     </option>
+                    <option value="3">kl &nbsp;- Lattice &nbsp; Conductivity </option>
+                    <option value="5">Cs &nbsp;- Spin &nbsp; Capacity     </option>
+                    <option value="6">ks &nbsp;- Spin &nbsp; Conductivity </option>
                     <option value="4">Gel - Electron-Lattice Coupling    </option>
                     <option value="4">Ges - Electron-Spin Coupling    </option>
                     <option value="4">Gls - Lattice-Spin Coupling    </option>
@@ -48,13 +48,13 @@
                 </label>
                 <label style="display: flex; justify-content: space-between;">
                     <span style="width:190px; text-align: right;">Iterations:</span>
-                    <input type="number" size="10" style="flex: 1; margin-left: 10px;" id="iteration" value="20">
+                    <input type="number" size="10" style="flex: 1; margin-left: 10px; width: 1px;" id="iteration" value="20">
                 </label>
             </div>
             
             <div style="display: flex; flex-direction: column;">
                 <span style="text-align: center; margin: 10px; display: flex; justify-content: space-evenly;">
-                    <label style="width: 25%">fitting value: </label><label id="result1" style="width: 200px;"></label>
+                    <label style="width: 35%">fitting value: </label><label id="result1" style="width: 200px;"></label>
                     <!--span style="width: 10%"></span-->
                     <!--label style="width: 25%">fitting error: </label><label id="result2" style="width: 20%;"></label-->
                 </span>

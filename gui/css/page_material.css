@@ -129,8 +129,9 @@
 }
 
 #load_drop, #save_name {
-  flex: none;
-  width: 440px;
+  flex: 1;
+  margin: 0px 10px;
+  /*width: 440px;*/
   height: 25px;
 }
 

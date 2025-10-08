@@ -4,8 +4,8 @@
 The graphical inteface is available on this repository. 
 
 # Installation
-At the moment, this new version of NTMpy is not available on pip. NTMpy does not require an installation: download this repository, unzip the files, and click on `launch.py` to open the user interface.
-The GUI needs eel and jinja2 as dependencies, which can be installed typing the command `pip install eel[jinja2]` on the command promtpt.
+<p align="justify">At the moment, this new version of NTMpy is not available on pip. NTMpy does not require an installation: download this repository, unzip the files, and click on `launch.py` to open the user interface.
+The GUI needs eel and jinja2 as dependencies, which can be installed typing the command `pip install eel[jinja2]` on the command promtpt.</p>
 
 # What does NTMpy solves
 NTMpy is a python package to solve 1D diffusion equation with 2 or 3 temperature coupled
@@ -44,8 +44,8 @@ Further informations can be found on the [paper](https://www.sciencedirect.com/s
 ------------------------------------------------------------------------------------------------------------------
 
 # How to use NTMpy
-NTMpy provides a set of classes to simulate coupled heat equation with 2 or 3 temperature in a multilayer system.
-The simulation parameters are customizable, but the codes can choose them automatically if not given by the user.
+<p align="justify">NTMpy provides a set of classes to simulate coupled heat equation with 2 or 3 temperature in a multilayer system.
+The simulation parameters are customizable, but the codes can choose them automatically if not given by the user.</p>
 
 Here is an example:
 ```python
@@ -88,10 +88,10 @@ The ouput `phi` is a 3D array with the following structure:
 ------------------------------------------------------------------------------------------------------------------
 
 # How to contribute
-New features for NTMpy are currently under development, but with a very slow pace. A graphic interface is under development using [eel](https://github.com/python-eel/Eel).</br>
-If there is any important feature you think is missing and it is important for the experiments, you can open an issue on this repository.</br>
-If you want to contribute to the code development, you can either clone this directory or contact the author [Valentino Scalera](mailto:valentino.scalera@uniparthenope.it).</br>
-Any collaboration would be very appreciated
+<p align="justify"> New features for NTMpy are currently under development, but with a very slow pace. 
+If there is any important feature you think is missing and it is important for the experiments, you can open an issue on this repository or directly contact the author.
+If you want to contribute to the code development, you can either clone this directory or contact the author <a href="mailto:valentino.scalera@uniparthenope.it">Valentino Scalera</a>.</br>
+Any collaboration would be very appreciated.</p>
 
 ------------------------------------------------------------------------------------------------------------------
 

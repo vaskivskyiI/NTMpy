@@ -21,14 +21,14 @@ C_{Si}\cdot\rho_i\cdot\partial_t T_S = \partial_x(k_{Si}\cdot\partial_xT_S)+G_{E
 $$
  
 where </br>
-$T_E(x,t)$, $T_L(x,t)$, and $T_S(x,t)$ are temperature (subscripts recall Electron, Lattice, and Spin) </br>
-$\rho$ is the mass density in the $i$-th layer of material (the material properties are piecewise homogeneous) </br>
-$C_{Ki}$ and $k_{Ki}$ are the specific heat and thermal conductivity of the system $K = E,L,S$ in the $i$-th layer of material </br>
-$G_{KHi}$ is the thermal coupling coefficient between the system $K$ and $H$ (with $K,H\in \lbrace E,L,S\rbrace$) in the $i$-th layer </br>
-$S(x,t)$ is the energy generation/ source </br>
+* $T_E(x,t)$, $T_L(x,t)$, and $T_S(x,t)$ are temperature (subscripts recall Electron, Lattice, and Spin) </br>
+* $\rho$ is the mass density in the $i$-th layer of material (the material properties are piecewise homogeneous) </br>
+* $C_{Ki}$ and $k_{Ki}$ are the specific heat and thermal conductivity of the system $K = E,L,S$ in the $i$-th layer of material </br>
+* $G_{KHi}$ is the thermal coupling coefficient between the system $K$ and $H$ (with $K,H\in \lbrace E,L,S\rbrace$) in the $i$-th layer </br>
+* $S(x,t)$ is the energy generation/ source </br>
 
-The material properties $C_{Ki}(T_E,T_L,T_S)$, $k_{Ki}(T_E,T_L,T_S)$, and $G_{KH}(T_E,T_L,T_S)$ are function of the three temperatures </br>
-The dependance on temperature are non-dispersive, i.e. they depend on the temperature in the same point at the same time
+<p align="justify">The material properties $C_{Ki}(T_E,T_L,T_S)$, $k_{Ki}(T_E,T_L,T_S)$, and $G_{KH}(T_E,T_L,T_S)$ are function of the three temperatures.<br>
+The dependance on temperature are non-dispersive, i.e. they depend on the temperature in the same point at the same time</p>
 
 $$
 \begin{aligned}

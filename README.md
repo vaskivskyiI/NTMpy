@@ -44,6 +44,9 @@ Further informations can be found on the [paper](https://www.sciencedirect.com/s
 ------------------------------------------------------------------------------------------------------------------
 
 # How to use NTMpy
+NTMpy can be used as a Python package or with a Graphic User Interface depending on the user preferences.
+
+### Python Package
 <p align="justify">NTMpy provides a set of classes to simulate coupled heat equation with 2 or 3 temperature in a multilayer system.
 The simulation parameters are customizable, but the codes can choose them automatically if not given by the user.</p>
 
@@ -81,9 +84,12 @@ vs.compare(x,t,phi[0],phi[1])
 ```
 
 The ouput `phi` is a 3D array with the following structure:
-* the first index selects the temperature: `phi[0]` is the electron temperature, `phi[1]` is the lattice temperature.
-* the second index is the space position: `phi[0][0]` is the temperature on the surface, `phi[0][10]` is the temperature in the 10th point of the grid.
-* the third index is the time instant: `phi[0][0][100]` is the temperature of the temperature of the surface after 100 time steps.
+* the <b>first index</b> selects the temperature: `phi[0]` is the electron temperature, `phi[1]` is the lattice temperature.
+* the <b>second index</b> is the space position: `phi[0][n]` is the electron temperature in the n-th point of the grid.
+* the <b>third index</b> is the time instant: `phi[0][0][n]` is the electron temperature of the surface after n time steps.
+
+### Graphic User Interface
+A GUI is available running the `launch.py` script with pyhton. Detailed description of the GUI is presented in the [Wiki](https://github.com/VaSca92/NTMpy/wiki) of the repository (currently under construction).
 
 ------------------------------------------------------------------------------------------------------------------
 

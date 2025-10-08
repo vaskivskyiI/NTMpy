@@ -37,7 +37,7 @@ k_{Ki}(x,t) = k_{Ki}(T_E(x,t),T_L(x,t),T_S(x,t))\\
 G_{KHi}(x,t) = G_{KHi}(T_E(x,t),T_L(x,t),T_S(x,t))
 \end{aligned}$$
 
-The solution is obtained using the Finite Element Method (FEM) + explicit Euler method. The FEM uses B-splines + collocation method. 
+<p align ="justify">The solution is obtained using the Finite Element Method (FEM) + explicit Euler method. The FEM uses B-splines + collocation method.</p>
 
 Further informations can be found on the [paper](https://www.sciencedirect.com/science/article/pii/S0010465521001028?via%3Dihub).
 

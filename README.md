@@ -129,7 +129,7 @@ Please, cite the reference [paper](https://www.sciencedirect.com/science/article
 ```
 
 ## Dependencies
-NTMpy has four dependencies: [Numpy](http://www.numpy.org/), [Matplotlib](https://matplotlib.org/), [B-splines](https://github.com/johntfoster), [Eel-Jinja2](https://github.com/python-eel/Eel) and [Progressbar](https://pypi.org/project/tqdm/2.2.3/)
+NTMpy has four dependencies: [Numpy](http://www.numpy.org/), [Matplotlib](https://matplotlib.org/), [B-splines](https://github.com/johntfoster), and [Progressbar](https://pypi.org/project/tqdm/2.2.3/), plus one extra dependency for the GUI [Eel-Jinja2](https://github.com/python-eel/Eel).
 
   
 

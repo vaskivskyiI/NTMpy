@@ -7,8 +7,8 @@
 # ----------------------------------------------------------------------------------------
 
 import numpy as np
-from bspline import Bspline
-from bspline.splinelab import aptknt
+from core.bspline import Bspline
+from core.splinelab import aptknt
 import time
 from tqdm import tqdm
 
